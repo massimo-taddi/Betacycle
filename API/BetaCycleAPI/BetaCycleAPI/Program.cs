@@ -18,6 +18,8 @@ namespace BetaCycleAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AdventureWorksLt2019Context>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorks")));
+            builder.Services.AddDbContext<AdventureWorks2019CredentialsContext>(opt =>
+                    opt.UseSqlServer(builder.Configuration.GetConnectionString("Credentials")));
 
             var app = builder.Build();
 
