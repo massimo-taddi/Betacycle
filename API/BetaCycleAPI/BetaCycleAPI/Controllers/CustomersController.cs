@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
+using BetaCycleAPI.Models.ModelsCredentials;
+using EncryptData;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -15,6 +17,7 @@ namespace BetaCycleAPI.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
+        private readonly AdventureWorks2019CredentialsContext _credentials;
 
         public CustomersController(AdventureWorksLt2019Context context)
         {
@@ -78,11 +81,23 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(customer.PasswordHash);
+            customer.PasswordHash = pwData.Key;
+            Console.WriteLine(pwData.Value);
+            customer.PasswordSalt = pwData.Value;
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult<Boolean>> PostLogin(string email, string password)
+        //{
+        //    bool isValid = false;
+        //    var myCredentials = await _credentials.Credentials.FindAsync(email); //da verificare
+
+        //    return CreatedAtAction("Login", isValid);
+        //}
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]

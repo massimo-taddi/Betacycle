@@ -251,3 +251,7 @@ C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\D
 C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\EncryptData.dll
+C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\LogManager.dll
+C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\EncryptData.pdb
+C:\Users\Cristian\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\bin\Debug\net8.0\LogManager.pdb
