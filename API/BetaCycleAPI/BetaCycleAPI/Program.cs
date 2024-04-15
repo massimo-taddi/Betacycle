@@ -21,6 +21,21 @@ namespace BetaCycleAPI
             builder.Services.AddDbContext<AdventureWorks2019CredentialsContext>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("Credentials")));
 
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .AllowCredentials()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed((hosts) => true));
+            });
+            builder.Services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,6 +46,8 @@ namespace BetaCycleAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+
 
             app.UseAuthorization();
 

@@ -36,6 +36,12 @@ namespace BetaCycleAPI.Controllers
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
+            List<CustomerAddress> addresses = [];
+            customer.CustomerAddresses = await _context.CustomerAddresses.Where(ad => ad.CustomerId == id).ToListAsync();
+            foreach (var item in customer.CustomerAddresses)
+            {
+                item.Address = await _context.Addresses.FindAsync(item.AddressId);
+            }
 
             if (customer == null)
             {
