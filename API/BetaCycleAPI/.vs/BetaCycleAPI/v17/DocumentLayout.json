@@ -1,42 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\",
+  "WorkspaceRootPath": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\models\\modelscredentials\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\models\\modelscredentials\\credential.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\contexts\\adventureworkslt2019context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\tomto\\desktop\\academy .net\\betacycle\\api\\betacycleapi\\betacycleapi\\contexts\\adventureworkslt2019context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\contexts\\adventureworkslt2019context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\tomto\\desktop\\academy .net\\betacycle\\api\\betacycleapi\\betacycleapi\\contexts\\adventureworks2019credentialscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\contexts\\adventureworks2019credentialscontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\models\\vgetallcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\models\\vgetallcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\cristian\\documents\\github\\betacycle\\api\\betacycleapi\\betacycleapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\tomto\\desktop\\academy .net\\betacycle\\api\\betacycleapi\\betacycleapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:BetaCycleAPI\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|c:\\users\\tomto\\desktop\\academy .net\\betacycle\\api\\betacycleapi\\betacycleapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{196D5513-55CA-4CAE-9B98-F8A69F368FF5}|BetaCycleAPI\\BetaCycleAPI.csproj|solutionrelative:betacycleapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,110 +34,51 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Credential.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\ModelsCredentials\\Credential.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Models\\ModelsCredentials\\Credential.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\ModelsCredentials\\Credential.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Models\\ModelsCredentials\\Credential.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAxwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-12T10:54:03.563Z"
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "BetaCycleAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\appsettings.json",
+              "RelativeToolTip": "BetaCycleAPI\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-04-15T07:43:07.35Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Customer.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\Customer.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Models\\Customer.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\Customer.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Models\\Customer.cs",
-              "ViewState": "AQIAADkAAAAAAAAAAAAmwAAAAAAAAAAA",
+              "Title": "AdventureWorks2019CredentialsContext.cs",
+              "DocumentMoniker": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorks2019CredentialsContext.cs",
+              "RelativeDocumentMoniker": "BetaCycleAPI\\Contexts\\AdventureWorks2019CredentialsContext.cs",
+              "ToolTip": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorks2019CredentialsContext.cs",
+              "RelativeToolTip": "BetaCycleAPI\\Contexts\\AdventureWorks2019CredentialsContext.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAzwBYAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-12T10:54:08.039Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ProductsController.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Controllers\\ProductsController.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Controllers\\ProductsController.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Controllers\\ProductsController.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Controllers\\ProductsController.cs",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAIwE4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-12T10:47:05.141Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ErrorLog.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\ErrorLog.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Models\\ErrorLog.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\ErrorLog.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Models\\ErrorLog.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-12T08:32:21.853Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CustomersController.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Controllers\\CustomersController.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Controllers\\CustomersController.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Controllers\\CustomersController.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Controllers\\CustomersController.cs",
-              "ViewState": "AQIAAEcAAAAAAAAAAAAkwFYAAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T15:26:01.022Z",
+              "WhenOpened": "2024-04-15T07:37:54.562Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\appsettings.json",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\appsettings.json",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\appsettings.json",
-              "RelativeToolTip": "BetaCycleAPI\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAD7AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-04-05T15:06:25.48Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "VGetAllCategory.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\VGetAllCategory.cs",
-              "RelativeDocumentMoniker": "BetaCycleAPI\\Models\\VGetAllCategory.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Models\\VGetAllCategory.cs",
-              "RelativeToolTip": "BetaCycleAPI\\Models\\VGetAllCategory.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T15:05:06.34Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "AdventureWorksLt2019Context.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
+              "DocumentMoniker": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
               "RelativeDocumentMoniker": "BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
+              "ToolTip": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
               "RelativeToolTip": "BetaCycleAPI\\Contexts\\AdventureWorksLt2019Context.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAA2wDEAAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T15:04:39.884Z"
+              "WhenOpened": "2024-04-05T15:04:39.884Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Program.cs",
               "RelativeDocumentMoniker": "BetaCycleAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\Cristian\\Documents\\GitHub\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Program.cs",
               "RelativeToolTip": "BetaCycleAPI\\Program.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAQwBsAAAANAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAA4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-05T14:49:33.285Z"
             }

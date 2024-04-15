@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <Reference Include="EncryptData">
-      <HintPath>D:\AcademyBetacom\AcademyBackEndNET\FileProjectOne\FileProjectOne\bin\Debug\net8.0\EncryptData.dll</HintPath>
+      <HintPath>..\..\..\Libraries\EncryptData.dll</HintPath>
     </Reference>
   </ItemGroup>
 

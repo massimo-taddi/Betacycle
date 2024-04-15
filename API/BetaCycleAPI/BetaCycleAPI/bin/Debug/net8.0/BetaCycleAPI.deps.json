@@ -1923,14 +1923,6 @@
             "fileVersion": "1.0.0.0"
           }
         }
-      },
-      "LogManager/1.0.0.0": {
-        "runtime": {
-          "LogManager.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
@@ -3096,11 +3088,6 @@
       "hashPath": "system.windows.extensions.7.0.0.nupkg.sha512"
     },
     "EncryptData/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "LogManager/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
