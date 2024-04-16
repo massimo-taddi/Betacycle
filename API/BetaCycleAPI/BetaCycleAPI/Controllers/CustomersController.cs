@@ -44,9 +44,7 @@ namespace BetaCycleAPI.Controllers
             }
 
             if (customer == null)
-            {
                 return NotFound();
-            }
 
             return customer;
         }
