@@ -1,5 +1,8 @@
 
+using BetaCycleAPI.BLogic.Authentication.Basic;
 using BetaCycleAPI.Contexts;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCycleAPI
@@ -15,6 +18,17 @@ namespace BetaCycleAPI
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddAuthentication()
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", opt => { });
+
+            builder.Services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication")
+                    .RequireAuthenticatedUser().Build());
+            });
+
+
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AdventureWorksLt2019Context>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorks")));
@@ -47,6 +61,7 @@ namespace BetaCycleAPI
 
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
+            app.UseAuthentication();
 
 
             app.UseAuthorization();

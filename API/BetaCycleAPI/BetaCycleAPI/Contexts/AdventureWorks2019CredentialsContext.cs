@@ -31,7 +31,7 @@ public partial class AdventureWorks2019CredentialsContext : DbContext
             entity.Property(e => e.CustomerId)
                 .ValueGeneratedNever()
                 .HasColumnName("CustomerID");
-            entity.Property(e => e.EmailHash256)
+            entity.Property(e => e.Email)
                 .HasMaxLength(128)
                 .IsUnicode(false);
             entity.Property(e => e.PasswordHash)

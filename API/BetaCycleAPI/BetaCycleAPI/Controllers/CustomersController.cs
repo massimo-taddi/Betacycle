@@ -9,15 +9,16 @@ using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.ModelsCredentials;
 using EncryptData;
+using BetaCycleAPI.BLogic.Authentication.Basic;
 
 namespace BetaCycleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [BasicAuthorizationAttributes]
     public class CustomersController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
-        private readonly AdventureWorks2019CredentialsContext _credentials;
 
         public CustomersController(AdventureWorksLt2019Context context)
         {

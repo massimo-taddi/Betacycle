@@ -13,14 +13,14 @@ public partial class Credential
 
     public string SaltHash { get; set; } = null!;
 
-    public string EmailHash256 { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
-    public Credential(long customerId, bool adminPermission, string passwordHash, string saltHash, string emailHash256)
+    public Credential(long customerId, bool adminPermission, string passwordHash, string saltHash, string email)
     {
         CustomerId = customerId;
         AdminPermission = adminPermission;
         PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
         SaltHash = saltHash ?? throw new ArgumentNullException(nameof(saltHash));
-        EmailHash256 = emailHash256 ?? throw new ArgumentNullException(nameof(emailHash256));
+        Email = email ?? throw new ArgumentNullException(nameof(email));
     }
 }
