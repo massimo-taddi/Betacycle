@@ -57,8 +57,8 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
             }
             else
             {
-                //CredentialsDBChecker myChecker = 
-                //var loginValidation = myChecker.ValidateLoginAsync(authUser, authPassword).Result;
+                CredentialsDBChecker dbChecker = new();
+                var validationResult = dbChecker.ValidateLogin(authUser, authPassword);
                 //switch (loginValidation)
                 //{
 

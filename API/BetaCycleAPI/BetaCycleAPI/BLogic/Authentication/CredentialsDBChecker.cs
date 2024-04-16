@@ -4,6 +4,7 @@ using EncryptData;
 using BetaCycleAPI.Models.Enums;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using BetaCycleAPI.Models;
 
 namespace BetaCycleAPI.BLogic.Authentication
 {
@@ -11,13 +12,14 @@ namespace BetaCycleAPI.BLogic.Authentication
     {
         SqlCommand sqlCmd = new();
         SqlConnection myConn = new();
-        public async Task<DBCheckResponse> ValidateLoginAsync(string user, string pwd)
+
+        public DBCheckResponse ValidateLogin(string user, string pwd)
         {
             DBCheckResponse response = DBCheckResponse.NotFound;
             try
             {
-                dynamic appSettings = JsonConvert.DeserializeObject<string>(File.ReadAllText(@"..\..\appsettings.json"));
-                myConn.ConnectionString = appSettings.ConnectionString;
+                myConn.ConnectionString = JsonConvert.DeserializeObject<AppSettings>(File.ReadAllText("appsettings.json")).ConnectionStrings.AdventureWorks;
+                
                 //if (credLoginNew.Any()) //new db
                 //{
                 //    if ((EncryptData.CypherData.DecryptSalt(pwd, credLoginNew.First().SaltHash)).Equals(credLoginNew.First().PasswordHash))
@@ -29,7 +31,8 @@ namespace BetaCycleAPI.BLogic.Authentication
                 //{
                 //    response = DBCheckResponse.FoundNotMigrated;
                 //}
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 throw;
             }
