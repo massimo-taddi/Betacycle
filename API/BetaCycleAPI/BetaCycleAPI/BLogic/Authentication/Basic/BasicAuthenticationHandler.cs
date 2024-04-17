@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using BetaCycleAPI.BLogic.Authentication;
 using BetaCycleAPI.Models.Enums;
+using BetaCycleAPI.Models;
 
 
 
@@ -16,8 +17,6 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-
-
         [Obsolete]
         public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock
@@ -58,15 +57,17 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
             else
             {
                 CredentialsDBChecker dbChecker = new();
-                var validationResult = dbChecker.ValidateLogin(authUser, authPassword);
-                //switch (loginValidation)
-                //{
-
-                //    case DBCheckResponse.NotFound:
-                //        return Task.FromResult(AuthenticateResult.Fail("Username e/o Password NON validi"));
-
-                //        break;
-                //}
+                
+                switch (dbChecker.ValidateLogin(authUser, authPassword))
+                {
+                    case DBCheckResponse.NotFound:
+                        return Task.FromResult(AuthenticateResult.Fail("Username e/o Password NON validi"));
+                        break;
+                    case DBCheckResponse.FoundNotMigrated:
+                        // ri-crea l'account a partire da questa mail
+                        return Task.FromResult(AuthenticateResult.Fail("Account pre-migrazione, da ricreare"));
+                        break;
+                }
             }
 
             var authenticatedUser = new AuthenticatedUser("BasicAuthentication", true, authArraySplit[0].ToString());

@@ -6,7 +6,7 @@ namespace BetaCycleAPI.Models.Enums
     {
         NotFound = 0,
         FoundNotMigrated,
-        FoundMigrated
-        
+        FoundMigrated,
+        FoundAdmin
     }
 }

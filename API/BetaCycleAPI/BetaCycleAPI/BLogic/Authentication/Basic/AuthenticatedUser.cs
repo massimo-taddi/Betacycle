@@ -15,5 +15,7 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
         public bool IsAuthenticated { get; set; }
 
         public string? Name { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

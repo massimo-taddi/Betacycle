@@ -1,6 +1,7 @@
 
 using BetaCycleAPI.BLogic.Authentication.Basic;
 using BetaCycleAPI.Contexts;
+using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ namespace BetaCycleAPI
                     .RequireAuthenticatedUser().Build());
             });
 
+            Connectionstrings.AdventureWorks = builder.Configuration.GetConnectionString("AdventureWorks");
+            Connectionstrings.Credentials = builder.Configuration.GetConnectionString("Credentials");
 
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AdventureWorksLt2019Context>(opt =>

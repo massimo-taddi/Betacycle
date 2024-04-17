@@ -15,7 +15,6 @@ namespace BetaCycleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [BasicAuthorizationAttributes]
     public class CustomersController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
@@ -27,6 +26,7 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Customers
         [HttpGet]
+        [BasicAuthorizationAttributes]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
             return await _context.Customers.ToListAsync();
@@ -86,7 +86,9 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            // customer.PasswordHash is NOT supposed to be hashed at this point
             KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(customer.PasswordHash);
+            // this is where it gets hashed ^
             customer.PasswordHash = pwData.Key;
             Console.WriteLine(pwData.Value);
             customer.PasswordSalt = pwData.Value;

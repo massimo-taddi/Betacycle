@@ -8,12 +8,11 @@ namespace BetaCycleAPI.Controllers {
     public class LoginController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Login(LoginCredentials credentials)
+        public async Task<ActionResult<bool>> Login(LoginCredentials credentials)
         {
             try
             {
-                int x = 0;
-
+                // steps:
             }
             catch (Exception)
             {
