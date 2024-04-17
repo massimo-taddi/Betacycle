@@ -83,6 +83,11 @@ namespace BetaCycleAPI.Controllers
 
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Given a Customer object, posts it to the DB
+        /// </summary>
+        /// <param name="customer">The Customer object, from which fields CustomerId, SaltHash and rowguid are ignored</param>
+        /// <returns>A Task<ActionResult<Customer>> representing the posted customer</returns>
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {

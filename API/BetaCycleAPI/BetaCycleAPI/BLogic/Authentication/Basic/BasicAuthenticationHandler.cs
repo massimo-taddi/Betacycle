@@ -56,7 +56,9 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
             }
             else
             {
-                switch (CredentialsDBChecker.ValidateLogin(authUser, authPassword))
+                var loginRes = CredentialsDBChecker.ValidateLogin(authUser, authPassword);
+                loginRes.Wait();
+                switch (loginRes.Result)
                 {
                     case DBCheckResponse.NotFound:
                         return Task.FromResult(AuthenticateResult.Fail("Username e/o Password NON validi"));
@@ -66,6 +68,7 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
                         return Task.FromResult(AuthenticateResult.Fail("Account pre-migrazione, da ricreare"));
                         break;
                 }
+                
             }
 
             var authenticatedUser = new AuthenticatedUser("BasicAuthentication", true, authArraySplit[0].ToString());

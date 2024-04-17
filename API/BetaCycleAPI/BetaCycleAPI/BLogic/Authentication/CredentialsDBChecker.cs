@@ -11,7 +11,7 @@ namespace BetaCycleAPI.BLogic.Authentication
 {
     public static class CredentialsDBChecker
     {
-        public static DBCheckResponse ValidateLogin(string user, string pwd)
+        public static async Task<DBCheckResponse> ValidateLogin(string user, string pwd)
         {
             SqlCommand sqlCmd = new();
             SqlConnection sqlConn = new(Connectionstrings.Credentials);
@@ -19,14 +19,14 @@ namespace BetaCycleAPI.BLogic.Authentication
             DBCheckResponse response = DBCheckResponse.NotFound;
             try
             {
-                sqlConn.Open();
+                await sqlConn.OpenAsync();
 
                 sqlCmd.CommandType = System.Data.CommandType.Text;
                 sqlCmd.Parameters.AddWithValue("@Email", user);
                 sqlCmd.CommandText = "SELECT TOP 1 Email, PasswordHash, SaltHash, AdminPermission FROM [dbo].[Credentials] WHERE Email = @Email";
                 sqlCmd.Connection = sqlConn;
 
-                using(SqlDataReader reader = sqlCmd.ExecuteReader())
+                using(SqlDataReader reader = await sqlCmd.ExecuteReaderAsync())
                 {
                     if(reader.Read()) {
                         if (EncryptData.CypherData.DecryptSalt(pwd, reader["SaltHash"].ToString()).Equals(reader["PasswordHash"].ToString()))
@@ -34,22 +34,24 @@ namespace BetaCycleAPI.BLogic.Authentication
                             response = reader["AdminPermission"].ToString() == "True" ? DBCheckResponse.FoundAdmin : DBCheckResponse.FoundMigrated;
                         }
                     }
-                    sqlConn.Close();
+                    await sqlConn.CloseAsync();
                 }
 
                 sqlConn.ConnectionString = Connectionstrings.AdventureWorks;
-                sqlConn.Open();
+                await sqlConn.OpenAsync();
 
                 sqlCmd.CommandText = "SELECT TOP 1 EmailAddress FROM [SalesLT].[Customer] WHERE EmailAddress = @Email";
                 sqlCmd.Connection = sqlConn;
 
-                using (SqlDataReader reader = sqlCmd.ExecuteReader())
+                using (SqlDataReader reader = await sqlCmd.ExecuteReaderAsync())
                 {
                     if (reader.Read())
                     {
                         response = DBCheckResponse.FoundNotMigrated;
                     }
                 }
+
+                await sqlConn.CloseAsync();
 
 
             }
