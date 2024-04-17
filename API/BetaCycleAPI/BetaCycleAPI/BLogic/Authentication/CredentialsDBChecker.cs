@@ -9,17 +9,16 @@ using Microsoft.CodeAnalysis.Options;
 
 namespace BetaCycleAPI.BLogic.Authentication
 {
-    public class CredentialsDBChecker
+    public static class CredentialsDBChecker
     {
-        private SqlCommand sqlCmd = new();
-        private SqlConnection sqlConn = new();
-
-        public DBCheckResponse ValidateLogin(string user, string pwd)
+        public static DBCheckResponse ValidateLogin(string user, string pwd)
         {
+            SqlCommand sqlCmd = new();
+            SqlConnection sqlConn = new(Connectionstrings.Credentials);
+
             DBCheckResponse response = DBCheckResponse.NotFound;
             try
             {
-                sqlConn.ConnectionString = Connectionstrings.Credentials;
                 sqlConn.Open();
 
                 sqlCmd.CommandType = System.Data.CommandType.Text;

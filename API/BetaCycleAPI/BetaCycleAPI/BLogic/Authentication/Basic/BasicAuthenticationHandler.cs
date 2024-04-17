@@ -56,9 +56,7 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
             }
             else
             {
-                CredentialsDBChecker dbChecker = new();
-                
-                switch (dbChecker.ValidateLogin(authUser, authPassword))
+                switch (CredentialsDBChecker.ValidateLogin(authUser, authPassword))
                 {
                     case DBCheckResponse.NotFound:
                         return Task.FromResult(AuthenticateResult.Fail("Username e/o Password NON validi"));
