@@ -17,9 +17,9 @@ export class NavbarComponent implements OnInit {
   constructor(private loginStatus: LoginStatusService) { }
 
   ngOnInit(): void {
-    if(sessionStorage.getItem('isLoggedIn') === 'true') {
+    if(sessionStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('isLoggedIn') === 'true') {
       this.isUserLoggedIn = true;
-      if(sessionStorage.getItem('isAdmin') === 'true')
+      if(sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true')
         this.isUserAdmin = true;
       return;
     }
@@ -35,5 +35,8 @@ export class NavbarComponent implements OnInit {
     this.loginStatus.setAdmin(false);
     this.loginStatus.setLoggedIn(false);
     localStorage.removeItem('credentials');
+    sessionStorage.removeItem('credentials');
+    this.isUserLoggedIn = false;
+    //window.location.reload();
   }
 }

@@ -10,13 +10,25 @@ export class LoginStatusService {
   private isAdmin = new BehaviorSubject(false);
   isAdmin$ = this.isAdmin.asObservable();
 
-  setLoggedIn(isLoggedIn: boolean) {
+  setLoggedIn(isLoggedIn: boolean, stayLoggedIn?: boolean) {
     this.isLoggedIn.next(isLoggedIn);
-    sessionStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
+    if(typeof(stayLoggedIn)  === undefined || stayLoggedIn === false){
+      sessionStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
+    }
+    else {
+      localStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
+      sessionStorage.setItem('isLoggedIn', isLoggedIn ? 'true' : 'false');
+    }
   }
 
-  setAdmin(isAdmin: boolean) {
+  setAdmin(isAdmin: boolean, stayLoggedIn?: boolean) {
     this.isAdmin.next(isAdmin);
-    sessionStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+    if(typeof(stayLoggedIn)  === undefined || stayLoggedIn === false){
+      sessionStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+    }
+    else {
+      localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+      sessionStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+    }
   }
 }

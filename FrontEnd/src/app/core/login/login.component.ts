@@ -1,24 +1,35 @@
-import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttploginService } from '../../shared/services/httplogin.service';
 import { LoginCredentials } from '../../shared/models/LoginCredentials';
 import { HttpStatusCode } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginStatusService } from '../../shared/services/login-status.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginResponseBody: string = '';
   loginResponseStatus: HttpStatusCode = HttpStatusCode.NotFound;
-  @Output() loginSuccess = new EventEmitter<boolean>()
+  stayLoggedIn: boolean = false;
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private httpLogin: HttploginService, private router: Router, private route: ActivatedRoute, private loggedInStatus: LoginStatusService) {}
+
+  ngOnInit(): void {
+    this.loggedInStatus.isLoggedIn$.subscribe(
+      res => this.isLoggedIn = res
+    );
+    localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true' ? this.isLoggedIn = true : this.isLoggedIn = false;
+    localStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isAdmin') === 'true' ? this.isAdmin = true : this.isAdmin = false;
+  }
 
   Login(Username: HTMLInputElement, Password: HTMLInputElement) {
     this.httpLogin.httpSendLoginCredentials(new LoginCredentials(Username.value, Password.value)).subscribe({
@@ -34,15 +45,21 @@ export class LoginComponent {
               break;
             case "migrated":
               // fa il login e appare l'area personale
-              localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
-              this.loggedInStatus.setLoggedIn(true);
+              if(this.stayLoggedIn)
+                localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+              else
+                sessionStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+              this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
               this.router.navigate(["/home"]);
               break;
             case "admin":
               // fa il login e appare un'opzione extra nella navbar x area amministratore
-              localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
-              this.loggedInStatus.setLoggedIn(true);
-              this.loggedInStatus.setAdmin(true);
+              if(this.stayLoggedIn)
+                localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+              else
+                sessionStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+              this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
+              this.loggedInStatus.setAdmin(true, this.stayLoggedIn);
               this.router.navigate(["/home"]);
               break;
           }

@@ -1,3 +1,7 @@
-<input #Username type="text" name="username"><br>
-<input #Password type="text" name="password"><br>
-<input type="button" value="login" (click)="Login(Username, Password)">
+<div *ngIf="!isLoggedIn">
+    <input #Username type="text" name="username"><br>
+    <input #Password type="text" name="password"><br>
+    <input type="button" value="login" (click)="Login(Username, Password)"><br>
+    resta collegato?
+    <input type="checkbox" [(ngModel)]="stayLoggedIn">
+</div>
