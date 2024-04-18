@@ -14,7 +14,12 @@ export class HttploginService {
   constructor(private http: HttpClient) {}
 
   httpSendLoginCredentials(credential: LoginCredentials): Observable<any> {
-    return this.http.get('');
+    // when used: httpSendLoginCredentials(credentials).subscribe(
+    //   (response: any) => {
+    //     qualcosa = response.text();
+    //   }
+    // );
+    return this.http.post('https://localhost:7287/app/login', credential);
   }
 
   httpValidateToken(credential: LoginCredentials): Observable<any> {
@@ -22,7 +27,7 @@ export class HttploginService {
     //modificare a post
     this.newHeader = this.newHeader.set(
       'Authorization',
-      'Basic' + window.btoa(localStorage.getItem('user'))
+      'Basic '// + window.btoa(localStorage.getItem('credentials'))
     );
     return this.http.get('');
   }

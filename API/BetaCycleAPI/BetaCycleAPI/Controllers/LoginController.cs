@@ -11,7 +11,7 @@ namespace BetaCycleAPI.Controllers {
     public class LoginController : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<bool>> Login(LoginCredentials credentials)
+        public async Task<IActionResult> Login(LoginCredentials credentials)
         {
             try
             {
