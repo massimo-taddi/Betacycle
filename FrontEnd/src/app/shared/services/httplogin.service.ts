@@ -14,15 +14,10 @@ export class HttploginService {
   constructor(private http: HttpClient) {}
 
   httpSendLoginCredentials(credential: LoginCredentials): Observable<any> {
-    // when used: httpSendLoginCredentials(credentials).subscribe(
-    //   (response: any) => {
-    //     qualcosa = response.text();
-    //   }
-    // );
-    return this.http.post('https://localhost:7287/app/login', credential);
+    return this.http.post('https://localhost:7287/app/login', credential, { observe: "response", responseType: "text" });
   }
 
-  httpValidateToken(credential: LoginCredentials): Observable<any> {
+  httpValidateToken(): Observable<any> {
     //da finire
     //modificare a post
     this.newHeader = this.newHeader.set(

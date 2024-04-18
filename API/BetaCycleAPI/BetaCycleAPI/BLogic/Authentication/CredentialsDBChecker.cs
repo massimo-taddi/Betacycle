@@ -25,7 +25,6 @@ namespace BetaCycleAPI.BLogic.Authentication
                 sqlCmd.Parameters.AddWithValue("@Email", user);
                 sqlCmd.CommandText = "SELECT TOP 1 Email, PasswordHash, SaltHash, AdminPermission FROM [dbo].[Credentials] WHERE Email = @Email";
                 sqlCmd.Connection = sqlConn;
-
                 using(SqlDataReader reader = await sqlCmd.ExecuteReaderAsync())
                 {
                     if(reader.Read()) {
@@ -48,7 +47,9 @@ namespace BetaCycleAPI.BLogic.Authentication
                     if (reader.Read())
                     {
                         response = DBCheckResponse.FoundNotMigrated;
+                        if (reader["EmailAddress"].ToString() == string.Empty) response = DBCheckResponse.NotFound;
                     }
+                    Console.WriteLine();
                 }
 
                 await sqlConn.CloseAsync();

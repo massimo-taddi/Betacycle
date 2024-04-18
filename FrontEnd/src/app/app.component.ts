@@ -10,5 +10,5 @@ import { NavbarComponent } from './core/navbar/navbar.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'FrontEnd';
+  title = 'BetaCycle';
 }
