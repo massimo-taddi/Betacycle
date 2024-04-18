@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { LoginCredentials } from '../models/LoginCredentials';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,12 +13,30 @@ export class HttploginService {
   });
   constructor(private http: HttpClient) {}
 
-  httpSendLoginCredentials(): Observable<any> {
-    //modificare a post
+  httpSendLoginCredentials(credential: LoginCredentials): Observable<any> {
     return this.http.get('');
   }
-  httpValidateToken(): Observable<any> {
+
+  httpValidateToken(credential: LoginCredentials): Observable<any> {
     //da finire
+    //modificare a post
+    this.newHeader = this.newHeader.set(
+      'Authorization',
+      'Basic' + window.btoa(localStorage.getItem('user'))
+    );
     return this.http.get('');
   }
+  /*
+  httpGetAuthrsById(id: number): Observable<any> {
+    this.newHeader = this.newHeader.set(
+      'Authorization',
+      'Basic' + window.btoa('Claudio:orloff')
+    );
+    localStorage.setItem;
+    sessionStorage.getItem;
+    return this.http.get(`https://localhost:7132/api/Authors/${id}`, {
+      headers: this.newHeader,
+    });
+  }
+  */
 }
