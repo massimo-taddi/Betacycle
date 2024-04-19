@@ -21,7 +21,7 @@
 *{padding: 0 0; margin: 0 0; font-family: "Inter"; font-weight: 400; -webkit-user-select: none; -ms-user-select: none; user-select: none;}
 
 
-section, article, nav, form, div{display: flex; flex-direction: column; flex-wrap: wrap;}
+/* section, article, nav, form, div{display: flex; flex-direction: column; flex-wrap: wrap;} */
 
 
 article{padding: var(--Padding-section); width: 90vw;}

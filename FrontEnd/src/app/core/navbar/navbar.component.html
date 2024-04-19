@@ -1,7 +1,31 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #00000000;">
+    <div class="container-fluid">
+      <a class="navbar-brand" routerLink="/home">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li *ngIf="!isUserLoggedIn" class="nav-item">
+            <a class="nav-link" routerLink="/login">login</a>
+          </li>
+        </ul>
+        <form class="d-flex me-auto">
+            <input #searchString class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="border-radius: 20px;">
+            <button class="btn btn-outline-success" type="submit" style="border-radius: 20px;" (click)="Search(searchString)">Search</button>
+        </form>
+        <li *ngIf="isUserLoggedIn" class="nav-item">
+          <button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-arrow-right">apri sidebar</button>
+        </li>
+      </div>
+    </div>
+  </nav>
+  <p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="background-color: aqua;">
+    <h3>Left Sidebar</h3>
+  </p-sidebar>
+  <router-outlet></router-outlet>
 
-<nav>
-    <a routerLink="/home">home</a><br>
-    <a routerLink="/login">login</a><br>
-</nav>
-
-<router-outlet>
+  <!-- 
+    <a *ngIf="isUserLoggedIn">area personale</a><br>
+<input *ngIf="isUserLoggedIn" type="button" value="logout" (click)="Logout()">
+  -->
