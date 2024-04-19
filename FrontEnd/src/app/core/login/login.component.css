@@ -1,0 +1,10 @@
+#big-container{align-items: flex-end;}
+#form-big-container{max-width: 550px; width: 500px; min-width: 230px;}
+
+#form-container{row-gap: 35px; padding: var(--Padding-form); border: solid 3px var(--Secondary-color); border-radius: calc(25px - 0.235vw);}
+
+div.fcontainer{row-gap: 25px;}
+
+input.iform{border: none; font-size: 20px;}
+
+div.icontainer{border-bottom: solid 2.5px var(--Secondary-color);}

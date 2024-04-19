@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* VARIABLES & IMPORTS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+
+:root{
+    /*variabili di root*/
+    --Base-color: #E6E6E6;
+    --Primary-color: #5BBCFF;
+    --Secondary-color: #091E42;
+    --Primary-text-color: #1e1e1e;
+    --Secondary-text-color: #091E42;
+
+    --Padding-section: 100px 5vw 100px 5vw;
+    --Padding-form: 100px 15px 35px 15px;
+}
+
+
+*{padding: 0 0; margin: 0 0; font-family: "Inter"; font-weight: 400; -webkit-user-select: none; -ms-user-select: none; user-select: none;}
+
+
+section, article, nav, form, div{display: flex; flex-direction: column; flex-wrap: wrap;}
+
+
+article{padding: var(--Padding-section); width: 90vw;}
+nav{flex-direction: row; justify-content: space-around;}
