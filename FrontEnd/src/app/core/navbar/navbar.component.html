@@ -2,8 +2,6 @@
 <nav>
     <a routerLink="/home">home</a><br>
     <a routerLink="/login">login</a><br>
-    <a *ngIf="isUserLoggedIn">area personale</a><br>
-    <input type="button" value="logout" (click)="Logout()">
 </nav>
 
 <router-outlet>

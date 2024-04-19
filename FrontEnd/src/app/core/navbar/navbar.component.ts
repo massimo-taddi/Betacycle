@@ -10,33 +10,5 @@ import { LoginStatusService } from '../../shared/services/login-status.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit {
-  isUserLoggedIn: boolean = false;
-  isUserAdmin: boolean = false;
-
-  constructor(private loginStatus: LoginStatusService) { }
-
-  ngOnInit(): void {
-    if(sessionStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('isLoggedIn') === 'true') {
-      this.isUserLoggedIn = true;
-      if(sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true')
-        this.isUserAdmin = true;
-      return;
-    }
-    this.loginStatus.isLoggedIn$.subscribe(
-      res => this.isUserLoggedIn = res
-    );
-    this.loginStatus.isAdmin$.subscribe(
-      res => this.isUserAdmin = res
-    );
-  }
-
-  Logout() {
-    this.loginStatus.setAdmin(false);
-    this.loginStatus.setLoggedIn(false);
-    localStorage.removeItem('credentials');
-    sessionStorage.removeItem('credentials');
-    this.isUserLoggedIn = false;
-    //window.location.reload();
-  }
+export class NavbarComponent {
 }
