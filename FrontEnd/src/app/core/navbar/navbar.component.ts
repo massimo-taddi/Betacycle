@@ -4,11 +4,13 @@ import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
 import { LoginStatusService } from '../../shared/services/login-status.service';
 import { SidebarModule } from 'primeng/sidebar';
+import { PrimeIcons } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, LoginComponent, CommonModule, SidebarModule],
+  imports: [RouterModule, LoginComponent, CommonModule, SidebarModule, ButtonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })

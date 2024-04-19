@@ -5,23 +5,29 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li *ngIf="!isUserLoggedIn" class="nav-item">
             <a class="nav-link" routerLink="/login">login</a>
           </li>
-        </ul>
-        <form class="d-flex me-auto">
+        </ul>-->
+        <form class="d-flex ms-auto me-auto">
             <input #searchString class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="border-radius: 20px;">
             <button class="btn btn-outline-success" type="submit" style="border-radius: 20px;" (click)="Search(searchString)">Search</button>
         </form>
-        <li *ngIf="isUserLoggedIn" class="nav-item">
-          <button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-arrow-right">apri sidebar</button>
-        </li>
+        <p-button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
       </div>
     </div>
   </nav>
-  <p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="background-color: aqua;">
-    <h3>Left Sidebar</h3>
+  <p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="bg-light">
+    <h3>Right Sidebar</h3>
+    <ul>
+      <li *ngIf="!isUserLoggedIn" class="nav-item">
+        <a class="nav-link" routerLink="/login">Login</a>
+      </li>
+      <li *ngIf="isUserAdmin" class="nav-item">
+        <a class="nav-link" routerLink="/admin">Zona Amministratori</a>
+      </li>
+    </ul>
   </p-sidebar>
   <router-outlet></router-outlet>
 
