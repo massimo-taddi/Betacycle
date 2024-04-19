@@ -6,6 +6,11 @@ import { SignUpComponent } from './core/sign-up/sign-up.component';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
     path: 'home',
     component: HomeComponent
   },
