@@ -33,4 +33,11 @@ public partial class ProductModelProductDescription
     public virtual ProductDescription ProductDescription { get; set; } = null!;
 
     public virtual ProductModel ProductModel { get; set; } = null!;
+
+    public bool Validate()
+    {
+        return (this.Culture.Length < 7) &&
+            (this.ModifiedDate > (new DateTime(1970, 1, 1)) && this.ModifiedDate < DateTime.Now);
+    }
+
 }

@@ -56,4 +56,17 @@ public partial class SalesOrderDetail
     public virtual Product Product { get; set; } = null!;
 
     public virtual SalesOrderHeader SalesOrder { get; set; } = null!;
+
+    public bool Validate()
+    {
+        //rifare
+        if ((this.OrderQty!=0) && (this.UnitPrice!=0) && (this.UnitPriceDiscount!=0)
+            && this.LineTotal!=0)
+        {
+            return true;
+        }
+        else return false;
+       ; //&& (this.Rowguid) && ModifiedDate
+    }
+
 }

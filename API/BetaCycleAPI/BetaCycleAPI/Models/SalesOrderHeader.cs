@@ -125,4 +125,25 @@ public partial class SalesOrderHeader
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
 
     public virtual Address? ShipToAddress { get; set; }
+
+    public bool Validate()
+    {
+        return (this.RevisionNumber != 0) &&
+               //this.OrderDate
+               //this.DueDate
+               //this.ShipDate
+               (this.Status != 0) &&
+               (this.OnlineOrderFlag != null) &&
+               //this.SalesOrderDetails
+               (this.PurchaseOrderNumber.Length <= 25) &&
+               (this.AccountNumber.Length <= 15) &&
+               (this.ShipMethod.Length <= 50) &&
+               (this.CreditCardApprovalCode.Length <= 15) &&
+               (this.SubTotal != 0) &&
+               (this.TaxAmt != 0) &&
+               (this.Freight != 0);// &&
+               //this.rowguid,
+               //this.modifiedDate
+               
+    }
 }

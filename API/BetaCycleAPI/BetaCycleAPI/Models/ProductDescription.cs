@@ -29,4 +29,12 @@ public partial class ProductDescription
     public DateTime ModifiedDate { get; set; }
 
     public virtual ICollection<ProductModelProductDescription> ProductModelProductDescriptions { get; set; } = new List<ProductModelProductDescription>();
+
+    public bool Validate()
+    {
+        return (this.Description.Length < 400) &&
+            //this.rowguid    
+            (this.ModifiedDate > (new DateTime(1970, 1, 1)) && this.ModifiedDate<DateTime.Now);
+    }
+
 }
