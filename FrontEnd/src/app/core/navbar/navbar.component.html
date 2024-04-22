@@ -1,35 +1,39 @@
 <nav class="navbar navbar-expand-lg" style="background-color: #00000000;">
-    <div class="container-fluid">
-      <a class="navbar-brand" routerLink="/home">Home</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li *ngIf="!isUserLoggedIn" class="nav-item">
-            <a class="nav-link" routerLink="/login">login</a>
-          </li>
-        </ul>-->
-        <form class="d-flex ms-auto me-auto">
-            <input #searchString class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="border-radius: 20px;">
-            <button class="btn btn-outline-success" type="submit" style="border-radius: 20px;" (click)="Search(searchString)">Search</button>
-        </form>
-        <p-button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
-      </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/home">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="d-flex ms-auto me-auto">
+          <input #searchString class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="border-radius: 20px;">
+          <button class="btn btn-outline-success" type="submit" style="border-radius: 20px;" (click)="Search(searchString)">Search</button>
+      </form>
+      <p-button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
     </div>
-  </nav>
-  <p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="bg-light">
-    <h3>Right Sidebar</h3>
-    <ul>
-      <li *ngIf="!isUserLoggedIn" class="nav-item">
-        <a class="nav-link" routerLink="/login">Login</a>
-      </li>
-      <li *ngIf="isUserAdmin" class="nav-item">
-        <a class="nav-link" routerLink="/admin">Zona Amministratori</a>
-      </li>
-    </ul>
-  </p-sidebar>
-  <router-outlet></router-outlet>
+  </div>
+</nav>
+<p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="bg-light">
+  <h3>Right Sidebar</h3>
+  <ul>
+    <li *ngIf="!isUserLoggedIn" class="nav-item">
+      <a class="nav-link" routerLink="/login">Login</a>
+    </li>
+    <li *ngIf="!isUserLoggedIn" class="nav-item">
+      <a class="nav-link" routerLink="/signup">Sign up</a>
+    </li>
+    <li *ngIf="isUserLoggedIn" class="nav-item">
+      <a class="nav-link" routerLink="/personal">Area personale</a>
+    </li>
+    <li *ngIf="isUserAdmin" class="nav-item">
+      <a class="nav-link" routerLink="/admin">Zona Amministratori</a>
+    </li>
+    <li *ngIf="isUserLoggedIn" class="nav-item">
+      <a class="nav-link" (click)="Logout()">Logout</a>
+    </li>
+  </ul>
+</p-sidebar>
+<router-outlet></router-outlet>
 
   <!-- 
     <a *ngIf="isUserLoggedIn">area personale</a><br>

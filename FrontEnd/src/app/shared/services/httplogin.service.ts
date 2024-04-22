@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginCredentials } from '../models/LoginCredentials';
+import { Customer } from '../models/Customer';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,10 @@ export class HttploginService {
 
   httpSendLoginCredentials(credential: LoginCredentials): Observable<any> {
     return this.http.post('https://localhost:7287/app/login', credential, { observe: "response", responseType: "text" });
+  }
+
+  httpPostNewCustomer(customer: Customer): Observable<any> {
+    return this.http.post('https://localhost:7287/api/customer', customer);
   }
 
   httpValidateToken(): Observable<any> {

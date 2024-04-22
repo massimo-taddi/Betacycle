@@ -24,6 +24,7 @@ export class NavbarComponent {
   ngOnInit(): void {
     if(sessionStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('isLoggedIn') === 'true') {
       this.isUserLoggedIn = true;
+      console.log(this.isUserLoggedIn);
       if(sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true')
         this.isUserAdmin = true;
       return;

@@ -1,1 +1,44 @@
-<p>sign-up works!</p>
+<div class="w-25" style="margin-right: 10%; margin-top: 5%;">
+    <form class="form-signin">
+        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Registrati</h1>
+        <label for="inputTitle" class="sr-only">Titolo</label>
+        <input type="text" #Title class="form-control" placeholder="Titolo" autofocus="" maxlength="8">
+        
+        <label for="inputFirstName" class="sr-only">Nome</label>
+        <input type="text" #FirstName class="form-control" placeholder="Nome*" required autofocus="" maxlength="50">
+
+        <label for="inputMiddleName" class="sr-only">Secondo Nome</label>
+        <input type="email" #MiddleName class="form-control" placeholder="Secondo Nome" autofocus="" maxlength="50">
+
+        <label for="inputLastName" class="sr-only">Cognome</label>
+        <input type="text" #LastName class="form-control" placeholder="Cognome*" required autofocus="" maxlength="50">
+
+        <label for="inputSuffix" class="sr-only">Suffix</label>
+        <input type="text" #Suffix class="form-control" placeholder="Suffisso" autofocus="" maxlength="10">
+
+        <label for="inputCompany" class="sr-only">Nome Azienda</label>
+        <input type="text" #CompanyName class="form-control" placeholder="Nome Azienda" autofocus="" maxlength="128">
+
+        <label for="inputSalesPerson" class="sr-only">Responsabile vendite</label>
+        <input type="email" #SalesPerson class="form-control" placeholder="Responsabile vendite" autofocus="" maxlength="256">
+
+        <label for="inputEmail" class="sr-only">Email</label>
+        <input type="email" #EmailAddress class="form-control" placeholder="Email*" required autofocus="" maxlength="">
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" #Password class="form-control" placeholder="Password*" required>
+
+        <label for="inputPhone" class="sr-only">Phone</label>
+        <input type="tel" #Phone class="form-control" placeholder="Telefono" autofocus="" maxlength="50">
+
+        <div class="checkbox mb-3">
+            <label>
+            <input type="checkbox" value="remember-me" [(ngModel)]="stayLoggedIn" [ngModelOptions]="{standalone:true}"> Rimani collegato
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="
+            SignUp(Title.value, FirstName.value, MiddleName.value, LastName.value, Suffix.value, CompanyName.value, SalesPerson.value, EmailAddress.value, Phone.value, Password.value, false, []);
+        ">Sign Up</button>
+    </form>
+</div>

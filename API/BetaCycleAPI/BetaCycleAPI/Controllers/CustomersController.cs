@@ -91,6 +91,7 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            if(!customer.Validate()) return BadRequest();
             // customer.PasswordHash is NOT supposed to be hashed at this point
             KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(customer.PasswordHash);
             // this is where it gets hashed ^
