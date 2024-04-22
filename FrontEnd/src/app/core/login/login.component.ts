@@ -20,6 +20,9 @@ export class LoginComponent implements OnInit{
   stayLoggedIn: boolean = false;
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
+  failedLogin: boolean = false;
+  myUser: string ='';
+  myPwd: string='';
 
   constructor(private httpLogin: HttploginService, private router: Router, private route: ActivatedRoute, private loggedInStatus: LoginStatusService) {}
 
@@ -31,8 +34,9 @@ export class LoginComponent implements OnInit{
     localStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isAdmin') === 'true' ? this.isAdmin = true : this.isAdmin = false;
   }
 
-  Login(Username: HTMLInputElement, Password: HTMLInputElement) {
-    this.httpLogin.httpSendLoginCredentials(new LoginCredentials(Username.value, Password.value)).subscribe({
+  Login() {
+    console.log(this.myPwd, this.myUser)
+    this.httpLogin.httpSendLoginCredentials(new LoginCredentials(this.myUser, this.myPwd)).subscribe({
       next: (response: any) => {
         this.loginResponseStatus = response.status;
         this.loginResponseBody = response.body;
@@ -46,18 +50,18 @@ export class LoginComponent implements OnInit{
             case "migrated":
               // fa il login e appare l'area personale
               if(this.stayLoggedIn)
-                localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+                localStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
               else
-                sessionStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+                sessionStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
               this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
               this.router.navigate(["/home"]);
               break;
             case "admin":
               // fa il login e appare un'opzione extra nella navbar x area amministratore
               if(this.stayLoggedIn)
-                localStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+                localStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
               else
-                sessionStorage.setItem('credentials', window.btoa(Username.value + ":" + Password.value));
+                sessionStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
               this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
               this.loggedInStatus.setAdmin(true, this.stayLoggedIn);
               this.router.navigate(["/home"]);
@@ -66,6 +70,7 @@ export class LoginComponent implements OnInit{
         }
       },
       error: (error: any) => {
+        this.failedLogin = true;
         if(error.status === HttpStatusCode.NotFound) {
           console.log("not found")
         }

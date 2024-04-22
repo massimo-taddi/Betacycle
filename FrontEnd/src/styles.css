@@ -25,5 +25,5 @@
 /* section, article, nav, form, div{display: flex; flex-direction: column; flex-wrap: wrap;} */
 
 
-article{padding: var(--Padding-section); width: 90vw;}
+article{padding: var(--Padding-section);}
 nav{flex-direction: row; justify-content: space-around;}
