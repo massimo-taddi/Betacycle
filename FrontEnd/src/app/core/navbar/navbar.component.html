@@ -1,17 +1,3 @@
-<<<<<<< Updated upstream
-<nav class="navbar navbar-expand-lg" style="background-color: #00000000;">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/home">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="d-flex ms-auto me-auto">
-          <input #searchString class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="border-radius: 20px;">
-          <button class="btn btn-outline-success" type="submit" style="border-radius: 20px;" (click)="Search(searchString)">Search</button>
-      </form>
-      <p-button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
-=======
 <nav class="navbar navbar-expand-lg" style="background: linear-gradient(180deg, rgba(30,30,30,1)0%, rgba(30,30,30,0)); position: fixed; width: 100%;">
     <div class="container-fluid">
       <a class="navbar-brand" routerLink="/home">Home</a>
@@ -30,11 +16,9 @@
         </form>
         <p-button type="button" class="mr-2" (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
       </div>
->>>>>>> Stashed changes
     </div>
-  </div>
 </nav>
-<p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="bg-light">
+<p-sidebar [(visible)]="sidebarVisible" position="right" styleClass="bg-light" [modal]="false">
   <h3>Right Sidebar</h3>
   <ul>
     <li *ngIf="!isUserLoggedIn" class="nav-item">

@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit{
         this.loginResponseStatus = response.status;
         this.loginResponseBody = response.body;
         if(this.loginResponseStatus === HttpStatusCode.Ok) {
-          // TODO: add criptaggio con window.btoa
           switch(this.loginResponseBody) {
             case "notMigrated":
               // porta utente a una pagina di registrazione ("abbiamo effettuato una migrazione")

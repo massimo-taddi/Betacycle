@@ -3,8 +3,11 @@ using BetaCycleAPI.BLogic.Authentication.Basic;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BetaCycleAPI
 {
@@ -20,14 +23,35 @@ namespace BetaCycleAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddAuthentication()
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", opt => { });
+            // JWT Authentication
+            JwtSettings jwtSettings = new();
+            jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            builder.Services.AddSingleton(jwtSettings);
 
-            builder.Services.AddAuthorization(opts =>
-            {
-                opts.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication")
-                    .RequireAuthenticatedUser().Build());
-            });
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opts =>
+                {
+                    opts.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        RequireExpirationTime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                    };
+                });
+
+            //builder.Services.AddAuthentication()
+            //    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", opt => { });
+
+            //builder.Services.AddAuthorization(opts =>
+            //{
+            //    opts.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication")
+            //        .RequireAuthenticatedUser().Build());
+            //});
 
             Connectionstrings.AdventureWorks = builder.Configuration.GetConnectionString("AdventureWorks");
             Connectionstrings.Credentials = builder.Configuration.GetConnectionString("Credentials");
