@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CustomerAddress } from '../../shared/models/CustomerAddress';
 import { HttploginService } from '../../shared/services/httplogin.service';
 import { Customer } from '../../shared/models/Customer';
+import { CustomerService } from '../../shared/services/customer.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,7 +16,7 @@ export class SignUpComponent implements OnInit {
   signUpSuccess: boolean = false;
   stayLoggedIn: boolean = false;
 
-  constructor(private httpService: HttploginService) { }
+  constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
     
@@ -35,7 +36,7 @@ export class SignUpComponent implements OnInit {
     IsMigrated: boolean,
     CustomerAddresses: CustomerAddress[]
   ) {
-    this.httpService.httpPostNewCustomer(new Customer(Title, FirstName, MiddleName, LastName, Suffix, CompanyName, SalesPerson, EmailAddress, Phone, Password, new Date(Date.now()), IsMigrated, CustomerAddresses))
+    this.customerService.httpPostNewCustomer(new Customer(Title, FirstName, MiddleName, LastName, Suffix, CompanyName, SalesPerson, EmailAddress, Phone, Password, new Date(Date.now()), IsMigrated, CustomerAddresses))
       .subscribe({
         next: (response: any) => {
           this.signUpSuccess = true;

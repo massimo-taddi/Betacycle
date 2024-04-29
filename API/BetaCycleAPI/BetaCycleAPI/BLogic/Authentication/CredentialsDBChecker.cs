@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.Options;
 
 namespace BetaCycleAPI.BLogic.Authentication
 {
+    /// <summary>
+    /// Static class with utilities for checking credentials' validity in the DB
+    /// </summary>
     public static class CredentialsDBChecker
     {
         public static async Task<DBCheckResponse> ValidateLogin(string user, string pwd)

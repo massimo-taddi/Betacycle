@@ -14,23 +14,19 @@ export class HttploginService {
   });
   constructor(private http: HttpClient) {}
 
-  httpSendLoginCredentials(credential: LoginCredentials): Observable<any> {
-    return this.http.post('https://localhost:7287/app/login', credential, { observe: "response", responseType: "text" });
+  httpSendLoginCredentials(credentials: LoginCredentials): Observable<any> {
+    return this.http.post('https://localhost:7287/app/loginjwt', credentials, { observe: "response", responseType: "text" });
   }
 
-  httpPostNewCustomer(customer: Customer): Observable<any> {
-    return this.http.post('https://localhost:7287/api/customer', customer);
-  }
-
-  httpValidateToken(): Observable<any> {
-    //da finire
-    //modificare a post
-    this.newHeader = this.newHeader.set(
-      'Authorization',
-      'Basic '// + window.btoa(localStorage.getItem('credentials'))
-    );
-    return this.http.get('');
-  }
+  // httpValidateToken(): Observable<any> {
+  //   //da finire
+  //   //modificare a post
+  //   this.newHeader = this.newHeader.set(
+  //     'Authorization',
+  //     'Basic '// + window.btoa(localStorage.getItem('credentials'))
+  //   );
+  //   return this.http.get('');
+  // }
   /*
   httpGetAuthrsById(id: number): Observable<any> {
     this.newHeader = this.newHeader.set(

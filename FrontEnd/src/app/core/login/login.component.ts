@@ -4,8 +4,9 @@ import { LoginCredentials } from '../../shared/models/LoginCredentials';
 import { HttpStatusCode } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LoginStatusService } from '../../shared/services/login-status.service';
 import { FormsModule } from '@angular/forms';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -14,66 +15,35 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit{
-  loginResponseBody: string = '';
-  loginResponseStatus: HttpStatusCode = HttpStatusCode.NotFound;
+export class LoginComponent {
+  loginCredentials: LoginCredentials = new LoginCredentials('','');
+  jwtToken: any;
+  decodedTokenPayload: any;
   stayLoggedIn: boolean = false;
-  isLoggedIn: boolean = false;
-  isAdmin: boolean = false;
   failedLogin: boolean = false;
-  myUser: string ='';
-  myPwd: string='';
 
-  constructor(private httpLogin: HttploginService, private router: Router, private route: ActivatedRoute, private loggedInStatus: LoginStatusService) {}
-
-  ngOnInit(): void {
-    this.loggedInStatus.isLoggedIn$.subscribe(
-      res => this.isLoggedIn = res
-    );
-    localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true' ? this.isLoggedIn = true : this.isLoggedIn = false;
-    localStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isAdmin') === 'true' ? this.isAdmin = true : this.isAdmin = false;
-  }
+  constructor(private http: HttploginService, private router: Router, private authStatus: AuthenticationService) {}
 
   Login() {
-    console.log(this.myPwd, this.myUser)
-    this.httpLogin.httpSendLoginCredentials(new LoginCredentials(this.myUser, this.myPwd)).subscribe({
-      next: (response: any) => {
-        this.loginResponseStatus = response.status;
-        this.loginResponseBody = response.body;
-        if(this.loginResponseStatus === HttpStatusCode.Ok) {
-          switch(this.loginResponseBody) {
-            case "notMigrated":
-              // porta utente a una pagina di registrazione ("abbiamo effettuato una migrazione")
-              this.router.navigate(["/signup"]);
+    if (this.loginCredentials.Username != '' && this.loginCredentials.Password != '') {
+      this.http.httpSendLoginCredentials(this.loginCredentials).subscribe({
+        next: (response: any) => {
+          switch (response.status) {
+            case HttpStatusCode.Ok:
+              this.jwtToken = JSON.parse(response.body).token;
+              this.decodedTokenPayload = jwtDecode(this.jwtToken);
+              this.authStatus.setLoginStatus(true, this.jwtToken, this.stayLoggedIn, this.decodedTokenPayload.role === 'admin');
               break;
-            case "migrated":
-              // fa il login e appare l'area personale
-              if(this.stayLoggedIn)
-                localStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
-              else
-                sessionStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
-              this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
-              this.router.navigate(["/home"]);
-              break;
-            case "admin":
-              // fa il login e appare un'opzione extra nella navbar x area amministratore
-              if(this.stayLoggedIn)
-                localStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
-              else
-                sessionStorage.setItem('credentials', window.btoa(this.myUser + ":" + this.myPwd));
-              this.loggedInStatus.setLoggedIn(true, this.stayLoggedIn);
-              this.loggedInStatus.setAdmin(true, this.stayLoggedIn);
-              this.router.navigate(["/home"]);
+            case HttpStatusCode.NoContent:
+              this.failedLogin = true;
+              if(response.text === 'not migrated') this.router.navigate(["/signup"]);
               break;
           }
-        }
-      },
-      error: (error: any) => {
-        this.failedLogin = true;
-        if(error.status === HttpStatusCode.NotFound) {
-          console.log("not found")
-        }
-      }
-    });
+        },
+        error: (err: any) => {
+          this.authStatus.setLoginStatus(false, '', false, false);
+        },
+      });
+    } else alert('Username e Password obbligatori!');
   }
 }

@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BLogic\Authentication\Jwt\" />
     <Folder Include="Contexts\" />
     <Folder Include="Models\ModelsCredentials\" />
   </ItemGroup>

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
-import { LoginStatusService } from '../../shared/services/login-status.service';
 import { SidebarModule } from 'primeng/sidebar';
 import { PrimeIcons } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,37 +14,27 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isUserLoggedIn: boolean = false;
   isUserAdmin: boolean = false;
   sidebarVisible: boolean = false;
 
-  constructor(private loginStatus: LoginStatusService) { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-    if(sessionStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('isLoggedIn') === 'true') {
-      this.isUserLoggedIn = true;
-      console.log(this.isUserLoggedIn);
-      if(sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true')
-        this.isUserAdmin = true;
-      return;
-    }
-    this.loginStatus.isLoggedIn$.subscribe(
+    this.authenticationService.isLoggedIn$.subscribe(
       res => this.isUserLoggedIn = res
     );
-    this.loginStatus.isAdmin$.subscribe(
+    this.authenticationService.isAdmin$.subscribe(
       res => this.isUserAdmin = res
     );
   }
 
   Logout() {
-    this.loginStatus.setAdmin(false);
-    this.loginStatus.setLoggedIn(false);
-    localStorage.removeItem('credentials');
-    sessionStorage.removeItem('credentials');
+    this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
-    //window.location.reload();
   }
+
   Search(searchString: HTMLInputElement) {
 
   }

@@ -25,6 +25,10 @@ namespace BetaCycleAPI.Controllers
         }
 
         // GET: api/Customers
+        /// <summary>
+        /// Get a list of all customers in the DB
+        /// </summary>
+        /// <returns>A list of all the customers found</returns>
         [HttpGet]
         [BasicAuthorizationAttributes]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
@@ -33,6 +37,11 @@ namespace BetaCycleAPI.Controllers
         }
 
         // GET: api/Customers/5
+        /// <summary>
+        /// Get a <c>Customer</c> object with the specified id
+        /// </summary>
+        /// <param name="id">The id of the <c>Customer</c> to find</param>
+        /// <returns>The customer with the specified id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
@@ -52,6 +61,12 @@ namespace BetaCycleAPI.Controllers
 
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a customer record given a record and the id of the customer
+        /// </summary>
+        /// <param name="id">The id of the customer</param>
+        /// <param name="customer">The customer record representing the updated information</param>
+        /// <returns>The response, which depends on the DB response</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
@@ -113,6 +128,11 @@ namespace BetaCycleAPI.Controllers
         //}
 
         // DELETE: api/Customers/5
+        /// <summary>
+        /// Deletes a customer record from the DB
+        /// </summary>
+        /// <param name="id">The id of the customer to delete</param>
+        /// <returns>A response indicating whether the record was deleted or not</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
