@@ -1,6 +1,7 @@
 ﻿using BetaCycleAPI.BLogic.Authentication;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace BetaCycleAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("app/[controller]")]
     [ApiController]
     public class LoginJwtController : ControllerBase
     {
@@ -21,35 +22,35 @@ namespace BetaCycleAPI.Controllers
             _jwtSettings = jwtSettings;
         }
 
+        /// <summary>
+        /// Generates a token for a POST call
+        /// </summary>
+        /// <param name="loginCredentials">The credentials that will be checked and used for the generation of the token</param>
+        /// <returns>A <c>Result</c>, the value of which is determined by checking the DB for credentials</returns>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GenerateToken(LoginCredentials loginCredentials)
         {
             // qui si controlla sul db
-            var dbCheckResult = await CredentialsDBChecker.ValidateLogin(loginCredentials.Username.ToLower(), loginCredentials.Password.ToLower());
+            var dbCheckResult = await CredentialsDBChecker.ValidateLogin(loginCredentials.Username.ToLower(), loginCredentials.Password);
             switch(dbCheckResult)
             {
                 case DBCheckResponse.FoundMigrated:
-                    var token = generateJwtToken(loginCredentials.Username);
+                    var token = generateJwtToken(loginCredentials.Username, false);
                     return Ok(new { token });
                 case DBCheckResponse.FoundAdmin:
-                    token = generateJwtToken(loginCredentials.Username);
+                    token = generateJwtToken(loginCredentials.Username, true);
                     return Ok(new { token });
                 case DBCheckResponse.FoundNotMigrated:
-                    return Ok("not migrated");
+                    return NotFound("not migrated");
                 case DBCheckResponse.NotFound:
                     return NotFound();
 
             }
-            if (dbCheckResult == DBCheckResponse.FoundMigrated)
-            {
-                var token = generateJwtToken(loginCredentials.Username);
-                return Ok(new { token });
-            }
-            else
-                return BadRequest();
+            return BadRequest();
         }
 
-        private string generateJwtToken(string username)
+        private string generateJwtToken(string username, bool isAdmin)
         {
             var secretKey = _jwtSettings.SecretKey;
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -58,7 +59,8 @@ namespace BetaCycleAPI.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, isAdmin ? "admin" : "customer")
                 }),
                 Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpirationMinutes),
                 Issuer = _jwtSettings.Issuer,

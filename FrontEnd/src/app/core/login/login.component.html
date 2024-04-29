@@ -4,10 +4,10 @@
             <img class="mb-4" src="/assets/images/favicon .ico" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" #Username="ngModel" [(ngModel)]="myUser" [ngModelOptions]="{standalone:true}" class="form-control" placeholder="Email address" required minlength="3" maxlength="40">
+            <input type="email" #Username="ngModel" [(ngModel)]="loginCredentials.Username" [ngModelOptions]="{standalone:true}" class="form-control" placeholder="Email address" required minlength="3" maxlength="40">
             <div *ngIf="Username.invalid && Username.touched" id="emailHelp" style="color: red;"   class="form-text">Email must be valid</div>
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" #Password="ngModel" [(ngModel)]="myPwd" [ngModelOptions]="{standalone:true}" class="form-control" placeholder="Password" required minlength="5" maxlength="20">
+            <input type="password" #Password="ngModel" [(ngModel)]="loginCredentials.Password" [ngModelOptions]="{standalone:true}" class="form-control" placeholder="Password" required minlength="5" maxlength="20">
             <div *ngIf="Password.invalid && Password.touched" id="pwdHelp" style="color: red;"   class="form-text">Passsword must be valid</div>
             <div class="checkbox mb-3">
                 <label>
