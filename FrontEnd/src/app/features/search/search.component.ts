@@ -25,10 +25,11 @@ export class SearchComponent {
   products!: Product[];
 
   constructor(private productService: ProductService) {}
-
+  /*
   ngOnInit() {
     this.productService
       .getProducts()
       .then((data) => (this.products = data.slice(0, 5)));
   }
+  */
 }
