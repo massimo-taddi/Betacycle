@@ -1,5 +1,5 @@
 <nav
-  class="navbar navbar-expand-lg"
+  class="navbar navbar-expand-lg navbar-expand"
   style="
     background: linear-gradient(
       180deg,
@@ -24,15 +24,10 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li *ngIf="!isUserLoggedIn" class="nav-item">
-            <a class="nav-link" routerLink="/login">login</a>
-          </li>
-        </ul>-->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="windowWidth > navbarBreakpoint;">
       <form class="d-flex ms-auto me-auto">
         <input
-          #searchString
+          #searchStringNav
           class="form-control me-2"
           type="search"
           placeholder="Search"
@@ -43,28 +38,46 @@
           class="btn btn-outline-success"
           type="submit"
           style="border-radius: 20px"
-          (click)="Search(searchString)"
+          (click)="Search(searchStringNav)"
         >
           Search
         </button>
       </form>
-      <p-button
+    </div>
+    <p-button
         type="button"
-        class="mr-2"
+        class="mr-2" 
         (click)="sidebarVisible = true"
         icon="pi pi-bars"
         size="small"
-      ></p-button>
-    </div>
+    ></p-button>
   </div>
 </nav>
 <p-sidebar
   [(visible)]="sidebarVisible"
   position="right"
-  styleClass="bg-light"
+  styleClass="bg-light p-sidebar-mask"
   [modal]="false"
 >
   <h3>Right Sidebar</h3>
+  <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint;">
+    <input
+      #searchString
+      class="form-control me-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+      style="border-radius: 20px"
+    />
+    <button
+      class="btn btn-outline-success"
+      type="submit"
+      style="border-radius: 20px"
+      (click)="Search(searchString)"
+    >
+      Search
+    </button>
+  </form>
   <ul>
     <li *ngIf="!isUserLoggedIn" class="nav-item">
       <a class="nav-link" routerLink="/login">Login</a>
@@ -72,7 +85,7 @@
     <li *ngIf="!isUserLoggedIn" class="nav-item">
       <a class="nav-link" routerLink="/signup">Sign up</a>
     </li>
-    <li *ngIf="isUserLoggedIn" class="nav-item">
+    <li *ngIf="isUserLoggedIn && !isUserAdmin" class="nav-item">
       <a class="nav-link" routerLink="/personal">Area personale</a>
     </li>
     <li *ngIf="isUserAdmin" class="nav-item">

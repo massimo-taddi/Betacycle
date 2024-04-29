@@ -6,6 +6,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { PrimeIcons } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { HostListener } from "@angular/core";
 
 @Component({
   selector: 'app-navbar',
@@ -18,8 +19,10 @@ export class NavbarComponent implements OnInit {
   isUserLoggedIn: boolean = false;
   isUserAdmin: boolean = false;
   sidebarVisible: boolean = false;
+  windowWidth: number = window.innerWidth;
+  navbarBreakpoint = +(getComputedStyle(document.body).getPropertyValue('--bs-breakpoint-lg')).slice(0, -2)
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private authenticationService: AuthenticationService) {  }
 
   ngOnInit(): void {
     this.authenticationService.isLoggedIn$.subscribe(
@@ -33,6 +36,11 @@ export class NavbarComponent implements OnInit {
   Logout() {
     this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenWidth(event?: any) {
+    this.windowWidth = window.innerWidth;
   }
 
   Search(searchString: HTMLInputElement) {

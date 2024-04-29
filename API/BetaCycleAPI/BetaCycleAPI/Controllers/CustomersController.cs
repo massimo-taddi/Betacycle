@@ -52,7 +52,6 @@ namespace BetaCycleAPI.Controllers
             {
                 item.Address = await _context.Addresses.FindAsync(item.AddressId);
             }
-
             if (customer == null)
                 return NotFound();
 
