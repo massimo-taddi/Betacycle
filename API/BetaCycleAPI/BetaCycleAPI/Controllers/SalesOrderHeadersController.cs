@@ -36,42 +36,60 @@ namespace BetaCycleAPI.Controllers
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            List<SalesOrderHeader> headers = new();
             if(token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                headers = await _awContext.SalesOrderHeaders.ToListAsync();
+            else
             {
-                return await _awContext.SalesOrderHeaders.ToListAsync();
+                // TEST VALUES: tokenEmail = "david16@adventure-works.com"; tokenCustomerId = 29847 (o 609);
+                // E' stato testato con dei valori di prova e funziona
+                var tokenEmail = "david16@adventure-works.com";// token.Claims.First(claim => claim.Type == "unique_name").Value;
+                var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+                headers = await _awContext.SalesOrderHeaders.Where(order => order.CustomerId == tokenCustomerId).ToListAsync();
             }
 
-            // TEST VALUES: tokenEmail = "david16@adventure-works.com"; tokenCustomerId = 29847 (o 609);
-            // E' stato testato con dei valori di prova e funziona
-            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
-            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
-                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).Last().CustomerId :
-                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).Last().CustomerId;
-            return await _awContext.SalesOrderHeaders.Where(order => order.CustomerId == tokenCustomerId).ToListAsync();
+            foreach (var header in headers)
+            {
+                header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
+            }
+
+            return headers;
         }
 
         // GET: api/SalesOrderHeaders/5
-        // get an order with a provided ID
+        // get an order with a provided ID, only for admins
         [HttpGet("{id}")]
         public async Task<ActionResult<SalesOrderHeader>> GetSalesOrderHeader(int id)
         {
-            var salesOrderHeader = await _awContext.SalesOrderHeaders.FindAsync(id);
-
-            if (salesOrderHeader == null)
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            SalesOrderHeader? salesOrderHeader;
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
             {
-                return NotFound();
+                salesOrderHeader = await _awContext.SalesOrderHeaders.FindAsync(id);
+
+                if (salesOrderHeader == null)
+                {
+                    return NotFound();
+                }
+                salesOrderHeader.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == salesOrderHeader.SalesOrderId).ToListAsync();
+                return salesOrderHeader;
             }
 
-            return salesOrderHeader;
+            return BadRequest();
         }
 
         // PUT: api/SalesOrderHeaders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // 
+        // updates a salesorderheader with a given ID
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSalesOrderHeader(int id, SalesOrderHeader salesOrderHeader)
         {
-            if (id != salesOrderHeader.SalesOrderId)
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin" || id != salesOrderHeader.SalesOrderId)
             {
                 return BadRequest();
             }
@@ -97,21 +115,17 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/SalesOrderHeaders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<SalesOrderHeader>> PostSalesOrderHeader(SalesOrderHeader salesOrderHeader)
-        {
-            _awContext.SalesOrderHeaders.Add(salesOrderHeader);
-            await _awContext.SaveChangesAsync();
-
-            return CreatedAtAction("GetSalesOrderHeader", new { id = salesOrderHeader.SalesOrderId }, salesOrderHeader);
-        }
-
         // DELETE: api/SalesOrderHeaders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSalesOrderHeader(int id)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+
             var salesOrderHeader = await _awContext.SalesOrderHeaders.FindAsync(id);
             if (salesOrderHeader == null)
             {
