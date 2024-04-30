@@ -19,4 +19,6 @@ div.icontainer{border-bottom: solid 2.5px var(--Secondary-color);}
 .form-container{
     border: 3px solid #091e42; border-radius: 1.5vw; padding: 2%; box-sizing: content-box; display: flex; height: max-content;
     background-color: var(--Base-color);
+    margin-top: 10%;
+    margin-right: 3%;
 }

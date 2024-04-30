@@ -33,6 +33,7 @@ export class LoginComponent {
               this.jwtToken = JSON.parse(response.body).token;
               this.decodedTokenPayload = jwtDecode(this.jwtToken);
               this.authStatus.setLoginStatus(true, this.jwtToken, this.stayLoggedIn, this.decodedTokenPayload.role === 'admin');
+              this.router.navigate(["/home"])
               break;
             case HttpStatusCode.NoContent:
               this.failedLogin = true;

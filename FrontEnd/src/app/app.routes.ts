@@ -4,6 +4,7 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './core/login/login.component';
 import { SignUpComponent } from './core/sign-up/sign-up.component';
 import { SearchComponent } from './features/search/search.component';
+import { PrivateAreaComponent } from './features/private-area/private-area.component';
 
 export const routes: Routes = [
   {
@@ -26,5 +27,9 @@ export const routes: Routes = [
   {
     path: 'search',
     component: SearchComponent,
+  },
+  {
+    path: 'personal',
+    component: PrivateAreaComponent,
   },
 ];
