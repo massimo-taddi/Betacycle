@@ -1,64 +1,48 @@
 <nav
   class="navbar navbar-expand-lg navbar-expand"
   style="
-    background: linear-gradient(
-      180deg,
-      rgba(30, 30, 30, 1) 0%,
-      rgba(30, 30, 30, 0)
-    );
+    background-color: #687995;
     position: fixed;
     width: 100%;
     z-index: 1;
-  "
->
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/home">Home</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="windowWidth > navbarBreakpoint;">
-      <form class="d-flex ms-auto me-auto">
-        <input
-          #searchStringNav
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-          style="border-radius: 20px"
-        />
-        <button
-          class="btn btn-outline-success"
-          type="submit"
-          style="border-radius: 20px"
-          (click)="Search(searchStringNav)"
-        >
-          Search
-        </button>
-      </form>
-    </div>
-    <p-button
+  ">
+  <div class="container-fluid d-flex justify-content-between">
+    <a class="navbar-brand" routerLink="/home"><img
+        src="/assets/images/Betacycle_logo_linear.svg"></a>
+
+    <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="windowWidth > navbarBreakpoint;"> -->
+    <form class="d-flex navbar-form" style="position: absolute; margin: auto; right: 0; left: 0; width: 400px;" *ngIf="windowWidth > navbarBreakpoint;">
+      <input
+        #searchStringNav
+        class="form-control me-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+        style="border-radius: 20px" />
+      <button
+        class="btn btn-outline-success"
+        type="submit"
+        style="border-radius: 20px"
+        (click)="Search(searchStringNav)">
+        Search
+      </button>
+    </form>
+    <!-- </div> -->
+    <div class>
+      <p-button
         type="button"
-        class="mr-2" 
+        class="mr-2"
         (click)="sidebarVisible = true"
         icon="pi pi-bars"
-        size="small"
-    ></p-button>
+        size="small"></p-button>
+    </div>
   </div>
 </nav>
 <p-sidebar
   [(visible)]="sidebarVisible"
   position="right"
   styleClass="bg-light p-sidebar-mask"
-  [modal]="false"
->
+  [modal]="false">
   <h3>Right Sidebar</h3>
   <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint;">
     <input
@@ -67,14 +51,12 @@
       type="search"
       placeholder="Search"
       aria-label="Search"
-      style="border-radius: 20px"
-    />
+      style="border-radius: 20px" />
     <button
       class="btn btn-outline-success"
       type="submit"
       style="border-radius: 20px"
-      (click)="Search(searchString)"
-    >
+      (click)="Search(searchString)">
       Search
     </button>
   </form>
