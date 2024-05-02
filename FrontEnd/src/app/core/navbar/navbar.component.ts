@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit {
     this.authenticationService.isLoggedIn$.subscribe(
       res => this.isUserLoggedIn = res
     );
+    if(localStorage.getItem('jwtToken') != null) sessionStorage.setItem('jwtToken', localStorage.getItem('jwtToken')!);
     this.authenticationService.isAdmin$.subscribe(
       res => this.isUserAdmin = res
     );

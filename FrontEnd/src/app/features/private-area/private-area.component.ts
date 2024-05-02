@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { HostListener } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-private-area',
@@ -51,5 +52,11 @@ export class PrivateAreaComponent {
         document.getElementById('info')?.setAttribute('class', 'nav-link text-white');
         break;
     }
+  }
+
+  getJwtUsername():string {
+    if(sessionStorage.getItem('jwtToken') == null) return 'user'
+    var decodedToken: any = jwtDecode(sessionStorage.getItem('jwtToken')!);
+    return decodedToken.unique_name;
   }
 }
