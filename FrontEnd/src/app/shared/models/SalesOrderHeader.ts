@@ -7,6 +7,5 @@ export class SalesOrderHeader {
   Status: number = 0;
   OnlineOrderFlag: boolean = false;
 
-  //controllare
-  
+  constructor() {}
 }
