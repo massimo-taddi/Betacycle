@@ -41,16 +41,22 @@ namespace BetaCycleAPI.Controllers
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            List<Customer> res = [];
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
-                return await _awContext.Customers.ToListAsync();
+                res = await _awContext.Customers.ToListAsync();
             else
             {
                 var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
                 var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
                                        _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                        _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
-                return await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
+                res = await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
             }
+            //foreach (var customer in res)
+            //{
+            //    customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
+            //}
+            return res;
         }
 
         // GET: api/Customers/5

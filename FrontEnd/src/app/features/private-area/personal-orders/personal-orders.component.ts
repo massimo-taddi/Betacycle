@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SalesOrderHeader } from '../../../shared/models/SalesOrderHeader';
-import { HttpOrdersService } from '../../../shared/services/http-orders.service';
+import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
 
 @Component({
   selector: 'app-personal-orders',
@@ -12,7 +12,7 @@ import { HttpOrdersService } from '../../../shared/services/http-orders.service'
 })
 export class PersonalOrdersComponent implements OnInit {
   orders: SalesOrderHeader[] = [];
-  constructor(private httpOrders: HttpOrdersService) {}
+  constructor(private httpOrders: HttpUserAdminService) {}
   ngOnInit(): void {
     this.getPersonalItems();
   }
@@ -38,7 +38,7 @@ export class PersonalOrdersComponent implements OnInit {
 
   private getPersonalItems() {
     this.httpOrders.httpGetUserOrders().subscribe({
-      next: (orders: any) => {
+      next: (orders: SalesOrderHeader[]) => {
         for(let order of orders) {
           this.orders.push(order);
         }

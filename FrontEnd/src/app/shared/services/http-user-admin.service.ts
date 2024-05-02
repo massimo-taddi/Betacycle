@@ -6,7 +6,7 @@ import { AuthenticationService } from './authentication.service';
 @Injectable({
   providedIn: 'root'
 })
-export class HttpOrdersService {
+export class HttpUserAdminService {
 
   constructor(private http: HttpClient, private auth: AuthenticationService) { }
 
@@ -15,7 +15,24 @@ export class HttpOrdersService {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe(
       h => header = h
-    )
+    );
     return this.http.get('https://localhost:7287/api/orders', {headers: header});
+  }
+
+  // if user is admin, get every customer's information. if user is customer, get a list with only their information in it
+  httpGetCustomerInfo(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe(
+      h => header = h
+    );
+    return this.http.get('https://localhost:7287/api/customers', {headers: header});
+  }
+
+  httpGetCustomerAddresses(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe(
+      h => header = h
+    );
+    return this.http.get('https://localhost:7287/api/addresses', {headers: header});
   }
 }

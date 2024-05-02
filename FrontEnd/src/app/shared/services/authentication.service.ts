@@ -1,21 +1,28 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private isLoggedIn = new BehaviorSubject(false);
+  private token = localStorage.getItem('jwtToken');
+  private isLoggedIn = new BehaviorSubject(this.token != null);
   isLoggedIn$ = this.isLoggedIn.asObservable();
-  private isAdmin = new BehaviorSubject(false);
+  private decodedToken: any = this.token != null ? jwtDecode(this.token!) : '';
+  private isAdmin = new BehaviorSubject(this.token != null ? this.decodedToken.role == 'admin' : false);
   isAdmin$ = this.isAdmin.asObservable();
   
   // authJwtHeader = new HttpHeaders({
   //   contentType: 'application/json',
   //   responseType: 'text'
   // });
-  private authJwtHeader = new BehaviorSubject(new HttpHeaders());
+  private authJwtHeader = new BehaviorSubject(this.token != null ? new HttpHeaders({
+    contentType: 'application/json',
+    responseType: 'text',
+    Authorization: 'Bearer ' + this.token
+  }) : new HttpHeaders());
   authJwtHeader$ = this.authJwtHeader.asObservable();
   
   constructor() { }
@@ -39,10 +46,7 @@ export class AuthenticationService {
       }));
     } else {
       localStorage.removeItem('jwtToken');
-      // this.authJwtHeader= new BehaviorSubject(new HttpHeaders({
-      //   contentType: 'application/json',
-      //   responseType: 'text'
-      // }));
+      sessionStorage.removeItem('jwtToken');
       this.authJwtHeader.next(new HttpHeaders({
         contentType: 'application/json',
         responseType: 'text'

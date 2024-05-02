@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -23,9 +26,43 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] ProductSpecParams @params)
         {
-            return await _context.Products.ToListAsync();
+            List<Product> res = [];
+            switch (@params.Sort)
+            {
+                case "priceDesc":
+                    res = await (from product in _context.Products 
+                                 join pmpd in _context.ProductModelProductDescriptions
+                                 on product.ProductModelId equals pmpd.ProductModelId
+                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                 where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                                 select product).Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                .Take(@params.PageSize)
+                                                .OrderByDescending(p => p.ListPrice)
+                                                .ToListAsync();
+                    //res = await _context.Products
+                    //                    .Where(prod => prod.Name.Contains(@params.Search))
+                    //                    .OrderBy(prod => prod.ListPrice)
+                    //                    .Skip((@params.PageIndex - 1) * @params.PageSize)
+                    //                    .Take(@params.PageSize).ToListAsync();
+                    break;
+                case "priceAsc":
+                    res = await (from product in _context.Products
+                                 join pmpd in _context.ProductModelProductDescriptions
+                                 on product.ProductModelId equals pmpd.ProductModelId
+                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                 where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                                 select product).OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                                          .Take(@params.PageSize)
+                                                                          .OrderBy(p => p.ListPrice)
+                                                                          .ToListAsync();
+                    break;
+                default:
+                    return BadRequest();
+            }
+
+            return res;
         }
 
         // GET: api/Products/5
@@ -44,10 +81,13 @@ namespace BetaCycleAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
-            if (id != product.ProductId)
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (id != product.ProductId || token.Claims.First(claim => claim.Type == "role").Value == "admin")
             {
                 return BadRequest();
             }
@@ -78,6 +118,10 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest();
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
@@ -88,6 +132,10 @@ namespace BetaCycleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest();
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {

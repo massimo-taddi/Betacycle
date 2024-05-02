@@ -7,6 +7,7 @@ import { PrimeIcons } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { HostListener } from "@angular/core";
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-navbar',
