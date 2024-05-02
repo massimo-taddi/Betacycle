@@ -1,7 +1,7 @@
 export class ProductCategory {
-  ProductCategoryid: number = 0;
-  ParentProductCategoryid: number = 0;
-  Name: string = '';
+  productCategoryid: number = 0;
+  parentProductCategoryid: number = 0;
+  name: string = '';
   rowguid: string = '';
-  ModifiedDate: Date | null = null;
+  modifiedDate: Date | null = null;
 }

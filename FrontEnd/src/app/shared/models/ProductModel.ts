@@ -1,6 +1,6 @@
 export class ProductModel {
-  ProductModelid: number = 0;
-  Name: string = '';
+  productModelid: number = 0;
+  name: string = '';
 
   //---
   //Guardare CatalogDescription

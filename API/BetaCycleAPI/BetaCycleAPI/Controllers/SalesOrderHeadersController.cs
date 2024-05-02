@@ -43,7 +43,7 @@ namespace BetaCycleAPI.Controllers
             {
                 // TEST VALUES: tokenEmail = "david16@adventure-works.com"; tokenCustomerId = 29847 (o 609);
                 // E' stato testato con dei valori di prova e funziona
-                var tokenEmail = "david16@adventure-works.com";// token.Claims.First(claim => claim.Type == "unique_name").Value;
+                var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
                 var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
                                        _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                        _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;

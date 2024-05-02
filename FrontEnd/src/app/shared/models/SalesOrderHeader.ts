@@ -2,24 +2,24 @@ import { Address } from "./Address";
 import { SalesOrderDetail } from "./SalesOrderDetail";
 
 export class SalesOrderHeader {
-  SalesOrderID: number = 0;
-  RevisionNumber: number = 0;
-  OrderDate: Date | null = null;
-  DueDate: Date | null = null;
-  ShipDate: Date | null = null;
-  Status: number = 0;
-  OnlineOrderFlag: boolean = false;
-  SalesOrderNumber: string = '';
-  PurchaseOrderNumber: string = '';
-  ShipToAddressID: number = 0;
-  ShipMethod: string = '';
-  SubTotal: number = 0;
-  TaxAmt: number = 0;
-  Freight: number = 0;
-  TotalDue: number = 0;
-  Comment: string = '';
-  SalesOrderDetails: SalesOrderDetail[] = [];
-  ShipToAddress: Address | null = null;
+  salesOrderID: number = 0;
+  revisionNumber: number = 0;
+  orderDate: Date | null = null;
+  dueDate: Date | null = null;
+  shipDate: Date | null = null;
+  status: number = 0;
+  onlineOrderFlag: boolean = false;
+  salesOrderNumber: string = '';
+  purchaseOrderNumber: string = '';
+  shipToAddressID: number = 0;
+  shipMethod: string = '';
+  subTotal: number = 0;
+  taxAmt: number = 0;
+  freight: number = 0;
+  totalDue: number = 0;
+  comment: string = '';
+  salesOrderDetails: SalesOrderDetail[] = [];
+  shipToAddress: Address | null = null;
 
   constructor() {}
 }

@@ -25,7 +25,7 @@ export class LoginComponent {
   constructor(private http: HttploginService, private router: Router, private authStatus: AuthenticationService) {}
 
   Login() {
-    if (this.loginCredentials.Username != '' && this.loginCredentials.Password != '') {
+    if (this.loginCredentials.username != '' && this.loginCredentials.password != '') {
       this.http.httpSendLoginCredentials(this.loginCredentials).subscribe({
         next: (response: any) => {
           switch (response.status) {

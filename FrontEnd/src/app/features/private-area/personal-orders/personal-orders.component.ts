@@ -39,12 +39,12 @@ export class PersonalOrdersComponent implements OnInit {
   private getPersonalItems() {
     this.httpOrders.httpGetUserOrders().subscribe({
       next: (orders: any) => {
-        orders.array.forEach((element: SalesOrderHeader) => {
-          this.orders.push(element)
-        });
+        for(let order of orders) {
+          this.orders.push(order);
+        }
       },
-      error: (err: any) => {
-        console.log(err);
+      error: (err: Error) => {
+        console.log(err.message);
       },
     });
   }

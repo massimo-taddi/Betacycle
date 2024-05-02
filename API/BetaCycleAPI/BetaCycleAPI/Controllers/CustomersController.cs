@@ -9,48 +9,70 @@ using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.ModelsCredentials;
 using EncryptData;
-using BetaCycleAPI.BLogic.Authentication.Basic;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BetaCycleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CustomersController : ControllerBase
     {
-        private readonly AdventureWorksLt2019Context _context;
+        private readonly AdventureWorksLt2019Context _awContext;
+        private readonly AdventureWorks2019CredentialsContext _credentialsContext;
 
-        public CustomersController(AdventureWorksLt2019Context context)
+        public CustomersController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext)
         {
-            _context = context;
+            _awContext = context;
+            _credentialsContext = credentialsContext;
         }
 
         // GET: api/Customers
         /// <summary>
-        /// Get a list of all customers in the DB
+        /// Administrators get a list of all customer information, while customers get a list with a single item containing their information
         /// </summary>
-        /// <returns>A list of all the customers found</returns>
+        /// <returns>admins: A list of all the customers found, customers: a list with a single item containing their information</returns>
         [HttpGet]
-        [BasicAuthorizationAttributes]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return await _awContext.Customers.ToListAsync();
+            else
+            {
+                var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+                var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+                return await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
+            }
         }
 
         // GET: api/Customers/5
         /// <summary>
         /// Get a <c>Customer</c> object with the specified id
+        /// only allowed for admins
         /// </summary>
         /// <param name="id">The id of the <c>Customer</c> to find</param>
         /// <returns>The customer with the specified id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest();
+            var customer = await _awContext.Customers.FindAsync(id);
             List<CustomerAddress> addresses = [];
-            customer.CustomerAddresses = await _context.CustomerAddresses.Where(ad => ad.CustomerId == id).ToListAsync();
+            customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ad => ad.CustomerId == id).ToListAsync();
             foreach (var item in customer.CustomerAddresses)
             {
-                item.Address = await _context.Addresses.FindAsync(item.AddressId);
+                item.Address = await _awContext.Addresses.FindAsync(item.AddressId);
             }
             if (customer == null)
                 return NotFound();
@@ -74,11 +96,11 @@ namespace BetaCycleAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
+            _awContext.Entry(customer).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _awContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -112,8 +134,8 @@ namespace BetaCycleAPI.Controllers
             customer.PasswordHash = pwData.Key;
             Console.WriteLine(pwData.Value);
             customer.PasswordSalt = pwData.Value;
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            _awContext.Customers.Add(customer);
+            await _awContext.SaveChangesAsync();
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
@@ -135,21 +157,21 @@ namespace BetaCycleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _awContext.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            _awContext.Customers.Remove(customer);
+            await _awContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool CustomerExists(int id)
         {
-            return _context.Customers.Any(e => e.CustomerId == id);
+            return _awContext.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

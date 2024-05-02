@@ -1,6 +1,6 @@
 export class ProductDescription {
-  ProductDescriptionid: number = 0;
-  Description: string = '';
+  productDescriptionid: number = 0;
+  description: string = '';
   rowguid: string = '';
-  ModifiedDate: Date | null = null;
+  modifiedDate: Date | null = null;
 }

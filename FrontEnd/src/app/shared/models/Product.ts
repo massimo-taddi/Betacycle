@@ -1,19 +1,19 @@
 export class Product {
-  ProductID: number = 0;
-  Name: string = '';
-  ProductNumber: string = '';
-  Color: string = '';
-  StandardCost: number = 0;
-  ListPrice: number = 0;
-  Size: string = '';
-  Weight: number = 0;
-  ProductCategoryid: number = 0;
-  ProductModelid: number = 0;
-  SellStartDate: Date | null = null;
-  SellEndDate: Date | null = null;
-  DiscontinuedDate: Date | null = null;
-  ThumbNailPhoto: any;
-  ThumbNailPhotoFileName: string = '';
+  productID: number = 0;
+  name: string = '';
+  productNumber: string = '';
+  color: string = '';
+  standardCost: number = 0;
+  listPrice: number = 0;
+  size: string = '';
+  weight: number = 0;
+  productCategoryid: number = 0;
+  productModelid: number = 0;
+  sellStartDate: Date | null = null;
+  sellEndDate: Date | null = null;
+  discontinuedDate: Date | null = null;
+  thumbNailPhoto: any;
+  thumbNailPhotoFileName: string = '';
   rowguid: string = '';
-  ModifiedDate: Date | null = null;
+  modifiedDate: Date | null = null;
 }

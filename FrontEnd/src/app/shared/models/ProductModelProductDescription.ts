@@ -1,7 +1,7 @@
 export class ProductModelProductDescription {
-  ProductModelId: number = 0;
-  ProductDescriptionid: number = 0;
-  Culture: string = '';
+  productModelId: number = 0;
+  productDescriptionid: number = 0;
+  culture: string = '';
   rowguid: string = '';
-  ModifiedDate: Date | null = null;
+  modifiedDate: Date | null = null;
 }

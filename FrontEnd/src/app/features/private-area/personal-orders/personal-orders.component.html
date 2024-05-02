@@ -14,15 +14,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let order of orders;">
-        <th scope="col">{{order.SalesOrderNumber}}</th>
-        <th scope="col">{{order.OrderDate}}</th>
-        <th scope="col">{{order.ShipDate}}</th>
-        <th scope="col">{{order.ShipToAddress?.AddressLine1}}, {{order.ShipToAddress?.AddressLine2}}, {{order.ShipToAddress?.City}}, {{order.ShipToAddress?.CountryRegion}}</th>
-        <th scope="col">{{orderStatusString(order.Status)}}</th>
-        <th scope="col">{{order.SubTotal}}</th>
-        <th scope="col">{{order.TaxAmt}}</th>
-        <th scope="col">{{order.Freight}}</th>
-        <th scope="col">{{order.TotalDue}}</th>
+        <th scope="col">{{order.salesOrderNumber}}</th>
+        <th scope="col">{{order.orderDate}}</th>
+        <th scope="col">{{order.shipDate}}</th>
+        <th scope="col">{{order.shipToAddress?.addressLine1}}, {{order.shipToAddress?.addressLine2}}, {{order.shipToAddress?.city}}, {{order.shipToAddress?.countryRegion}}</th>
+        <th scope="col">{{orderStatusString(order.status)}}</th>
+        <th scope="col">{{order.subTotal}}</th>
+        <th scope="col">{{order.taxAmt}}</th>
+        <th scope="col">{{order.freight}}</th>
+        <th scope="col">{{order.totalDue}}</th>
       </tr>
     </tbody>
   </table>

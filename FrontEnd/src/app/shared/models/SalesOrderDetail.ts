@@ -1,11 +1,11 @@
 export class SalesOrderDetail {
-  SalesOrderid: number = 0;
-  SalesOrderDetailid: number = 0;
-  OrderQty: number = 0;
-  Productid: number = 0;
-  UnitPrice: number = 0;
-  UnitPrioceDiscount: number = 0;
-  LineTotal: number = 0;
+  salesOrderid: number = 0;
+  salesOrderDetailid: number = 0;
+  orderQty: number = 0;
+  productid: number = 0;
+  unitPrice: number = 0;
+  unitPrioceDiscount: number = 0;
+  lineTotal: number = 0;
   rowguid: string = '';
-  ModifiedDate: Date | null = null;
+  modifiedDate: Date | null = null;
 }
