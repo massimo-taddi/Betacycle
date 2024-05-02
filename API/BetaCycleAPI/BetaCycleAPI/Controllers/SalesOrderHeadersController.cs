@@ -29,7 +29,7 @@ namespace BetaCycleAPI.Controllers
             _credentialsContext = credentialsContext;
         }
 
-        // GET: api/SalesOrderHeaders
+        // GET: api/orders
         // get all orders FROM THE CURRENT USER, but if the user is admin then get the full list of orders (ADMINS CANT ORDER!)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SalesOrderHeader>>> GetSalesOrderHeaders()
@@ -53,12 +53,14 @@ namespace BetaCycleAPI.Controllers
             foreach (var header in headers)
             {
                 header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
+                header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
             }
+
 
             return headers;
         }
 
-        // GET: api/SalesOrderHeaders/5
+        // GET: api/orders/5
         // get an order with a provided ID, only for admins
         [HttpGet("{id}")]
         public async Task<ActionResult<SalesOrderHeader>> GetSalesOrderHeader(int id)
@@ -75,13 +77,14 @@ namespace BetaCycleAPI.Controllers
                     return NotFound();
                 }
                 salesOrderHeader.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == salesOrderHeader.SalesOrderId).ToListAsync();
+                salesOrderHeader.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == salesOrderHeader.ShipToAddressId).FirstAsync();
                 return salesOrderHeader;
             }
 
             return BadRequest();
         }
 
-        // PUT: api/SalesOrderHeaders/5
+        // PUT: api/orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // updates a salesorderheader with a given ID
         [HttpPut("{id}")]
@@ -115,7 +118,7 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/SalesOrderHeaders/5
+        // DELETE: api/orders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSalesOrderHeader(int id)
         {
