@@ -1,1 +1,70 @@
-<p>private-area works!</p>
+<div style="height: 900px; display: flex; flex-direction: row; column-gap: 1%; padding-top: 65px;">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 800px; margin-left: 15px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;" *ngIf="windowWidth > navbarBreakpoint;">
+        <ul class="nav nav-pills flex-column mb-auto">
+        <li style="text-align: center; margin-top: 10%;">
+            <h4>Ciao, (nomeUtente)!</h4>
+        </li>
+        <hr>
+        <li class="nav-item">
+            <a routerLink="/personal/myinfo" id="info" class="nav-link active" (click)="StatusPage('info')">
+            <i class="pi pi-user" style="color: white"></i>
+            <svg class="bi me-2" width="16" height="16"></svg>
+            Informazioni Personali
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/myorders" id="orders" class="nav-link text-white" (click)="StatusPage('orders')">
+            <i class="pi pi-box" style="color: white"></i>
+            <svg class="bi me-2" width="16" height="16"></svg>
+            Visualizza ordini
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/myaddresses" id="addresses" class="nav-link text-white" (click)="StatusPage('addresses')">
+            <i class="pi pi-home" style="color: white"></i>
+            <svg class="bi me-2" width="16" height="16"></svg>
+            Gestione indirizzi
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/mypayments" id="payments" class="nav-link text-white" (click)="StatusPage('payments')">
+            <i class="pi pi-wallet" style="color: white"></i>
+            <svg class="bi me-2" width="16" height="16"></svg>
+            Gestione pagamenti
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="d-flex flex-column text-white bg-dark" style="width: min-content; height: 800px; border-bottom-right-radius: 20px;" *ngIf="windowWidth < navbarBreakpoint;">
+        <ul class="nav nav-pills flex-column mb-auto">
+        <li style="text-align: center; margin-top: 10%;">
+        </li>
+        <hr>
+        <li class="nav-item">
+            <a routerLink="/personal/myinfo" id="info" class="nav-link active" style="width: min-content;" (click)="StatusPage('info')">
+            <i class="pi pi-user" style="color: white"></i>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/myorders" id="orders" class="nav-link text-white" style="width: min-content;" (click)="StatusPage('orders')">
+            <i class="pi pi-box" style="color: white"></i>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/myaddresses" id="addresses" class="nav-link text-white" style="width: min-content;" (click)="StatusPage('addresses')">
+            <i class="pi pi-home" style="color: white"></i>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/personal/mypayments" id="payments" class="nav-link text-white" style="width: min-content;" (click)="StatusPage('payments')">
+            <i class="pi pi-wallet" style="color: white"></i>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="d-flex overflow-auto" style="border: 1px solid red; height: 100%; width: 100%; margin-top: 20px; margin-right: 1%;">
+        <router-outlet></router-outlet>
+    </div>
+
+
+</div>

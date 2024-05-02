@@ -6,6 +6,9 @@ import { SignUpComponent } from './core/sign-up/sign-up.component';
 import { SearchComponent } from './features/search/search.component';
 import { PrivateAreaComponent } from './features/private-area/private-area.component';
 import { PersonalOrdersComponent } from './features/private-area/personal-orders/personal-orders.component';
+import { PersonalAddressesComponent } from './features/private-area/personal-addresses/personal-addresses.component';
+import { PersonalPaymentsComponent } from './features/private-area/personal-payments/personal-payments.component';
+import { PersonalInfoComponent } from './features/private-area/personal-info/personal-info.component';
 
 export const routes: Routes = [
   {
@@ -36,7 +39,19 @@ export const routes: Routes = [
       {
         path: 'myorders',
         component: PersonalOrdersComponent
-      }
+      },
+      {
+        path: 'myaddresses',
+        component: PersonalAddressesComponent
+      },
+      {
+        path: 'mypayments',
+        component: PersonalPaymentsComponent
+      },
+      {
+        path: 'myinfo',
+        component: PersonalInfoComponent
+      },
     ]
   },
 ];
