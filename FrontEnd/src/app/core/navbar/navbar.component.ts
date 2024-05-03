@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
   windowWidth: number = window.innerWidth;
   navbarBreakpoint = +(getComputedStyle(document.body).getPropertyValue('--bs-breakpoint-lg')).slice(0, -2)
 
-  constructor(private authenticationService: AuthenticationService, private productService: ProductService) {  }
+  constructor(private authenticationService: AuthenticationService, private productService: ProductService, private router: Router) {  }
 
   ngOnInit(): void {
     this.authenticationService.isLoggedIn$.subscribe(
@@ -51,5 +51,6 @@ export class NavbarComponent implements OnInit {
     var params = new SearchParams();
     params.search = searchString.value;
     this.productService.setSearchParams(params);
+    this.router.navigate(['/search']);
   }
 }
