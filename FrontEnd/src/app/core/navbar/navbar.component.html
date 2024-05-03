@@ -1,29 +1,32 @@
 <nav
   class="navbar navbar-expand-lg navbar-expand"
-  style="
-    background-color: #687995;
-    position: fixed;
-    width: 100%;
-    z-index: 1;
-  ">
+  style="background-color: #687995; position: fixed; width: 100%; z-index: 1"
+>
   <div class="container-fluid d-flex justify-content-between">
-    <a class="navbar-brand" routerLink="/home"><img
-        src="/assets/images/Betacycle_logo_linear.svg"></a>
+    <a class="navbar-brand" routerLink="/home"
+      ><img src="/assets/images/Betacycle_logo_linear.svg"
+    /></a>
 
     <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="windowWidth > navbarBreakpoint;"> -->
-    <form class="d-flex navbar-form" style="position: absolute; margin: auto; right: 0; left: 0; width: 400px;" *ngIf="windowWidth > navbarBreakpoint;">
+    <form
+      class="d-flex navbar-form"
+      style="position: absolute; margin: auto; right: 0; left: 0; width: 400px"
+      *ngIf="windowWidth > navbarBreakpoint"
+    >
       <input
         #searchStringNav
         class="form-control me-2"
         type="search"
         placeholder="Search"
         aria-label="Search"
-        style="border-radius: 20px" />
+        style="border-radius: 20px"
+      />
       <button
         class="btn btn-outline-success"
         type="submit"
         style="border-radius: 20px"
-        (click)="Search(searchStringNav)">
+        (click)="Search(searchStringNav)"
+      >
         Search
       </button>
     </form>
@@ -34,7 +37,8 @@
         class="mr-2"
         (click)="sidebarVisible = true"
         icon="pi pi-bars"
-        size="small"></p-button>
+        size="small"
+      ></p-button>
     </div>
   </div>
 </nav>
@@ -42,21 +46,24 @@
   [(visible)]="sidebarVisible"
   position="right"
   styleClass="bg-light p-sidebar-mask"
-  [modal]="false">
+  [modal]="false"
+>
   <h3>Right Sidebar</h3>
-  <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint;">
+  <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint">
     <input
       #searchString
       class="form-control me-2"
       type="search"
       placeholder="Search"
       aria-label="Search"
-      style="border-radius: 20px" />
+      style="border-radius: 20px"
+    />
     <button
       class="btn btn-outline-success"
       type="submit"
       style="border-radius: 20px"
-      (click)="Search(searchString)">
+      (click)="Search(searchString)"
+    >
       Search
     </button>
   </form>
@@ -78,6 +85,12 @@
     </li>
     <li class="nav-item">
       <a class="nav-link" routerLink="/search">RicercaApprofondita</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/personal">AreaPersonale</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/admin">AreaAdmin</a>
     </li>
   </ul>
 </p-sidebar>
