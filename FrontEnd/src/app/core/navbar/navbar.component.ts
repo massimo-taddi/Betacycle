@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { HostListener } from "@angular/core";
 import { jwtDecode } from 'jwt-decode';
+import { ProductService } from '../../shared/services/product.service';
+import { SearchParams } from '../../shared/models/SearchParams';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +25,7 @@ export class NavbarComponent implements OnInit {
   windowWidth: number = window.innerWidth;
   navbarBreakpoint = +(getComputedStyle(document.body).getPropertyValue('--bs-breakpoint-lg')).slice(0, -2)
 
-  constructor(private authenticationService: AuthenticationService) {  }
+  constructor(private authenticationService: AuthenticationService, private productService: ProductService) {  }
 
   ngOnInit(): void {
     this.authenticationService.isLoggedIn$.subscribe(
@@ -46,6 +48,8 @@ export class NavbarComponent implements OnInit {
   }
 
   Search(searchString: HTMLInputElement) {
-
+    var params = new SearchParams();
+    params.search = searchString.value;
+    this.productService.setSearchParams(params);
   }
 }

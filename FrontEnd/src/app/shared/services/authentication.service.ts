@@ -53,12 +53,4 @@ export class AuthenticationService {
       }));
     }
   }
-
-  getLoginStatus() {
-    return this.isLoggedIn;
-  }
-
-  getAdminStatus() {
-    return this.isAdmin;
-  }
 }

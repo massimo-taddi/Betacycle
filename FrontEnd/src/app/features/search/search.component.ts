@@ -7,6 +7,7 @@ import { TagModule } from 'primeng/tag';
 import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
 import { CommonModule } from '@angular/common';
+import { SearchParams } from '../../shared/models/SearchParams';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -23,13 +24,20 @@ import { CommonModule } from '@angular/common';
 })
 export class SearchComponent {
   products!: Product[];
-
+  searchParams: SearchParams = new SearchParams();
   constructor(private productService: ProductService) {}
-  /*
   ngOnInit() {
+    this.productService.searchParams$.subscribe(
+      par => this.searchParams = par
+    );
     this.productService
-      .getProducts()
-      .then((data) => (this.products = data.slice(0, 5)));
+      .getProducts(this.searchParams).subscribe({
+        next: (products: Product[]) => {
+          this.products = products;
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        },
+      });
   }
-  */
 }

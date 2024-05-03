@@ -20,10 +20,11 @@
         aria-label="Search"
         style="border-radius: 20px" />
       <button
-        class="btn btn-outline-success"
-        type="submit"
+        class="btn btn-outline-primary"
+        type="button"
         style="border-radius: 20px"
-        (click)="Search(searchStringNav)">
+        (click)="Search(searchStringNav)"
+        [routerLink]="['/search']">
         Search
       </button>
     </form>
@@ -54,9 +55,10 @@
       style="border-radius: 20px" />
     <button
       class="btn btn-outline-success"
-      type="submit"
+      type="button"
       style="border-radius: 20px"
-      (click)="Search(searchString)">
+      (click)="Search(searchString)"
+      [routerLink]="['/search']">
       Search
     </button>
   </form>

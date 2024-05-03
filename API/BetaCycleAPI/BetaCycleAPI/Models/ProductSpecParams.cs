@@ -24,9 +24,8 @@
         public string Search
         {
             get => search;
-            set => search = value.ToLowerInvariant();
+            set => search = value == null ? string.Empty : value.ToLowerInvariant();
         }
 
-        public string Culture {  get; set; }
     }
 }

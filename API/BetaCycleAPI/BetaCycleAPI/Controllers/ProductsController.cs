@@ -32,36 +32,30 @@ namespace BetaCycleAPI.Controllers
             switch (@params.Sort)
             {
                 case "priceDesc":
-                    res = await (from product in _context.Products 
-                                 join pmpd in _context.ProductModelProductDescriptions
-                                 on product.ProductModelId equals pmpd.ProductModelId
+                    res = await (from product in _context.Products
+                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
-                                 select product).Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                .Take(@params.PageSize)
+                                 select product).Distinct()
                                                 .OrderByDescending(p => p.ListPrice)
+                                                .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                .Take(@params.PageSize)
                                                 .ToListAsync();
-                    //res = await _context.Products
-                    //                    .Where(prod => prod.Name.Contains(@params.Search))
-                    //                    .OrderBy(prod => prod.ListPrice)
-                    //                    .Skip((@params.PageIndex - 1) * @params.PageSize)
-                    //                    .Take(@params.PageSize).ToListAsync();
                     break;
                 case "priceAsc":
                     res = await (from product in _context.Products
-                                 join pmpd in _context.ProductModelProductDescriptions
-                                 on product.ProductModelId equals pmpd.ProductModelId
+                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
-                                 select product).OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                                          .Take(@params.PageSize)
-                                                                          .OrderBy(p => p.ListPrice)
-                                                                          .ToListAsync();
+                                 select product).Distinct()
+                                                .OrderBy(p => p.ListPrice)
+                                                .Skip((@params.PageIndex - 1) * @params.PageSize)                          
+                                                .Take(@params.PageSize)
+                                                .ToListAsync();
                     break;
                 default:
                     return BadRequest();
             }
-
             return res;
         }
 
@@ -75,7 +69,9 @@ namespace BetaCycleAPI.Controllers
             {
                 return NotFound();
             }
-
+            product.ProductModel = await _context.ProductModels.FindAsync(product.ProductModelId);
+            product.ProductModel.ProductModelProductDescriptions = await _context.ProductModelProductDescriptions.Where(p => p.ProductModelId == product.ProductModel.ProductModelId).ToListAsync();
+            product.ProductCategory = await _context.ProductCategories.FindAsync(product.ProductCategoryId);
             return product;
         }
 

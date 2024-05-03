@@ -12,7 +12,7 @@ export class Product {
   sellStartDate: Date | null = null;
   sellEndDate: Date | null = null;
   discontinuedDate: Date | null = null;
-  thumbNailPhoto: any;
+  thumbNailPhoto: string = '';
   thumbNailPhotoFileName: string = '';
   rowguid: string = '';
   modifiedDate: Date | null = null;
