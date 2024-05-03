@@ -79,16 +79,7 @@
 
 <section class="py-5">
   <div class="container px-4 px-lg-5 mt-5">
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-        <!-- <br><br><br><br>
-<ul>
-  <li *ngFor="let product of products">
-    <img src="data:image/gif;base64, {{product.thumbNailPhoto}}"/>
-    {{product.name}}
-  </li>
-</ul> -->
-
+      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" *ngIf=" products!=null; else spinner">
           <div class="col mb-5" *ngFor="let product of products">
               <div class="card h-100">
                   <!-- Product image-->
@@ -109,9 +100,14 @@
               </div>
           </div>
       </div>
+      <ng-template #spinner>
+        <div style="margin-left: auto; margin-right: auto; max-width: fit-content;">
+          <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+        </div>
+      </ng-template>
       <div class="flex-1">
         <p-paginator (onPageChange)="changeOutput($event)" [first]="0" [rows]="searchParams.pageSize" [totalRecords]="productCount" [rowsPerPageOptions]="[10, 20, 30]" [showFirstLastIcon]="false"></p-paginator>
-    </div>
+      </div>
   </div>
 </section>
 </div>

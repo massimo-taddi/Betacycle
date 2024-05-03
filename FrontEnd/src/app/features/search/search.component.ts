@@ -8,7 +8,8 @@ import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
 import { CommonModule } from '@angular/common';
 import { SearchParams } from '../../shared/models/SearchParams';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -19,7 +20,8 @@ import { PaginatorModule } from 'primeng/paginator';
     RatingModule,
     TagModule,
     CommonModule,
-    PaginatorModule
+    PaginatorModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
@@ -48,9 +50,9 @@ export class SearchComponent {
       });
   }
 
-  changeOutput(event: any){
-    this.searchParams.pageIndex = event.page+1;
-    this.searchParams.pageSize = event.rows;
+  changeOutput(event: PaginatorState){
+    this.searchParams.pageIndex = event.page!+1;
+    this.searchParams.pageSize = event.rows!;
     this.productService.searchParams$.subscribe(
       par => this.searchParams = par
     );
