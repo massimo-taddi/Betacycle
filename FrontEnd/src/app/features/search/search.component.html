@@ -109,6 +109,9 @@
               </div>
           </div>
       </div>
+      <div class="flex-1">
+        <p-paginator (onPageChange)="changeOutput($event)" [first]="0" [rows]="searchParams.pageSize" [totalRecords]="productCount" [rowsPerPageOptions]="[10, 20, 30]" [showFirstLastIcon]="false"></p-paginator>
+    </div>
   </div>
 </section>
 </div>

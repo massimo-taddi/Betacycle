@@ -10,6 +10,7 @@ using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -26,9 +27,10 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] ProductSpecParams @params)
+        public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
+            int productCount = 0;
             switch (@params.Sort)
             {
                 case "priceDesc":
@@ -38,9 +40,11 @@ namespace BetaCycleAPI.Controllers
                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
                                  select product).Distinct()
                                                 .OrderByDescending(p => p.ListPrice)
-                                                .Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                .Take(@params.PageSize)
+                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                //.Take(@params.PageSize)
                                                 .ToListAsync();
+                    productCount = res.Count();
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
                 case "priceAsc":
                     res = await (from product in _context.Products
@@ -49,14 +53,16 @@ namespace BetaCycleAPI.Controllers
                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
                                  select product).Distinct()
                                                 .OrderBy(p => p.ListPrice)
-                                                .Skip((@params.PageIndex - 1) * @params.PageSize)                          
-                                                .Take(@params.PageSize)
+                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)                          
+                                                //.Take(@params.PageSize)
                                                 .ToListAsync();
+                    productCount = res.Count();
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
                 default:
                     return BadRequest();
             }
-            return res;
+            return (productCount, res);
         }
 
         // GET: api/Products/5
