@@ -9,6 +9,11 @@ import { PersonalOrdersComponent } from './features/private-area/personal-orders
 import { PersonalAddressesComponent } from './features/private-area/personal-addresses/personal-addresses.component';
 import { PersonalPaymentsComponent } from './features/private-area/personal-payments/personal-payments.component';
 import { PersonalInfoComponent } from './features/private-area/personal-info/personal-info.component';
+import { AdminAreaComponent } from './features/admin-area/admin-area.component';
+import { CustomersComponent } from './features/admin-area/customers/customers.component';
+import { AddProductComponent } from './features/admin-area/add-product/add-product.component';
+import { ProductsListComponent } from './features/admin-area/products-list/products-list.component';
+import { ModifyProductComponent } from './features/admin-area/modify-product/modify-product.component';
 
 export const routes: Routes = [
   {
@@ -38,20 +43,42 @@ export const routes: Routes = [
     children: [
       {
         path: 'myorders',
-        component: PersonalOrdersComponent
+        component: PersonalOrdersComponent,
       },
       {
         path: 'myaddresses',
-        component: PersonalAddressesComponent
+        component: PersonalAddressesComponent,
       },
       {
         path: 'mypayments',
-        component: PersonalPaymentsComponent
+        component: PersonalPaymentsComponent,
       },
       {
         path: 'myinfo',
-        component: PersonalInfoComponent
+        component: PersonalInfoComponent,
       },
-    ]
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminAreaComponent,
+    children: [
+      {
+        path: 'add-product',
+        component: AddProductComponent,
+      },
+      {
+        path: 'customers',
+        component: CustomersComponent,
+      },
+      {
+        path: 'products-list',
+        component: ProductsListComponent,
+      },
+      {
+        path: 'modify-product',
+        component: ModifyProductComponent,
+      },
+    ],
   },
 ];
