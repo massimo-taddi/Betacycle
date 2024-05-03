@@ -11,7 +11,9 @@ export class ProductService {
   searchParams$ = this.searchParams.asObservable();
   constructor(private http: HttpClient) {}
   getProducts(params: SearchParams): Observable<any> {
-    return this.http.get(`https://localhost:7287/api/products?pageindex=${params.pageIndex}&pagesize=${params.pageSize}&search=${params.search}&sort=${params.sort}`)
+    return this.http.get(
+      `https://localhost:7287/api/products?pageindex=${params.pageIndex}&pagesize=${params.pageSize}&search=${params.search}&sort=${params.sort}`
+    );
   }
   setSearchParams(params: SearchParams) {
     this.searchParams.next(params);

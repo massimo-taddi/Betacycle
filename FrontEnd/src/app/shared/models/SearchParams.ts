@@ -1,7 +1,15 @@
 export class SearchParams {
-    pageIndex: number = 1;
-    pageSize: number = 20;
-    search: string = '';
-    sort: string = 'priceDesc';
-    constructor () {}
+  pageIndex: number = 1;
+  pageSize: number = 20;
+  search: string = '';
+  sort: string = 'priceDesc';
+  constructor() {}
+}
+
+export class SearchParams1 {
+  pageIndex: number = 1;
+  pageSize: number = 20;
+  search: string = '';
+  sort: string = 'priceDesc';
+  constructor() {}
 }
