@@ -88,31 +88,29 @@
     {{product.name}}
   </li>
 </ul> -->
-        <div *ngIf="products!=null; else spinner">
-            <div class="col mb-5" *ngFor="let product of products">
-                <div class="card h-100">
-                    <!-- Product image-->
-                    <img class="card-img-top" src="data:image/gif;base64, {{product.thumbNailPhoto}}" alt="...">
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-bolder">{{product.name}}</h5>
-                            <!-- Product price-->
-                            {{product.listPrice}}$
-                        </div>
-                    </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <ng-template #spinner><p-progressSpinner ariaLabel="loading"></p-progressSpinner></ng-template>
-    </div>
-    <div class="flex-1">
-      <p-paginator (onPageChange)="changeOutput($event)" [first]="0" [rows]="searchParams.pageSize" [totalRecords]="productCount" [rowsPerPageOptions]="[10, 20, 30]" [showFirstLastIcon]="false"></p-paginator>
+
+          <div class="col mb-5" *ngFor="let product of products">
+              <div class="card h-100">
+                  <!-- Product image-->
+                  <img class="card-img-top" src="data:image/gif;base64, {{product.thumbNailPhoto}}" alt="...">
+                  <!-- Product details-->
+                  <div class="card-body p-4">
+                      <div class="text-center">
+                          <!-- Product name-->
+                          <h5 class="fw-bolder">{{product.name}}</h5>
+                          <!-- Product price-->
+                          {{product.listPrice}}$
+                      </div>
+                  </div>
+                  <!-- Product actions-->
+                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                      <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="flex-1">
+        <p-paginator (onPageChange)="changeOutput($event)" [first]="0" [rows]="searchParams.pageSize" [totalRecords]="productCount" [rowsPerPageOptions]="[10, 20, 30]" [showFirstLastIcon]="false"></p-paginator>
     </div>
   </div>
 </section>

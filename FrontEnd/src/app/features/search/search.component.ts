@@ -9,7 +9,6 @@ import { ProductService } from '../../shared/services/product.service';
 import { CommonModule } from '@angular/common';
 import { SearchParams } from '../../shared/models/SearchParams';
 import { PaginatorModule } from 'primeng/paginator';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -20,8 +19,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     RatingModule,
     TagModule,
     CommonModule,
-    PaginatorModule,
-    ProgressSpinnerModule
+    PaginatorModule
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
