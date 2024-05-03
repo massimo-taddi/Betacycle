@@ -42,41 +42,41 @@
   styleClass="bg-light p-sidebar-mask"
   [modal]="true">
   <h3>Right Sidebar</h3>
-  <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint;">
+  <form class="d-flex ms-auto me-auto" onsubmit="return false;" *ngIf="windowWidth <= navbarBreakpoint;">
     <input
       #searchString
       class="form-control me-2"
       type="search"
       placeholder="Search"
       aria-label="Search"
-      style="border-radius: 20px" />
+      style="border-radius: 20px"
+      (keyup.enter)="Search(searchString); sidebarVisible = false;" />
     <button
       class="btn btn-outline-success"
       type="button"
       style="border-radius: 20px"
-      (click)="Search(searchString)"
-      [routerLink]="['/search']">
+      (click)="Search(searchString); sidebarVisible = false;">
       Search
     </button>
   </form>
   <ul>
     <li *ngIf="!isUserLoggedIn" class="nav-item">
-      <a class="nav-link" routerLink="/login">Login</a>
+      <a class="nav-link" routerLink="/login" (click)="sidebarVisible = false;">Login</a>
     </li>
     <li *ngIf="!isUserLoggedIn" class="nav-item">
-      <a class="nav-link" routerLink="/signup">Sign up</a>
+      <a class="nav-link" routerLink="/signup" (click)="sidebarVisible = false;">Sign up</a>
     </li>
     <li *ngIf="isUserLoggedIn && !isUserAdmin" class="nav-item">
-      <a class="nav-link" routerLink="/personal/myinfo">Area personale</a>
+      <a class="nav-link" routerLink="/personal/myinfo" (click)="sidebarVisible = false;">Area personale</a>
     </li>
     <li *ngIf="isUserAdmin" class="nav-item">
-      <a class="nav-link" routerLink="/admin">Zona Amministratori</a>
+      <a class="nav-link" routerLink="/admin" (click)="sidebarVisible = false;">Zona Amministratori</a>
     </li>
     <li *ngIf="isUserLoggedIn" class="nav-item">
-      <a class="nav-link" routerLink="/home" (click)="Logout()">Logout</a>
+      <a class="nav-link" routerLink="/home" (click)="Logout(); sidebarVisible = false;">Logout</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/search">RicercaApprofondita</a>
+      <a class="nav-link" routerLink="/search" (click)="sidebarVisible = false;">RicercaApprofondita</a>
     </li>
   </ul>
 </p-sidebar>
