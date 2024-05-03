@@ -12,10 +12,11 @@
       <input
         #searchStringNav
         class="form-control me-2"
-        type="search"
+        type="text"
         placeholder="Search"
         aria-label="Search"
-        style="border-radius: 20px" />
+        style="border-radius: 20px"
+        (keyup.enter)="Search(searchStringNav)" />
       <button
         class="btn btn-outline-primary"
         type="button"
@@ -40,7 +41,7 @@
   [(visible)]="sidebarVisible"
   position="right"
   styleClass="bg-light p-sidebar-mask"
-  [modal]="false">
+  [modal]="true">
   <h3>Right Sidebar</h3>
   <form class="d-flex ms-auto me-auto" *ngIf="windowWidth <= navbarBreakpoint;">
     <input
@@ -67,7 +68,7 @@
       <a class="nav-link" routerLink="/signup">Sign up</a>
     </li>
     <li *ngIf="isUserLoggedIn && !isUserAdmin" class="nav-item">
-      <a class="nav-link" routerLink="/personal">Area personale</a>
+      <a class="nav-link" routerLink="/personal/myinfo">Area personale</a>
     </li>
     <li *ngIf="isUserAdmin" class="nav-item">
       <a class="nav-link" routerLink="/admin">Zona Amministratori</a>
