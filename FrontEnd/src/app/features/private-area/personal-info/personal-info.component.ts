@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from '../../../shared/models/Customer';
 import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-personal-info',
@@ -27,5 +28,11 @@ export class PersonalInfoComponent implements OnInit {
         console.log(err.message);
       },
     });
+  }
+
+  getJwtUsername():string {
+    if(sessionStorage.getItem('jwtToken') == null) return 'user'
+    var decodedToken: any = jwtDecode(sessionStorage.getItem('jwtToken')!);
+    return decodedToken.unique_name;
   }
 }
