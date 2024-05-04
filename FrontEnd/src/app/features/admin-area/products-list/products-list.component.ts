@@ -23,29 +23,46 @@ import { SearchParams } from '../../../shared/models/SearchParams';
 })
 export class ProductsListComponent {
   products!: Product[];
-  productsSuccessivi!: Product[];
   searchParams: SearchParams = new SearchParams();
   first: number = 0;
   rows: number = 10;
+  productCount: number = 0;
 
   constructor(private productService: ProductService) {}
   ngOnInit() {
     this.funzioneProdotti(1);
   }
   funzioneProdotti(index: number) {
+    this.searchParams.pageIndex = 1;
+    this.searchParams.pageSize = 10;
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
-    this.searchParams.pageSize = 10;
-    this.searchParams.pageIndex = index;
     this.productService.getProducts(this.searchParams).subscribe({
-      next: (products: Product[]) => {
-        this.products = products;
+      next: (products: any) => {
+        this.products = products.item2;
+        this.productCount = products.item1;
       },
       error: (err: Error) => {
         console.log(err.message);
       },
     });
   }
-  onPageChange() {}
+
+  changeOutput(event: any) {
+    this.searchParams.pageIndex = event.page! + 1;
+    this.searchParams.pageSize = event.rows!;
+    this.productService.searchParams$.subscribe(
+      (par) => (this.searchParams = par)
+    );
+    this.productService.getProducts(this.searchParams).subscribe({
+      next: (products: any) => {
+        this.products = products.item2;
+        this.productCount = products.item1;
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      },
+    });
+  }
 }

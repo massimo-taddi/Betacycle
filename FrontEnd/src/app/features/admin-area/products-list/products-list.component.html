@@ -7,6 +7,9 @@
   </tr>
 </table>
 
+<!-- 
+
+
 <div class="card flex justify-content-center">
   <p-paginator
     (onPageChange)="onPageChange($event)"
@@ -16,3 +19,12 @@
     [rowsPerPageOptions]="[10, 20, 30]"
   />
 </div>
+-->
+<p-paginator
+  (onPageChange)="changeOutput($event)"
+  [first]="0"
+  [rows]="searchParams.pageSize"
+  [totalRecords]="productCount"
+  [rowsPerPageOptions]="[10, 20, 30]"
+  [showFirstLastIcon]="false"
+></p-paginator>
