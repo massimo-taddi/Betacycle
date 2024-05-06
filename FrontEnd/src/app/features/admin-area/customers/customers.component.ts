@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
-import { SearchCustomer } from '../../../shared/models/SearchParams';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Customer } from '../../../shared/models/Customer';
