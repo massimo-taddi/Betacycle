@@ -4,11 +4,13 @@ import { HttpUserAdminService } from '../../../shared/services/http-user-admin.s
 import { jwtDecode } from 'jwt-decode';
 import { Router, RouterModule } from '@angular/router';
 import { SearchParams } from '../../../shared/models/SearchParams';
+import { PasswordResetComponent } from '../../../core/password-reset/password-reset.component';
+import { Panel, PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-personal-info',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, PasswordResetComponent, PanelModule],
   templateUrl: './personal-info.component.html',
   styleUrl: './personal-info.component.css'
 })

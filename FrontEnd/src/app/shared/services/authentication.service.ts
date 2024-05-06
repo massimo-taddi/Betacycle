@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthenticationService {
   private token = localStorage.getItem('jwtToken') == null ? sessionStorage.getItem('jwtToken'): localStorage.getItem('jwtToken');
+  private tokenObs = new BehaviorSubject(this.token);
+  tokenObs$ = this.tokenObs.asObservable();
   private isLoggedIn = new BehaviorSubject(this.token != null);
   isLoggedIn$ = this.isLoggedIn.asObservable();
   private decodedToken: any = this.token != null ? jwtDecode(this.token) : '';

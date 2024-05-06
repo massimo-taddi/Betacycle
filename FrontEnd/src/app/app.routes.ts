@@ -61,7 +61,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'pwreset',
+    path: 'pwreset_loggedin',
     component: PasswordResetComponent
   },
   {

@@ -25,6 +25,7 @@ namespace BetaCycleAPI.Controllers
             _credentialsContext = credentialsContext;
         }
 
+
         // PUT api/<PasswordResetController>
         [Authorize]
         [HttpPut]
