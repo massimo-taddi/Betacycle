@@ -9,3 +9,11 @@
     </td>
   </tr>
 </table>
+<p-paginator
+  (onPageChange)="changeOutput($event)"
+  [first]="0"
+  [rows]="searchParams.pageSize"
+  [totalRecords]="customersCount"
+  [rowsPerPageOptions]="[10, 20, 30]"
+  [showFirstLastIcon]="false"
+></p-paginator>

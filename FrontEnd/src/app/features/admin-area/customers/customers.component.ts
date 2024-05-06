@@ -40,4 +40,21 @@ export class CustomersComponent {
       },
     });
   }
+
+  changeOutput(event: any) {
+    this.searchParams.pageIndex = event.page! + 1;
+    this.searchParams.pageSize = event.rows!;
+    this.AdminService.searchParams$.subscribe(
+      (par) => (this.searchParams = par)
+    );
+    this.AdminService.httpGetCustomerInfo(this.searchParams).subscribe({
+      next: (products: any) => {
+        this.customers = products.item2;
+        this.customersCount = products.item1;
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      },
+    });
+  }
 }

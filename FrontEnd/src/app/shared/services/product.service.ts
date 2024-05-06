@@ -22,4 +22,8 @@ export class ProductService {
   getProductById(id: number): Observable<any> {
     return this.http.get(`https://localhost:7287/api/Products/${id}`);
   }
+
+  postProduct(product: Product) {
+    return this.http.post(`https://localhost:7287/api/Products`, product);
+  }
 }
