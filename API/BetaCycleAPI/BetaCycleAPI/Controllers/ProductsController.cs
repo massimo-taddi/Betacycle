@@ -33,7 +33,7 @@ namespace BetaCycleAPI.Controllers
             int productCount = 0;
             switch (@params.Sort)
             {
-                case "priceDesc":
+                case "Desc":
                     res = await (from product in _context.Products
                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
@@ -46,7 +46,7 @@ namespace BetaCycleAPI.Controllers
                     productCount = res.Count();
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
-                case "priceAsc":
+                case "Asc":
                     res = await (from product in _context.Products
                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
