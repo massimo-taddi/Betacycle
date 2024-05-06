@@ -1,3 +1,5 @@
+import { ProductModel } from "./ProductModel";
+
 export class Product {
   productID: number = 0;
   name: string = '';
@@ -16,4 +18,5 @@ export class Product {
   thumbNailPhotoFileName: string = '';
   rowguid: string = '';
   modifiedDate: Date | null = null;
+  productModel: ProductModel | null = null;
 }

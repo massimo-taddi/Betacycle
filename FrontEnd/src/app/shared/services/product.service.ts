@@ -18,4 +18,8 @@ export class ProductService {
   setSearchParams(params: SearchParams) {
     this.searchParams.next(params);
   }
+
+  getProductById(id: number): Observable<any> {
+    return this.http.get(`https://localhost:7287/api/Products/${id}`);
+  }
 }
