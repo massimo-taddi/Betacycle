@@ -2,16 +2,22 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SalesOrderHeader } from '../../../shared/models/SalesOrderHeader';
 import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
+import { TableModule } from 'primeng/table';
+import { BadgeModule } from 'primeng/badge';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+
 
 @Component({
   selector: 'app-personal-orders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TableModule, BadgeModule, ButtonModule, DialogModule],
   templateUrl: './personal-orders.component.html',
   styleUrl: './personal-orders.component.css'
 })
 export class PersonalOrdersComponent implements OnInit {
   orders: SalesOrderHeader[] = [];
+  dialogBool: boolean = false;
   constructor(private httpOrders: HttpUserAdminService) {}
   ngOnInit(): void {
     this.getPersonalItems();

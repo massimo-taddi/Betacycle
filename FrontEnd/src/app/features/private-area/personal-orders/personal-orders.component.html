@@ -1,28 +1,80 @@
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col"># Ordine</th>
-        <th scope="col">Data ordine</th>
-        <th scope="col">Data Spedizione</th>
-        <th scope="col">Indirizzo di spedizione</th>
-        <th scope="col">Stato dell'ordine</th>
-        <th scope="col">Costo dei prodotti</th>
-        <th scope="col">Tasse</th>
-        <th scope="col">Costo spedizione</th>
-        <th scope="col">Totale</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of orders;">
-        <th scope="col">{{order.salesOrderNumber}}</th>
-        <th scope="col">{{order.orderDate}}</th>
-        <th scope="col">{{order.shipDate}}</th>
-        <th scope="col">{{order.shipToAddress?.addressLine1}}, {{order.shipToAddress?.addressLine2}}, {{order.shipToAddress?.city}}, {{order.shipToAddress?.countryRegion}}</th>
-        <th scope="col">{{orderStatusString(order.status)}}</th>
-        <th scope="col">{{order.subTotal}}</th>
-        <th scope="col">{{order.taxAmt}}</th>
-        <th scope="col">{{order.freight}}</th>
-        <th scope="col">{{order.totalDue}}</th>
-      </tr>
-    </tbody>
-  </table>
+<!-- <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"># Ordine</th>
+      <th scope="col">Data ordine</th>
+      <th scope="col">Data Spedizione</th>
+      <th scope="col">Indirizzo di spedizione</th>
+      <th scope="col">Stato dell'ordine</th>
+      <th scope="col">Costo dei prodotti</th>
+      <th scope="col">Tasse</th>
+      <th scope="col">Costo spedizione</th>
+      <th scope="col">Totale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders;">
+      <th scope="col">{{order.salesOrderNumber}}</th>
+      <th scope="col">{{order.orderDate}}</th>
+      <th scope="col">{{order.shipDate}}</th>
+      <th scope="col">{{order.shipToAddress?.addressLine1}},
+        {{order.shipToAddress?.addressLine2}}, {{order.shipToAddress?.city}},
+        {{order.shipToAddress?.countryRegion}}</th>
+      <th scope="col">{{orderStatusString(order.status)}}</th>
+      <th scope="col">{{order.subTotal}}</th>
+      <th scope="col">{{order.taxAmt}}</th>
+      <th scope="col">{{order.freight}}</th>
+      <th scope="col">{{order.totalDue}}</th>
+    </tr>
+  </tbody>
+</table> -->
+
+  <p-table [value]="orders">
+      <ng-template pTemplate="orders">
+          Ordini effettuati
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th scope="col">Numero Ordine</th>
+            <th scope="col">Data ordine</th>
+            <th scope="col">Data Spedizione</th>
+            <th scope="col">Indirizzo di spedizione</th>
+            <th scope="col">Stato dell'ordine</th>
+            <th scope="col">Totale</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order let-columns="columns">
+          <tr style="border-bottom: 1px solid grey;">
+              <td>{{order.salesOrderNumber}}</td>
+              <td>{{order.orderDate}}</td>
+              <td>{{order.shipDate}}</td>
+              <td>{{order.shipToAddress?.addressLine1}}</td>
+              <td><span style="background-color: lightgreen; color: darkgreen; padding: 5px; border-radius: 10px;">{{orderStatusString(order.status)}}</span></td>
+              <td>{{order.subTotal | currency:'USD'}}</td>
+              <td><p-button label="Visualizza dettagli" icon="pi pi-box" (click)="dialogBool=true" styleClass="p-button-warning"></p-button></td>
+              <p-dialog header="Dettagli ordine N. {{order.salesOrderNumber}}" [modal]="true" [(visible)]="dialogBool" [style]="{ width: '50rem' }" 
+              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+              <p-table [value]="order.salesOrderDetails">
+                <ng-template pTemplate="header" let-columns>
+                  <th scope="col">#</th>
+                  <th scope="col">Nome prodotto</th>
+                  <th scope="col">Modello</th>
+                  <th scope="col">Prezzo singolo</th>
+                  <th scope="col">Quantita'</th>
+                  <th scope="col"></th>
+                </ng-template>
+                <ng-template pTemplate="body" let-eachDet let-columns="columns">
+                  <tr style="border-bottom: 1px solid grey;">
+                    <!--DA REVISIONARE-->
+                    <td>{{eachDet.orderQty}}</td>
+                    <td>{{eachDet.orderQty}}</td>
+                    <td>{{eachDet.orderQty}}</td>
+                    <td>{{eachDet.unitPrice | currency:'USD'}}</td>
+                    <td>{{eachDet.orderQty}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              </p-dialog>
+          </tr>
+      </ng-template>
+  </p-table>
