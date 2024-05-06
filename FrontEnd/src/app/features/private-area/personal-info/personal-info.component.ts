@@ -12,12 +12,13 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class PersonalInfoComponent implements OnInit {
   info?: Customer;
+  changesNotAllowed: boolean = true;
 
   constructor(private httpInfo: HttpUserAdminService) {}
 
   ngOnInit(): void {
     this.getPersonalInfo();
-  }
+    }
 
   private getPersonalInfo() {
     this.httpInfo.httpGetCustomerInfo().subscribe({

@@ -52,10 +52,10 @@ namespace BetaCycleAPI.Controllers
                                        _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
                 res = await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
             }
-            //foreach (var customer in res)
-            //{
-            //    customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
-            //}
+            foreach (var customer in res)
+            {
+                customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
+            }
             return res;
         }
 

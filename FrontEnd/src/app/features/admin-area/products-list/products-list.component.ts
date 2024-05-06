@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../../shared/models/Product';
 import { ProductService } from '../../../shared/services/product.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
 
 @Component({
@@ -47,5 +47,5 @@ export class ProductsListComponent {
       },
     });
   }
-  onPageChange() {}
+  onPageChange(event: PaginatorState) {}
 }
