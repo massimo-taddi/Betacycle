@@ -14,6 +14,7 @@ import { CustomersComponent } from './features/admin-area/customers/customers.co
 import { AddProductComponent } from './features/admin-area/add-product/add-product.component';
 import { ProductsListComponent } from './features/admin-area/products-list/products-list.component';
 import { ModifyProductComponent } from './features/admin-area/modify-product/modify-product.component';
+import { PasswordResetComponent } from './core/password-reset/password-reset.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +59,10 @@ export const routes: Routes = [
         component: PersonalInfoComponent,
       },
     ],
+  },
+  {
+    path: 'pwreset',
+    component: PasswordResetComponent
   },
   {
     path: 'admin',

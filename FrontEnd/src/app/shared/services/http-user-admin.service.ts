@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { PwResetCreds } from '../models/PwResetCreds';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class HttpUserAdminService {
       h => header = h
     );
     return this.http.get('https://localhost:7287/api/addresses', {headers: header});
+  }
+
+  httpUserResetPassword(oldAndNew: PwResetCreds): Observable<any> {
+    return this.http.post('https://localhost:7287/api/passwordreset', oldAndNew)
   }
 }
