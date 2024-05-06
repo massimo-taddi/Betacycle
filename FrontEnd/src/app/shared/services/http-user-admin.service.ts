@@ -1,40 +1,48 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { PwResetCreds } from '../models/PwResetCreds';
+import { SearchParams } from '../models/SearchParams';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpUserAdminService {
-
-  constructor(private http: HttpClient, private auth: AuthenticationService) { }
+  private searchParams = new BehaviorSubject(new SearchParams());
+  searchParams$ = this.searchParams.asObservable();
+  constructor(private http: HttpClient, private auth: AuthenticationService) {}
 
   // if user is admin, gets all orders in the db. if user is not admin, gets their personal orders
   httpGetUserOrders(): Observable<any> {
     var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe(
-      h => header = h
-    );
-    return this.http.get('https://localhost:7287/api/orders', {headers: header});
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get('https://localhost:7287/api/orders', {
+      headers: header,
+    });
   }
 
   // if user is admin, get every customer's information. if user is customer, get a list with only their information in it
-  httpGetCustomerInfo(): Observable<any> {
+  httpGetCustomerInfo(params: SearchParams): Observable<any> {
     var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe(
-      h => header = h
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get(
+      `https://localhost:7287/api/Customers?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}&Search=${params.search}`,
+      {
+        headers: header,
+      }
     );
-    return this.http.get('https://localhost:7287/api/customers', {headers: header});
   }
 
   httpGetCustomerAddresses(): Observable<any> {
     var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe(
-      h => header = h
-    );
-    return this.http.get('https://localhost:7287/api/addresses', {headers: header});
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get('https://localhost:7287/api/addresses', {
+      headers: header,
+    });
+  }
+  setSearchParams(params: SearchParams) {
+    this.searchParams.next(params);
   }
 
   httpUserResetPassword(oldAndNew: PwResetCreds): Observable<any> {

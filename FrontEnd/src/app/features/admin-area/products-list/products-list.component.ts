@@ -30,9 +30,9 @@ export class ProductsListComponent {
 
   constructor(private productService: ProductService) {}
   ngOnInit() {
-    this.funzioneProdotti(1);
+    this.funzioneProdotti();
   }
-  funzioneProdotti(index: number) {
+  funzioneProdotti() {
     this.searchParams.pageIndex = 1;
     this.searchParams.pageSize = 10;
     this.productService.searchParams$.subscribe(

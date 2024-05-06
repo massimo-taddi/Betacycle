@@ -37,13 +37,39 @@ namespace BetaCycleAPI.Controllers
         /// </summary>
         /// <returns>admins: A list of all the customers found, customers: a list with a single item containing their information</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<(int, IEnumerable<Customer>)>> GetCustomers([FromQuery] ProductSpecParams @params)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            int customerCount = 0;
             List<Customer> res = [];
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
-                res = await _awContext.Customers.ToListAsync();
+            {
+                switch (@params.Sort)
+                {
+                    case "Desc":
+                        //ritornare n customer 
+                        res = await (from customer in _awContext.Customers
+                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) select customer)
+                                     .OrderByDescending(x => x.FirstName).ToListAsync();
+                            
+                            
+                        break;
+                    case "Asc":
+                        //ritornare n customer 
+                        res = await (from customer in _awContext.Customers
+                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
+                                     select customer)
+                                     .OrderBy(x => x.FirstName).ToListAsync();
+                        break;
+                }
+                   
+
+
+                customerCount = res.Count();
+                res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                
+            }
             else
             {
                 var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
@@ -56,8 +82,10 @@ namespace BetaCycleAPI.Controllers
             {
                 customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
             }
-            return res;
+            
+            return (customerCount,res);
         }
+
 
         // GET: api/Customers/5
         /// <summary>
