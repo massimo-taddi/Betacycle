@@ -14,9 +14,12 @@ export class PasswordResetComponent {
   constructor(private resetter: HttpUserAdminService) {}
 
   pwdReset(oldPwd: HTMLInputElement, newPwd: HTMLInputElement)  {
-    this.resetter.httpUserResetPassword(new PwResetCreds(oldPwd.value, newPwd.value)).subscribe(
-      (val: boolean) => this.res = val,
-      (err: Error) => console.log("errore: " + err.message)
-    );
+    this.resetter.httpUserResetPassword(new PwResetCreds(oldPwd.value, newPwd.value)).subscribe({
+      next: (response: any) => this.res = response,
+      error: (err: Error) => {
+        console.log("Errore: "+ err.message);
+      }
+    });
+    console.log(this.res);
   }
 }

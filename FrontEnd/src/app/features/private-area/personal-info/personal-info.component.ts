@@ -3,13 +3,14 @@ import { Customer } from '../../../shared/models/Customer';
 import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
 import { jwtDecode } from 'jwt-decode';
 import { Router, RouterModule } from '@angular/router';
+import { SearchParams } from '../../../shared/models/SearchParams';
 
 @Component({
   selector: 'app-personal-info',
   standalone: true,
   imports: [RouterModule],
   templateUrl: './personal-info.component.html',
-  styleUrl: './personal-info.component.css',
+  styleUrl: './personal-info.component.css'
 })
 export class PersonalInfoComponent implements OnInit {
   info?: Customer;
@@ -19,23 +20,21 @@ export class PersonalInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPersonalInfo();
-  }
+    }
 
   private getPersonalInfo() {
-    /*
     this.httpInfo.httpGetCustomerInfo().subscribe({
-      next: (infoList: Customer[]) => {
-        this.info = infoList.pop();
+      next: (infoList: any) => {
+        this.info = infoList.item2.pop();
       },
       error: (err: Error) => {
         console.log(err.message);
       },
     });
-    */
   }
 
-  getJwtUsername(): string {
-    if (sessionStorage.getItem('jwtToken') == null) return 'user';
+  getJwtUsername():string {
+    if(sessionStorage.getItem('jwtToken') == null) return 'user'
     var decodedToken: any = jwtDecode(sessionStorage.getItem('jwtToken')!);
     return decodedToken.unique_name;
   }

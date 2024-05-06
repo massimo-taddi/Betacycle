@@ -23,7 +23,7 @@ export class HttpUserAdminService {
   }
 
   // if user is admin, get every customer's information. if user is customer, get a list with only their information in it
-  httpGetCustomerInfo(params: SearchParams): Observable<any> {
+  httpGetCustomerInfo(params: SearchParams = new SearchParams()): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.get(
@@ -46,6 +46,10 @@ export class HttpUserAdminService {
   }
 
   httpUserResetPassword(oldAndNew: PwResetCreds): Observable<any> {
-    return this.http.post('https://localhost:7287/api/passwordreset', oldAndNew)
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.put('https://localhost:7287/api/passwordreset', oldAndNew, {
+      headers: header,
+    })
   }
 }

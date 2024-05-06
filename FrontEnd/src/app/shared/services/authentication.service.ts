@@ -7,10 +7,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private token = localStorage.getItem('jwtToken');
+  private token = localStorage.getItem('jwtToken') == null ? sessionStorage.getItem('jwtToken'): localStorage.getItem('jwtToken');
   private isLoggedIn = new BehaviorSubject(this.token != null);
   isLoggedIn$ = this.isLoggedIn.asObservable();
-  private decodedToken: any = this.token != null ? jwtDecode(this.token!) : '';
+  private decodedToken: any = this.token != null ? jwtDecode(this.token) : '';
   private isAdmin = new BehaviorSubject(this.token != null ? this.decodedToken.role == 'admin' : false);
   isAdmin$ = this.isAdmin.asObservable();
   

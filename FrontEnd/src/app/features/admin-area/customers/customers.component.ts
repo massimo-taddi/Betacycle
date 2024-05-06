@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Customer } from '../../../shared/models/Customer';
 import { PaginatorModule } from 'primeng/paginator';
+import { SearchParams } from '../../../shared/models/SearchParams';
 
 @Component({
   selector: 'app-customers',
@@ -14,7 +15,7 @@ import { PaginatorModule } from 'primeng/paginator';
 })
 export class CustomersComponent {
   customers!: Customer[];
-  searchParams: SearchCustomer = new SearchCustomer();
+  searchParams: SearchParams = new SearchParams();
   first: number = 0;
   rows: number = 10;
   customersCount: number = 0;

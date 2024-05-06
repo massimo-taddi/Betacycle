@@ -1,6 +1,6 @@
 export class PwResetCreds {
-    oldPassword: string = '';
-    newPassword: string = '';
+    oldPassword: string;
+    newPassword: string;
     constructor(oldPassword:string, newPassword:string) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
