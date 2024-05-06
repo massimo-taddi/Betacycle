@@ -66,6 +66,7 @@ export class PersonalOrdersComponent implements OnInit {
   }
 
   getOrderProducts(ord: SalesOrderHeader) {
+    this.myProducts= [];
     ord.salesOrderDetails.forEach(det => {
       this.httpProducts.getProductById(det.productId).subscribe({
         next: (product: Product) => {
@@ -78,14 +79,5 @@ export class PersonalOrdersComponent implements OnInit {
     })
     console.log(this.myProducts);
   };
-
-  // this.httpProducts.getProductById(714).subscribe({
-  //   next: (product: Product) => {
-  //     this.myProducts.push(product);
-  //   },
-  //   error: (err: Error) => {
-  //     console.log(err.message);
-  //   },
-  // });
 
 }

@@ -1,3 +1,25 @@
-<li *ngFor="let address of addresses">
+<!-- <li *ngFor="let address of addresses">
     {{address.addressLine1}}
-</li>
+</li> -->
+<h1>Indirizzi</h1>
+<div class="d-flex justify-content-end">
+    <button pbutton pripple label="New" icon="pi pi-plus"
+        class="p-element p-ripple p-button-success mr-2 p-button p-component">
+        <span class="p-button-icon p-button-icon-left pi pi-plus"
+            aria-hidden="true"></span>
+        <span class="p-button-label">Aggiungi Indirizzo</span>
+        <span class="p-ink" aria-hidden="true" role="presentation"></span>
+    </button>
+</div>
+<p-table [value]="addresses">
+    <ng-template pTemplate="header" let-columns>
+        <th scope="col">#</th>
+        <th scope="col">#</th>
+        <th scope="col">#</th>
+        <th scope="col">#</th>
+        <th scope="col">#</th>
+    </ng-template>
+    <ng-template pTemplate="body" let-addr>
+        <td></td>
+    </ng-template>
+</p-table>
