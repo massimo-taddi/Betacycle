@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
   standalone: true,
   imports: [],
   templateUrl: './personal-info.component.html',
-  styleUrl: './personal-info.component.css'
+  styleUrl: './personal-info.component.css',
 })
 export class PersonalInfoComponent implements OnInit {
   info?: Customer;
@@ -18,9 +18,10 @@ export class PersonalInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPersonalInfo();
-    }
+  }
 
   private getPersonalInfo() {
+    /*
     this.httpInfo.httpGetCustomerInfo().subscribe({
       next: (infoList: Customer[]) => {
         this.info = infoList.pop();
@@ -29,10 +30,11 @@ export class PersonalInfoComponent implements OnInit {
         console.log(err.message);
       },
     });
+    */
   }
 
-  getJwtUsername():string {
-    if(sessionStorage.getItem('jwtToken') == null) return 'user'
+  getJwtUsername(): string {
+    if (sessionStorage.getItem('jwtToken') == null) return 'user';
     var decodedToken: any = jwtDecode(sessionStorage.getItem('jwtToken')!);
     return decodedToken.unique_name;
   }

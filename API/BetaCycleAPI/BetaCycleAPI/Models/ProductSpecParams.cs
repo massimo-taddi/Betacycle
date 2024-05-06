@@ -21,7 +21,7 @@
 
         private string search;
 
-        public string Search
+        public string? Search
         {
             get => search;
             set => search = value == null ? string.Empty : value.ToLowerInvariant();

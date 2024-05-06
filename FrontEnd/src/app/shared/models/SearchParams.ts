@@ -6,10 +6,10 @@ export class SearchParams {
   constructor() {}
 }
 
-export class SearchParams1 {
+export class SearchCustomer {
   pageIndex: number = 1;
   pageSize: number = 20;
   search: string = '';
-  sort: string = 'priceDesc';
+  sort: string = 'Desc';
   constructor() {}
 }
