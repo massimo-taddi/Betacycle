@@ -7,6 +7,8 @@ import { Product } from '../../../shared/models/Product';
 import { ProductService } from '../../../shared/services/product.service';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
+import { CardModule } from 'primeng/card';
+
 
 @Component({
   selector: 'app-products-list',
@@ -17,6 +19,7 @@ import { SearchParams } from '../../../shared/models/SearchParams';
     CommonModule,
     FormsModule,
     PaginatorModule,
+    CardModule,
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css',
@@ -27,6 +30,7 @@ export class ProductsListComponent {
   first: number = 0;
   rows: number = 10;
   productCount: number = 0;
+
 
   constructor(private productService: ProductService) {}
   ngOnInit() {

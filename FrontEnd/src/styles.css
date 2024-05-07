@@ -4,6 +4,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 @import "../node_modules/primeng/resources/primeng.min.css";
 @import "../node_modules/primeicons/primeicons.css";
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
 /*
 :root {
   /*variabili di root
@@ -17,15 +24,7 @@
   --Padding-form: 100px 15px 35px 15px;
 }
 
-* {
-  padding: 0 0;
-  margin: 0 0;
-  font-family: "Inter";
-  font-weight: 400;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+
 
 /* section, article, nav, form, div{display: flex; flex-direction: column; flex-wrap: wrap;} 
 

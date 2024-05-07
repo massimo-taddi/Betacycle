@@ -1,0 +1,13 @@
+.ADbuttonsContainer{
+    width: 80vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    row-gap: 35px;
+    flex-wrap: wrap;
+}
+
+.ADbutton{
+    border-radius: 10px;
+    background-color: #5bbcff;
+}

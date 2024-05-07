@@ -1,0 +1,9 @@
+div.productContainer{
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 25px;
+    justify-content: center;
+    row-gap: 35px;
+}
