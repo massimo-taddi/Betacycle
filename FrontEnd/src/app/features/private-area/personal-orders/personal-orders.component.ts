@@ -56,11 +56,12 @@ export class PersonalOrdersComponent implements OnInit {
     this.httpOrders.httpGetUserOrders().subscribe({
       next: (orders: SalesOrderHeader[]) => {
         for (let order of orders) {
+          console.log(order)
           this.orders.push(order);
         }
       },
       error: (err: Error) => {
-        console.log(err.message);
+        console.log('SONO QUI');
       },
     });
   }

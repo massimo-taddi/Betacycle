@@ -1,5 +1,5 @@
 export class Address {
-  addressid: number = 0;
+  addressId: number = 0;
   addressLine1: string = '';
   addressLine2: string = '';
   city: string = '';
@@ -8,4 +8,8 @@ export class Address {
   postalCode: string = '';
   rowguid: string = '';
   modifiedDate: Date | null = null;
+
+  constructor(){
+    this.modifiedDate = new Date(Date.now());
+  }
 }

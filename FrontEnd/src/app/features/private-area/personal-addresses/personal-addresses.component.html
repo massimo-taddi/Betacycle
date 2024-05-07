@@ -60,13 +60,24 @@
 </div>
 <p-table [value]="addresses">
     <ng-template pTemplate="header" let-columns>
-        <th scope="col">#</th>
-        <th scope="col">#</th>
-        <th scope="col">#</th>
-        <th scope="col">#</th>
-        <th scope="col">#</th>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Indirizzo Line 1</th>
+            <th scope="col">Indirizzo Line 2</th>
+            <th scope="col">Citta'</th>
+            <th scope="col">Regione</th>
+            <th scope="col">CAP</th>
+        </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-addr>
-        <td></td>
+    <ng-template pTemplate="body" let-addr let-rowIndex="rowIndex" let-columns="columns">
+        <tr style="border-bottom: 1px solid grey;">
+            <td>{{rowIndex+1}}</td>
+            <td>{{addr.addressLine1}}</td>
+            <td>{{addr.addressLine2}}</td>
+            <td>{{addr.city}}</td>
+            <td>{{addr.stateProvince}}</td>
+            <td>{{addr.countryRegion}}</td>
+        </tr>
+
     </ng-template>
 </p-table>

@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, NgForm } from '@angular/forms';
-import { AddressPost, CustomerAddress } from '../../../shared/models/CustomerAddress';
+import { CustomerAddress } from '../../../shared/models/CustomerAddress';
+import { AddressPost } from '../../../shared/models/AddressPost';
 
 @Component({
   selector: 'app-personal-addresses',
@@ -19,10 +20,12 @@ export class PersonalAddressesComponent implements OnInit {
   dialogBool: boolean = false;
   address: Address = new Address();
   customerAddress: CustomerAddress = new CustomerAddress('');
+  newAddress: AddressPost = new AddressPost();
 
   constructor(private httpAddresses: HttpUserAdminService) {}
 
   ngOnInit(): void {
+    this.addresses = [];
     this.getUserAddresses();
   }
 
@@ -30,7 +33,6 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpGetCustomerAddresses().subscribe({
       next: (addressList: Address[]) => {
         this.addresses = addressList
-        console.log(this.addresses)
       },
       error: (err: Error) => {
         console.log(err.message);
@@ -39,7 +41,10 @@ export class PersonalAddressesComponent implements OnInit {
   }
 
   SubmitAddress(newForm: NgForm){
+    this.newAddress.myAddress = this.address;
+    this.newAddress.myCustomerAddress = this.customerAddress;
+    console.log(this.newAddress);
+    this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe();
     this.addresses.push(this.address);
-    this.httpAddresses.httpPostCustomerAddress(new AddressPost(this.address, this.customerAddress)).subscribe();
   }
 }

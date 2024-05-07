@@ -69,7 +69,7 @@
                 <ng-template pTemplate="body" let-eachDet let-rowIndex="rowIndex">
                   <tr style="border-bottom: 1px solid grey;">
                     <!--DA REVISIONARE-->
-                    <td><img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{myProducts[rowIndex].thumbNailPhoto}}" alt="..."></td>
+                    <td><img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{myProducts[rowIndex].thumbNailPhoto}}" alt="{{myProducts[rowIndex].thumbNailPhotoFileName}}"></td>
                     <td>{{myProducts[rowIndex].name}}</td>
                     <td>{{myProducts[rowIndex].color}}</td>
                     <td>{{eachDet.unitPrice | currency:'USD'}}</td>

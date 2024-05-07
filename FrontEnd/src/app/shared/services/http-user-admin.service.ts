@@ -5,7 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { PwResetCreds } from '../models/PwResetCreds';
 import { SearchParams } from '../models/SearchParams';
 import { Address } from '../models/Address';
-import { AddressPost, CustomerAddress } from '../models/CustomerAddress';
+import { AddressPost } from '../models/AddressPost';
 
 @Injectable({
   providedIn: 'root',

@@ -63,6 +63,10 @@ namespace BetaCycleAPI.BLogic.Authentication
             {
                 throw;
             }
+            finally
+            {
+                await sqlConn.CloseAsync();
+            }
             return response;
         }
     }
