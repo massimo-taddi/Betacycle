@@ -5,7 +5,6 @@ namespace BetaCycleAPI.Models;
 
 public partial class VProductAndDescription
 {
-
     public int ProductId { get; set; }
 
     public string Name { get; set; } = null!;

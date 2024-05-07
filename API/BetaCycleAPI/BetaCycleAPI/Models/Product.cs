@@ -98,22 +98,4 @@ public partial class Product
     public virtual ProductModel? ProductModel { get; set; }
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
-
-
-    public bool Validate()
-    {
-        return (this.Name.Length < 50) &&
-                (this.ProductNumber.Length < 25) &&
-                (this.Color.Length < 15) &&
-                (this.StandardCost != 0) &&
-                (this.Size.Length < 5) &&
-                (this.Weight != 0) &&
-                (this.SellStartDate > (new DateTime(1970, 1, 1)) && (this.SellStartDate < DateTime.Now)) &&
-                (this.SellEndDate > (new DateTime(1970, 1, 1)) && (this.SellEndDate < DateTime.Now)) &&
-                (this.DiscontinuedDate > (new DateTime(1970, 1, 1)) && (this.DiscontinuedDate < DateTime.Now) &&
-                //(this.thumbnailPhoto)
-                (this.ThumbnailPhotoFileName.Length < 50) &&
-                //(this.rowguid)
-                (this.ModifiedDate >(new DateTime(1970,1,1)) && (this.ModifiedDate<DateTime.Now)));
-    }
 }

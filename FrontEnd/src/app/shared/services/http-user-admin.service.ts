@@ -51,10 +51,30 @@ export class HttpUserAdminService {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.put(
-      'https://localhost:7287/api/passwordreset',
+      'https://localhost:7287/api/passwordreset/loggedin',
       oldAndNew,
       {
         headers: header,
+      }
+    );
+  }
+
+  httpSendResetEmail(email: string): Observable<any> {
+    return this.http.post(
+      'https://localhost:7287/api/passwordreset/forgot',
+      email
+    );
+  }
+
+  httpTempUserResetPassword(newPwd: string, tempToken: string): Observable<any> {
+    return this.http.post(
+      'https://localhost:7287/api/passwordreset/notloggedin',
+      newPwd, { 
+        headers: new HttpHeaders({
+          contentType: 'application/json',
+          responseType: 'text',
+          Authorization: 'Bearer ' + tempToken
+        })
       }
     );
   }

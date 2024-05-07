@@ -161,13 +161,13 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            if(!customer.Validate()) return BadRequest();
             // customer.PasswordHash is NOT supposed to be hashed at this point
             KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(customer.PasswordHash);
             // this is where it gets hashed ^
             customer.PasswordHash = pwData.Key;
             Console.WriteLine(pwData.Value);
             customer.PasswordSalt = pwData.Value;
+            // the changes are only written on _awContext since the data is automatically migrated to the Credentials DB
             _awContext.Customers.Add(customer);
             await _awContext.SaveChangesAsync();
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);

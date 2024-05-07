@@ -18,10 +18,7 @@ public partial class ErrorLog
     /// </summary>
     public DateTime ErrorTime { get; set; }
 
-    /// <summary>
-    /// The user who executed the batch in which the error occurred.
-    /// </summary>
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     /// <summary>
     /// The error number of the error that occurred.
@@ -58,20 +55,4 @@ public partial class ErrorLog
     public string? Osdevice { get; set; }
 
     public string? ErrorSource { get; set; }
-
-    public ErrorLog(int errorLogId, DateTime errorTime, string userName, int errorNumber, int? errorSeverity, int? errorState, string? errorProcedure, int? errorLine, string errorMessage, string? ipaddress, string? osdevice, string? errorSource)
-    {
-        ErrorLogId = errorLogId;
-        ErrorTime = errorTime;
-        UserName = userName;
-        ErrorNumber = errorNumber;
-        ErrorSeverity = errorSeverity;
-        ErrorState = errorState;
-        ErrorProcedure = errorProcedure;
-        ErrorLine = errorLine;
-        ErrorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
-        Ipaddress = ipaddress;
-        Osdevice = osdevice;
-        ErrorSource = errorSource;
-    }
 }

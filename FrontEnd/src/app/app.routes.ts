@@ -16,6 +16,7 @@ import { ProductsListComponent } from './features/admin-area/products-list/produ
 import { ModifyProductComponent } from './features/admin-area/modify-product/modify-product.component';
 import { PasswordResetComponent } from './core/password-reset/password-reset.component';
 import { PasswordForgotComponent } from './core/password-reset/password-forgot/password-forgot.component';
+import { PasswordForgotResetComponent } from './core/password-reset/password-forgot/password-forgot-reset/password-forgot-reset.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +69,10 @@ export const routes: Routes = [
   {
     path: 'forgotpwd',
     component: PasswordForgotComponent
+  },
+  {
+    path: 'resetforgot',
+    component: PasswordForgotResetComponent
   },
   {
     path: 'admin',

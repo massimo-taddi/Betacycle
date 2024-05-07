@@ -28,6 +28,9 @@ namespace BetaCycleAPI
             jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
             builder.Services.AddSingleton(jwtSettings);
 
+            string url = builder.Configuration.GetSection("BaseSiteUrl").Get<string>();
+            builder.Services.AddSingleton(url);
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opts =>
                 {

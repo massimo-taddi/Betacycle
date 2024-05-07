@@ -8,10 +8,6 @@ import { Customer } from '../models/Customer';
   providedIn: 'root',
 })
 export class HttploginService {
-  newHeader = new HttpHeaders({
-    contentType: 'application/json',
-    responseType: 'text',
-  });
   constructor(private http: HttpClient) {}
 
   httpSendLoginCredentials(credentials: LoginCredentials): Observable<any> {

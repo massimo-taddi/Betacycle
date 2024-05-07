@@ -38,13 +38,4 @@ public partial class ProductCategory
     public virtual ProductCategory? ParentProductCategory { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public bool Validate() {
-        return (this.Name.Length < 50)
-                //&&(this.Rowguid.ToString().Length!=0)
-                &&(this.ModifiedDate>(new DateTime(1970,1,1)) && this.ModifiedDate<DateTime.Now);
-    }
-
-
-
 }

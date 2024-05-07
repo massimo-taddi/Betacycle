@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BetaCycleAPI.Models;
@@ -89,23 +88,4 @@ public partial class Customer
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaders { get; set; } = new List<SalesOrderHeader>();
-
-
-    public bool Validate()
-    {
-        return (this.Title.IsNullOrEmpty() || this.Title.Length <= 8) &&
-                (this.FirstName.Length > 0 && this.FirstName.Length < 50) &&
-                (this.MiddleName.IsNullOrEmpty() || this.MiddleName.Length <= 50) &&
-                (this.LastName.Length > 0 && this.LastName.Length < 50) &&
-                (this.Suffix.IsNullOrEmpty() || this.Suffix.Length < 10) &&
-                (this.CompanyName.IsNullOrEmpty() || this.CompanyName.Length < 128) &&
-                (this.SalesPerson.IsNullOrEmpty() || this.SalesPerson.Length < 256) &&
-                (this.EmailAddress.IsNullOrEmpty() || this.EmailAddress.Length < 50) &&
-                (this.Phone.IsNullOrEmpty() || this.Phone.Length < 25) &&
-                (this.PasswordHash.Length > 0 && this.PasswordHash.Length < 128) &&
-                (this.PasswordSalt.Length > 0 && this.PasswordSalt.Length < 10) &&
-                (this.Rowguid.ToString().Length > 0) &&
-                (this.ModifiedDate.CompareTo(new DateTime(1970, 1, 1)) > 0 && this.ModifiedDate.CompareTo(DateTime.Now) <= 0);
-    }
-
 }
