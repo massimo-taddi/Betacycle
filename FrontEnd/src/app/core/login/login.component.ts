@@ -47,4 +47,10 @@ export class LoginComponent {
       });
     } else alert('Username e Password obbligatori!');
   }
+  navToSignup() {
+    this.router.navigate(['/signup']);
+  }
+  navToForgot() {
+    this.router.navigate(['/forgotpwd']);
+  }
 }

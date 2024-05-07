@@ -27,7 +27,6 @@ namespace BetaCycleAPI.Controllers
 
 
         // PUT api/<PasswordResetController>
-        [Authorize]
         [HttpPut]
         public async Task<ActionResult<bool>> PostAsync([FromBody] PwResetCreds reset)
         {
@@ -41,7 +40,7 @@ namespace BetaCycleAPI.Controllers
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
 
             var dbPwd = (_credentialsContext.Credentials.Find(tokenCustomerId).PasswordHash, _credentialsContext.Credentials.Find(tokenCustomerId).SaltHash);
-            if (EncryptData.CypherData.DecryptSalt(reset.oldPassword, dbPwd.SaltHash)== dbPwd.PasswordHash)
+            if (EncryptData.CypherData.DecryptSalt(reset.oldPassword, dbPwd.SaltHash) == dbPwd.PasswordHash)
             {
                 // set new pwd
                 var customer = await _credentialsContext.Credentials.Where(c => c.CustomerId == tokenCustomerId).FirstOrDefaultAsync();
@@ -61,5 +60,41 @@ namespace BetaCycleAPI.Controllers
             }
             return false;
         }
+
+        // PUT api/<PasswordResetController>
+        [Route("forgot")]
+        [HttpPut]
+        public async Task<ActionResult<bool>> PostAsyncUnlogged([FromBody] PwResetCreds reset)
+        {
+            var customerId = _credentialsContext.Credentials.Where(customer => customer.Email == reset.email).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == reset.email).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == reset.email).OrderBy(c => c.CustomerId).Last().CustomerId;
+
+            var dbPwd = (_credentialsContext.Credentials.Find(customerId).PasswordHash, _credentialsContext.Credentials.Find(customerId).SaltHash);
+
+            if (EncryptData.CypherData.DecryptSalt(reset.oldPassword, dbPwd.SaltHash) == dbPwd.PasswordHash)
+            {
+                // invia la mail
+                // dal link della mail, user arriva a una pagina in cui gli e' stato generato un token valido
+                // da li esegui il reset pwd scritto sopra
+                //var customer = await _credentialsContext.Credentials.Where(c => c.CustomerId == customerId).FirstOrDefaultAsync();
+                //var encrypted = EncryptData.CypherData.SaltEncryp(reset.newPassword);
+                //customer.PasswordHash = encrypted.Key;
+                //customer.SaltHash = encrypted.Value;
+                //_credentialsContext.Entry(customer).State = EntityState.Modified;
+                //try
+                //{
+                //    await _credentialsContext.SaveChangesAsync();
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    throw;
+                //}
+                return true; // significa solo che la mail e' stata inviata
+            }
+            return false;
+        
+        }
+
     }
 }
