@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -98,11 +99,36 @@ namespace BetaCycleAPI.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress(Address address)
+        public async Task<ActionResult<Address>> PostAddress(AddressPost newAddress)
         {
-            _awContext.Addresses.Add(address);
-            await _awContext.SaveChangesAsync();
-
+            Address address = newAddress.myAddress;
+            CustomerAddress custAdd = newAddress.myCustomerAddress;
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            List<Address> res = [];
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest("Account admin rilevato");
+            else
+            {
+                try
+                {
+                    var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+                    var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                           _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                           _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+                    //Save address in db
+                    _awContext.Addresses.Add(address);
+                    await _awContext.SaveChangesAsync();
+                    custAdd.CustomerId = Convert.ToInt32(tokenCustomerId);
+                    custAdd.AddressId = address.AddressId;
+                    _awContext.CustomerAddresses.Add(custAdd);
+                    await _awContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             return CreatedAtAction("GetAddress", new { id = address.AddressId }, address);
         }
 
