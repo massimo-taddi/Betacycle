@@ -4,12 +4,59 @@
 <h1>Indirizzi</h1>
 <div class="d-flex justify-content-end">
     <button pbutton pripple label="New" icon="pi pi-plus"
-        class="p-element p-ripple p-button-success mr-2 p-button p-component">
-        <span class="p-button-icon p-button-icon-left pi pi-plus"
-            aria-hidden="true"></span>
+
+        class="p-element p-ripple p-button-success mr-2 p-button p-component" (click)="dialogBool = true">
+        <span class="p-button-icon p-button-icon-left pi pi-plus" aria-hidden="true"></span>
         <span class="p-button-label">Aggiungi Indirizzo</span>
         <span class="p-ink" aria-hidden="true" role="presentation"></span>
     </button>
+    <p-dialog header="Creazione Nuovo Indirizzo" [modal]="true" [(visible)]="dialogBool" [style]="{ width: '65rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+        <form #newAddress="ngForm" (submit)="SubmitAddress(newAddress)" class="row g-3">
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Indirizzo Line 1</label>
+                <input type="text" class="form-control" id="inputAddress1" placeholder="123 Via Marconi" name="addressLine1" [(ngModel)]="address.addressLine1">
+            </div>
+            <div class="col-12">
+                <label for="inputAddress2" class="form-label">Indirizzo Line 2</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="Appartamento, studio, o piano" name="addressLine2" [(ngModel)]="address.addressLine2">
+            </div>
+            <div class="col-md-6">
+                <label for="inputCity" class="form-label">Città</label>
+                <input type="text" class="form-control" id="inputCity" name="city" [(ngModel)]="address.city">
+            </div>
+            <div class="col-md-6">
+                <label for="inputRegion" class="form-label">Regione</label>
+                <input type="text" class="form-control" id="inputRegion" name="stateProvince" [(ngModel)]="address.stateProvince">
+            </div>
+            <div class="col-md-4">
+                <label for="inputState" class="form-label">Stato</label>
+                <select id="inputState" class="form-select" name="countryRegion" [(ngModel)]="address.countryRegion">
+                    <option selected>Seleziona</option>
+                    <option>Italia</option>
+                    <option>Svizzera</option>
+                    <option>Francia</option>
+                    <option>Germania</option>
+                    <option>Stati Uniti</option>
+                    <option>Regno Unito</option>
+                    <option>Malta</option>
+                    <option>San Marino</option>
+                    <option>Città del Vaticano</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">CAP</label>
+                <input type="text" class="form-control" id="inputZip" name="postalCode" [(ngModel)]="address.postalCode">
+            </div>
+            <div class="col-md-6">
+                <label for="inputType" class="form-label">Tipo Indirizzo</label>
+                <input type="text" class="form-control" id="inputType" name="addressType" [(ngModel)]="customerAddress.addressType">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Aggiungi</button>
+            </div>
+        </form>
+    </p-dialog>
 </div>
 <p-table [value]="addresses">
     <ng-template pTemplate="header" let-columns>

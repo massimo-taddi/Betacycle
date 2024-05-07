@@ -1,3 +1,5 @@
+import { Address } from "./Address";
+
 export class CustomerAddress {
   customerID?: number;
   addressID?: number;
@@ -10,5 +12,15 @@ export class CustomerAddress {
   ) {
     this.addressType = addressType;
     this.modifiedDate = new Date(Date.now());
+  }
+}
+
+export class AddressPost {
+  myAddress: Address | null = null;
+  myCustomerAddress: CustomerAddress | null= null;
+
+  constructor(add: Address, custAdd: CustomerAddress){
+    this.myAddress = add;
+    this.myCustomerAddress = custAdd;
   }
 }

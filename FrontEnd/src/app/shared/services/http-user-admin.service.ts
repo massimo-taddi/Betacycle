@@ -4,6 +4,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { PwResetCreds } from '../models/PwResetCreds';
 import { SearchParams } from '../models/SearchParams';
+import { Address } from '../models/Address';
+import { AddressPost, CustomerAddress } from '../models/CustomerAddress';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +47,18 @@ export class HttpUserAdminService {
   }
   setSearchParams(params: SearchParams) {
     this.searchParams.next(params);
+  }
+
+  httpPostCustomerAddress(newAddress: AddressPost): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.post(
+      'https://localhost:7287/api/addresses',
+      newAddress,
+      {
+        headers: header,
+      }
+    );
   }
 
   httpUserResetPassword(oldAndNew: PwResetCreds): Observable<any> {
