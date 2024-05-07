@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../shared/models/Product';
 import { ProductService } from '../../../shared/services/product.service';
+import { SalesOrderDetail } from '../../../shared/models/SalesOrderDetail';
 
 
 @Component({
@@ -68,8 +69,8 @@ export class PersonalOrdersComponent implements OnInit {
 
   getOrderProducts(ord: SalesOrderHeader) {
     this.myProducts= [];
-    ord.salesOrderDetails.forEach(det => {
-      this.httpProducts.getProductById(det.productId).subscribe({
+    for(let detail of ord.salesOrderDetails) {
+      this.httpProducts.getProductById(detail.productId).subscribe({
         next: (product: Product) => {
           this.myProducts.push(product);
         },
@@ -77,7 +78,7 @@ export class PersonalOrdersComponent implements OnInit {
           console.log(err.message);
         },
       });
-    })
+    }
     console.log(this.myProducts);
   };
 
