@@ -14,6 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class PasswordResetComponent {
   result: boolean = false;
+  @Input() formsDisabled: boolean = false;
   constructor(private resetter: HttpUserAdminService) {}
 
   pwdReset(oldPwd: HTMLInputElement, newPwd: HTMLInputElement)  {

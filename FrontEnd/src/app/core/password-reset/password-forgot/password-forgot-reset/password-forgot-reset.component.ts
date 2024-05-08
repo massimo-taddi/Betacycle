@@ -39,6 +39,7 @@ export class PasswordForgotResetComponent implements OnInit {
             this.authStatus.setLoginStatus(true, this.token!, false, decodedToken.role === 'admin');
             this.router.navigate(["/home"])
             break;
+          // this is redundant, since a user logging in through this method will always be migrated automatically on password change
           case HttpStatusCode.NoContent:
             this.success = false;
             if(response.text === 'not migrated') this.router.navigate(["/signup"]);

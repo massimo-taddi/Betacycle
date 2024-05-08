@@ -6,18 +6,19 @@ import { Router, RouterModule } from '@angular/router';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { PasswordResetComponent } from '../../../core/password-reset/password-reset.component';
 import { Panel, PanelModule } from 'primeng/panel';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-personal-info',
   standalone: true,
-  imports: [RouterModule, PasswordResetComponent, PanelModule],
+  imports: [RouterModule, PasswordResetComponent, PanelModule, CommonModule],
   templateUrl: './personal-info.component.html',
   styleUrl: './personal-info.component.css'
 })
 export class PersonalInfoComponent implements OnInit {
   info?: Customer;
   changesNotAllowed: boolean = true;
-
+  resetPwd: boolean = false;
   constructor(private httpInfo: HttpUserAdminService, private router: Router) {}
 
   ngOnInit(): void {

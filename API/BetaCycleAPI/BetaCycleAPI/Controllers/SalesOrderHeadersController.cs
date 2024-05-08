@@ -53,6 +53,10 @@ namespace BetaCycleAPI.Controllers
             foreach (var header in headers)
             {
                 header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
+                foreach(var detail in header.SalesOrderDetails)
+                {
+                    detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
+                }
                 header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
             }
 

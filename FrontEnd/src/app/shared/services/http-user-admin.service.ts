@@ -75,15 +75,15 @@ export class HttpUserAdminService {
 
   httpSendResetEmail(email: string): Observable<any> {
     return this.http.post(
-      'https://localhost:7287/api/passwordreset/forgot',
-      email
+      'https://localhost:7287/api/passwordreset/forgot?email='+ email,
+      null
     );
   }
 
   httpTempUserResetPassword(newPwd: string, tempToken: string): Observable<any> {
-    return this.http.post(
-      'https://localhost:7287/api/passwordreset/notloggedin',
-      newPwd, { 
+    return this.http.put(
+      'https://localhost:7287/api/passwordreset/notloggedin?newpwd=' + newPwd,
+      null, { 
         headers: new HttpHeaders({
           contentType: 'application/json',
           responseType: 'text',

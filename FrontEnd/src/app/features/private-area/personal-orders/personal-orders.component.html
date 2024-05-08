@@ -53,11 +53,11 @@
               <td><span id="status-box">{{orderStatusString(order.status)}}</span></td>
               <td>{{order.shipMethod}}</td>
               <td>{{order.subTotal | currency:'USD'}}</td>
-              <td><p-button label="Visualizza dettagli" icon="pi pi-box" (click)="dialogBool=true; getOrderProducts(order)" styleClass="p-button-warning"></p-button></td>
+              <td><p-button label="Visualizza dettagli" icon="pi pi-box" (click)="dialogBool=true;" styleClass="p-button-warning"></p-button></td>
               
               <p-dialog header="Dettagli ordine N. {{order.salesOrderNumber}}" [modal]="true" [(visible)]="dialogBool" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-              <p-table [value]="order.salesOrderDetails">
+              <p-table [value]="order.salesOrderDetails" [lazy]="true">
                 <ng-template pTemplate="header" let-columns>
                   <th scope="col">#</th>
                   <th scope="col">Nome Prodotto</th>
@@ -67,11 +67,11 @@
                   <th scope="col"></th>
                 </ng-template>
                 <ng-template pTemplate="body" let-eachDet let-rowIndex="rowIndex">
-                  <tr style="border-bottom: 1px solid grey;">
+                  <tr style="border-bottom: 1px solid grey;" [pEditableRow]="true">
                     <!--DA REVISIONARE-->
-                    <td><img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{myProducts[rowIndex].thumbNailPhoto}}" alt="{{myProducts[rowIndex].thumbNailPhotoFileName}}"></td>
-                    <td>{{myProducts[rowIndex].name}}</td>
-                    <td>{{myProducts[rowIndex].color}}</td>
+                    <td><img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{eachDet.product.thumbNailPhoto}}" alt="{{eachDet.product.thumbNailPhotoFileName}}"></td>
+                    <td>{{eachDet.product.name}}</td>
+                    <td>{{eachDet.product.color}}</td>
                     <td>{{eachDet.unitPrice | currency:'USD'}}</td>
                     <td>{{eachDet.orderQty}}</td>
                   </tr>

@@ -1,4 +1,4 @@
-<form class="row g-3">
+<form class="row g-3 p-3">
     <div class="col-md-4">
         <label for="inputEmail4" class="form-label">Name</label>
         <input #firstname type="text" class="form-control" value="{{info?.firstName}}" [disabled]="changesNotAllowed">
@@ -17,7 +17,8 @@
     </div>
 
     <div class="col-12">
-        <button routerLink="/pwreset" class="btn btn-primary">Change Password</button>
+        <button type="button" (click)="resetPwd ? resetPwd = false : resetPwd = true;" class="btn btn-primary">Change Password</button>
+        <span *ngIf="resetPwd"><app-password-reset [formsDisabled]="changesNotAllowed"></app-password-reset></span>
     </div>
 
     <div class="col-12">

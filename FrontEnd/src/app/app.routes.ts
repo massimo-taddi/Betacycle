@@ -59,13 +59,16 @@ export const routes: Routes = [
       {
         path: 'myinfo',
         component: PersonalInfoComponent,
+        children: [
+          {
+            path: 'pwreset',
+            component: PasswordResetComponent
+          }
+        ]
       },
     ],
   },
-  {
-    path: 'pwreset',
-    component: PasswordResetComponent
-  },
+  
   {
     path: 'forgotpwd',
     component: PasswordForgotComponent

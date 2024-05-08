@@ -20,7 +20,6 @@ import { SalesOrderDetail } from '../../../shared/models/SalesOrderDetail';
 })
 export class PersonalOrdersComponent implements OnInit {
   orders: SalesOrderHeader[] = [];
-  myProducts: Product[] = [];
   dialogBool: boolean = false;
   constructor(private httpOrders: HttpUserAdminService, private httpProducts: ProductService) { }
   ngOnInit(): void {
@@ -66,20 +65,5 @@ export class PersonalOrdersComponent implements OnInit {
       },
     });
   }
-
-  getOrderProducts(ord: SalesOrderHeader) {
-    this.myProducts= [];
-    for(let detail of ord.salesOrderDetails) {
-      this.httpProducts.getProductById(detail.productId).subscribe({
-        next: (product: Product) => {
-          this.myProducts.push(product);
-        },
-        error: (err: Error) => {
-          console.log(err.message);
-        },
-      });
-    }
-    console.log(this.myProducts);
-  };
 
 }

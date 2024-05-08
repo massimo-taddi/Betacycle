@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpUserAdminService } from '../../../shared/services/http-user-admin.service';
 
 @Component({
@@ -11,10 +11,14 @@ import { HttpUserAdminService } from '../../../shared/services/http-user-admin.s
   styleUrl: './password-forgot.component.css'
 })
 export class PasswordForgotComponent {
-  constructor(private resetter: HttpUserAdminService) {
+  emailSent: boolean = false;
+  constructor(private resetter: HttpUserAdminService, private router: Router) {
 
   }
   SendMail(email: HTMLInputElement) {
-    this.resetter.httpSendResetEmail(email.value);
+    this.resetter.httpSendResetEmail(email.value).subscribe(
+      res => this.emailSent = res
+    );
+    this.router.navigate(['/home']);
   }
 }
