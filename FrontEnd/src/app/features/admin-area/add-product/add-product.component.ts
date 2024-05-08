@@ -9,6 +9,7 @@ import { ProductModel } from '../../../shared/models/ProductModel';
 import { FileRemoveEvent, FileSelectEvent, FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 import { Product } from '../../../shared/models/Product';
 import { CardModule } from 'primeng/card';
+import * as BlobUtil from 'blob-util';
 
 @Component({
   selector: 'app-add-product',
@@ -36,8 +37,12 @@ export class AddProductComponent implements OnInit {
   }
 
   async onThumbnailSelect(event: FileSelectEvent) {
-    this.product.thumbNailPhoto = await event.files[0].text();
-    this.product.thumbnailPhotoFileName = event.files[0].name;
+    BlobUtil.blobToBase64String(event.files[0]).then(
+      (b64str) => {
+        this.product.thumbNailPhoto = b64str;
+        this.product.thumbnailPhotoFileName = event.files[0].name;
+      }
+    )
   }
 
   onThumbnailRemove(event: FileRemoveEvent) {
