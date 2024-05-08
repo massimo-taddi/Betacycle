@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-<table>
-  <tr *ngFor="let product of products">
-    <td colspan="3">
-      <img src="data:image/gif;base64, {{ product.thumbNailPhoto }}" />
-      {{ product.name }}
-    </td>
-  </tr>
-</table>
-=======
-
 <div class="productContainer">
   <div class="card flex justify-content-center" *ngFor="let product of products">
     <p-card header="{{ product.name }}" subheader="{{product.listPrice}}" [style]="{ width: '360px' }">
@@ -27,7 +16,6 @@
     </p-card>
   </div>
 </div>
->>>>>>> Stashed changes
 
 <!-- 
 

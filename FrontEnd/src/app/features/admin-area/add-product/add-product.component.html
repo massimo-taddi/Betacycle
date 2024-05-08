@@ -1,1 +1,13 @@
-sdfsdfds
+<form #newAddress="ngForm" (submit)="SubmitProduct(newAddress)" class="row g-3">
+    <div class="col-md-6">
+        <label for="inputName" class="form-label">Nome Prodotto</label>
+        <input type="text" class="form-control" id="inputName" name="name" [(ngModel)]="product.name">
+    </div>
+    <div class="col-md-6">
+        <label for="inputNumber" class="form-label">Numero prodotto</label>
+        <input type="text" class="form-control" id="inputAinputNumberddress2" name="productNumber" [(ngModel)]="product.productNumber">
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Aggiungi</button>
+    </div>
+</form>

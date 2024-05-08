@@ -119,12 +119,29 @@ namespace BetaCycleAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> PostProduct([FromBody] ProductForm productForm)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
                 return BadRequest();
+            var product = new Product()
+            {
+                Name = productForm.Name,
+                ProductNumber = productForm.ProductNumber,
+                Color = productForm.Color,
+                StandardCost = productForm.StandardCost,
+                ListPrice = productForm.ListPrice,
+                Size = productForm.Size,
+                Weight = productForm.Weight,
+                ProductCategoryId = productForm.ProductCategoryId,
+                SellStartDate = productForm.SellStartDate,
+                SellEndDate = productForm.SellEndDate,
+                DiscontinuedDate = productForm.DiscontinuedDate,
+                ThumbNailPhoto = productForm.ThumbNailPhoto,
+                ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
+                ModifiedDate = DateTime.Now
+            };
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
