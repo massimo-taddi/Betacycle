@@ -57,7 +57,7 @@
               
               <p-dialog header="Dettagli ordine N. {{order.salesOrderNumber}}" [modal]="true" [(visible)]="dialogBool" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-              <p-table [value]="order.salesOrderDetails" [lazy]="true">
+              <p-table [value]="order.salesOrderDetails">
                 <ng-template pTemplate="header" let-columns>
                   <th scope="col">#</th>
                   <th scope="col">Nome Prodotto</th>

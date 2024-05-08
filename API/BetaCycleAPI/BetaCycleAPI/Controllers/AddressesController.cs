@@ -99,12 +99,12 @@ namespace BetaCycleAPI.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress(AddressPost newAddress)
+        public async Task<ActionResult<Address>> PostAddress([FromBody] AddressFormData formData)
         {
-            Address address = newAddress.myAddress;
-            CustomerAddress custAdd = newAddress.myCustomerAddress;
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            Address address = null;
+            CustomerAddress custAdd = null;
             List<Address> res = [];
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 return BadRequest("Account admin rilevato");
@@ -117,10 +117,26 @@ namespace BetaCycleAPI.Controllers
                                            _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                            _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
                     //Save address in db
+                    var modDate = DateTime.Now;
+                    address = new Address()
+                    {
+                        AddressLine1 = formData.AddressLine1,
+                        AddressLine2 = formData.AddressLine2,
+                        City = formData.City,
+                        StateProvince = formData.StateProvince,
+                        CountryRegion = formData.CountryRegion,
+                        PostalCode = formData.PostalCode,
+                        ModifiedDate = modDate
+                    };
                     _awContext.Addresses.Add(address);
                     await _awContext.SaveChangesAsync();
-                    custAdd.CustomerId = Convert.ToInt32(tokenCustomerId);
-                    custAdd.AddressId = address.AddressId;
+                    custAdd = new CustomerAddress()
+                    {
+                        CustomerId = (int)tokenCustomerId,
+                        AddressId = address.AddressId,
+                        AddressType = formData.AddressType,
+                        ModifiedDate = modDate
+                    };
                     _awContext.CustomerAddresses.Add(custAdd);
                     await _awContext.SaveChangesAsync();
                 }

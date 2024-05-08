@@ -4,16 +4,17 @@ import { PwResetCreds } from '../../shared/models/PwResetCreds';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css'
 })
 export class PasswordResetComponent {
-  result: boolean = false;
+  result: boolean | null = null;
   @Input() formsDisabled: boolean = false;
   constructor(private resetter: HttpUserAdminService) {}
 
@@ -24,6 +25,5 @@ export class PasswordResetComponent {
         console.log("Errore: "+ err.message);
       }
     });
-    console.log(this.result);
   }
 }

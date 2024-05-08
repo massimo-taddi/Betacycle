@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CustomerAddress } from '../../../shared/models/CustomerAddress';
-import { AddressPost } from '../../../shared/models/AddressPost';
+import { AddressFormData } from '../../../shared/models/AddressFormData';
 
 @Component({
   selector: 'app-personal-addresses',
@@ -20,7 +20,7 @@ export class PersonalAddressesComponent implements OnInit {
   dialogBool: boolean = false;
   address: Address = new Address();
   customerAddress: CustomerAddress = new CustomerAddress('');
-  newAddress: AddressPost = new AddressPost();
+  newAddress: AddressFormData | null = null;
 
   constructor(private httpAddresses: HttpUserAdminService) {}
 
@@ -41,9 +41,7 @@ export class PersonalAddressesComponent implements OnInit {
   }
 
   SubmitAddress(newForm: NgForm){
-    this.newAddress.myAddress = this.address;
-    this.newAddress.myCustomerAddress = this.customerAddress;
-    console.log(this.newAddress);
+    this.newAddress = newForm.value as AddressFormData;
     this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe();
     this.addresses.push(this.address);
   }

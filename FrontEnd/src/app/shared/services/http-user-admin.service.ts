@@ -5,7 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { PwResetCreds } from '../models/PwResetCreds';
 import { SearchParams } from '../models/SearchParams';
 import { Address } from '../models/Address';
-import { AddressPost } from '../models/AddressPost';
+import { AddressFormData } from '../models/AddressFormData';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +49,7 @@ export class HttpUserAdminService {
     this.searchParams.next(params);
   }
 
-  httpPostCustomerAddress(newAddress: AddressPost): Observable<any> {
+  httpPostCustomerAddress(newAddress: AddressFormData): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.post(
