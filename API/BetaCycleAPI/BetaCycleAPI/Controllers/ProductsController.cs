@@ -81,6 +81,30 @@ namespace BetaCycleAPI.Controllers
             return product;
         }
 
+        // GET: api/products/categories
+        [Authorize]
+        [HttpGet]
+        [Route("categories")]
+        public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+            return await _context.ProductCategories.ToListAsync();
+        }
+
+        // GET: api/products/categories
+        [Authorize]
+        [HttpGet]
+        [Route("models")]
+        public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+            return await _context.ProductModels.ToListAsync();
+        }
+
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
@@ -119,7 +143,7 @@ namespace BetaCycleAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Product>> PostProduct([FromBody] ProductForm productForm)
+        public async Task<ActionResult<Product>> PostProduct(ProductForm productForm)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));

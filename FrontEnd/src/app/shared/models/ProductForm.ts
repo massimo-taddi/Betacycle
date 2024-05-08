@@ -1,6 +1,6 @@
 export class ProductForm {
-    name: string | null = null!;
-    productNumber: string | null = null;
+    name!: string;
+    productNumber!: string;
     color: string | null = null;
     standardCost!: number;
     listPrice!: number;
@@ -11,7 +11,7 @@ export class ProductForm {
     sellStartDate!: Date;
     sellEndDate: Date | null = null;
     discontinuedDate: Date | null = null;
-    thumbNailPhoto: Blob | null = null;
+    thumbNailPhoto: string | null = null;
     thumbnailPhotoFileName: string | null = null;
     modifiedDate: Date = new Date(Date.now());
 }

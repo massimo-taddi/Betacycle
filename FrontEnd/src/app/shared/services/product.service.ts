@@ -11,23 +11,38 @@ import { AuthenticationService } from './authentication.service';
 export class ProductService {
   private searchParams = new BehaviorSubject(new SearchParams());
   searchParams$ = this.searchParams.asObservable();
+
   constructor(private http: HttpClient, private auth: AuthenticationService) {}
+
+  setSearchParams(params: SearchParams) {
+    this.searchParams.next(params);
+  }
+
   getProducts(params: SearchParams): Observable<any> {
     return this.http.get(
       `https://localhost:7287/api/products?pageindex=${params.pageIndex}&pagesize=${params.pageSize}&search=${params.search}&sort=${params.sort}`
     );
   }
-  setSearchParams(params: SearchParams) {
-    this.searchParams.next(params);
+
+  getProductCategories(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get('https://localhost:7287/api/products/categories', { headers: header });
+  }
+
+  getProductModels(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get('https://localhost:7287/api/products/models', { headers: header });
   }
 
   getProductById(id: number): Observable<any> {
     return this.http.get(`https://localhost:7287/api/Products/${id}`);
   }
 
-  postProduct(productForm: ProductForm) {
+  postProduct(productForm: ProductForm): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.post(`https://localhost:7287/api/Products`, productForm);
+    return this.http.post(`https://localhost:7287/api/Products`, productForm, {headers : header});
   }
 }
