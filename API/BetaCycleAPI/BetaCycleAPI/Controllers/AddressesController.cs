@@ -37,6 +37,7 @@ namespace BetaCycleAPI.Controllers
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             List<Address> res = [];
+            List<CustomerAddress> custAdds = [];
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 res = await _awContext.Addresses.ToListAsync();
             else
@@ -46,6 +47,12 @@ namespace BetaCycleAPI.Controllers
                                        _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                        _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
                 res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId).First().CustomerId == tokenCustomerId).ToListAsync();
+                foreach (var address in res)
+                {
+                    custAdds.Add(await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).FirstAsync());
+                    //address.CustomerAddresses.Add(await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).First());
+                    address.CustomerAddresses = custAdds;
+                }
             }
 
             return res;

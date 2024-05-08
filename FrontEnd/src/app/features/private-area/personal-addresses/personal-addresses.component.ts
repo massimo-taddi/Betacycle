@@ -7,25 +7,29 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CustomerAddress } from '../../../shared/models/CustomerAddress';
 import { AddressFormData } from '../../../shared/models/AddressFormData';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-personal-addresses',
   standalone: true,
-  imports: [CommonModule ,TableModule, FormsModule, DialogModule],
+  imports: [CommonModule ,TableModule, FormsModule, DialogModule, ButtonModule],
   templateUrl: './personal-addresses.component.html',
   styleUrl: './personal-addresses.component.css'
 })
 export class PersonalAddressesComponent implements OnInit {
   addresses: Address[] = [];
-  dialogBool: boolean = false;
+  dialogBoolAdd: boolean = false;
+  dialogBoolEdit: boolean = false;
   address: Address = new Address();
   customerAddress: CustomerAddress = new CustomerAddress('');
   newAddress: AddressFormData | null = null;
+  changesNotAllowed: boolean = true;
+  modifyAddress: Address = new Address();
+  currentRow: number = 0;
 
   constructor(private httpAddresses: HttpUserAdminService) {}
 
   ngOnInit(): void {
-    this.addresses = [];
     this.getUserAddresses();
   }
 
@@ -44,5 +48,10 @@ export class PersonalAddressesComponent implements OnInit {
     this.newAddress = newForm.value as AddressFormData;
     this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe();
     this.addresses.push(this.address);
+  }
+
+  PutModifyAddress(){
+    //DA COMPLETARE
+    console.log(this.modifyAddress);
   }
 }
