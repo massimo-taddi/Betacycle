@@ -5,6 +5,7 @@ import { TagModule } from 'primeng/tag';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ import { RouterModule } from '@angular/router';
 export class HomeComponent {
   images: any[] = [
     '../../../assets/images/BiciclettaProva1.png',
-    '../../../assets/images/BiciclettaProva2.jpg',
-    '../../../assets/images/BiciclettaProva3.jpg',
+    '../../../assets/images/BiciclettaProva2.jng',
+    '../../../assets/images/BiciclettaProva3.jng',
   ];
 }

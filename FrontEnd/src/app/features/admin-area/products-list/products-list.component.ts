@@ -8,8 +8,7 @@ import { ProductService } from '../../../shared/services/product.service';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { CardModule } from 'primeng/card';
-
-
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-products-list',
   standalone: true,
@@ -31,7 +30,6 @@ export class ProductsListComponent {
   rows: number = 10;
   productCount: number = 0;
 
-
   constructor(private productService: ProductService) {}
   ngOnInit() {
     this.funzioneProdotti();
@@ -45,6 +43,7 @@ export class ProductsListComponent {
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
+        console.log(products.item2);
         this.productCount = products.item1;
       },
       error: (err: Error) => {
@@ -62,6 +61,7 @@ export class ProductsListComponent {
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
+
         this.productCount = products.item1;
       },
       error: (err: Error) => {
@@ -70,4 +70,12 @@ export class ProductsListComponent {
     });
   }
   onPageChange(event: PaginatorState) {}
+
+  Delete() {
+    this.productService;
+  }
+  SetLocalStorage(modifyId: number) {
+    let modifyIdString = modifyId.toString();
+    localStorage.setItem('ModifyId', modifyIdString);
+  }
 }

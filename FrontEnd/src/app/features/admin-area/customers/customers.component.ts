@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { Customer } from '../../../shared/models/Customer';
 import { PaginatorModule } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
-
+import { TableModule } from 'primeng/table';
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [FormsModule, CommonModule, PaginatorModule],
+  imports: [FormsModule, CommonModule, PaginatorModule, TableModule],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
 })
@@ -26,10 +26,11 @@ export class CustomersComponent {
   }
   funzioneCustomer(index: number) {
     this.searchParams.pageIndex = index;
-    this.searchParams.pageSize = 10;
+
     this.AdminService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
+    this.searchParams.pageSize = 10;
     this.AdminService.httpGetCustomerInfo(this.searchParams).subscribe({
       next: (customers: any) => {
         this.customers = customers.item2;

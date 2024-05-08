@@ -1,1 +1,57 @@
-<p>modify-product works!</p>
+<table>
+  <tr>
+    <td>
+      <p-inputGroup> <input value="{{ product.name }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.productNumber }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.color }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.standardCost }}" /></p-inputGroup>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p-inputGroup><input value="{{ product.listPrice }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.size }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.weight }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup
+        ><input value="{{ product.productCategoryId }}"
+      /></p-inputGroup>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p-inputGroup
+        ><input value="{{ product.productModelId }}"
+      /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup><input value="{{ product.sellStartDate }}" /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup
+        ><input value="{{ product.sellEndDate }}" placeholder="null"
+      /></p-inputGroup>
+    </td>
+    <td>
+      <p-inputGroup
+        ><input value="{{ product.discontinuedDate }}" placeholder="null"
+      /></p-inputGroup>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p-inputGroup><input value="{{ product.modifiedDate }}" /></p-inputGroup>
+    </td>
+  </tr>
+</table>

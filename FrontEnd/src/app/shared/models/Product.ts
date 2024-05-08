@@ -1,7 +1,7 @@
-import { ProductModel } from "./ProductModel";
+import { ProductModel } from './ProductModel';
 
 export class Product {
-  productID: number = 0;
+  productId: number = 0;
   name: string = '';
   productNumber: string = '';
   color: string = '';

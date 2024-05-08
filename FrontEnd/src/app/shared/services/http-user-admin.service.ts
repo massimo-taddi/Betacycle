@@ -52,13 +52,9 @@ export class HttpUserAdminService {
   httpPostCustomerAddress(newAddress: AddressFormData): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.post(
-      'https://localhost:7287/api/addresses',
-      newAddress,
-      {
-        headers: header,
-      }
-    );
+    return this.http.post('https://localhost:7287/api/addresses', newAddress, {
+      headers: header,
+    });
   }
 
   httpUserResetPassword(oldAndNew: PwResetCreds): Observable<any> {
@@ -75,21 +71,28 @@ export class HttpUserAdminService {
 
   httpSendResetEmail(email: string): Observable<any> {
     return this.http.post(
-      'https://localhost:7287/api/passwordreset/forgot?email='+ email,
+      'https://localhost:7287/api/passwordreset/forgot?email=' + email,
       null
     );
   }
 
-  httpTempUserResetPassword(newPwd: string, tempToken: string): Observable<any> {
+  httpTempUserResetPassword(
+    newPwd: string,
+    tempToken: string
+  ): Observable<any> {
     return this.http.put(
       'https://localhost:7287/api/passwordreset/notloggedin?newpwd=' + newPwd,
-      null, { 
+      null,
+      {
         headers: new HttpHeaders({
           contentType: 'application/json',
           responseType: 'text',
-          Authorization: 'Bearer ' + tempToken
-        })
+          Authorization: 'Bearer ' + tempToken,
+        }),
       }
     );
+  }
+  httpDeleteProduct(): Observable<any> {
+    return this.http.delete('');
   }
 }
