@@ -1,54 +1,26 @@
 <div class="productContainer">
-  <div
-    class="card flex justify-content-center"
-    *ngFor="let product of products"
-  >
-    <p-card
-      header="{{ product.name }}"
-      subheader="{{ product.listPrice }}"
-      [style]="{ width: '360px' }"
-    >
+  <div class="card flex justify-content-center" *ngFor="let product of products">
+    <p-card header="{{ product.name }}" subheader="{{ product.listPrice }}" [style]="{ width: '360px' }">
       <ng-template pTemplate="header">
-        <img
-          alt="Card"
-          src="data:image/gif;base64, {{ product.thumbNailPhoto }}"
-        />
+        <img alt="Card" src="data:image/gif;base64, {{ product.thumbNailPhoto }}"/>
       </ng-template>
-      <p></p>
+      
+      <p>
+        <!-- DESCRIPTION PRODUCT -->
+      </p>
+      
       <ng-template pTemplate="footer">
-        <div class="flex gap-3 mt-1">
-          <p-button
-            label="Delete"
-            severity="secondary"
-            class="w-full"
-            styleClass="w-full"
-          />
-          <p-button
-            label="Modify"
-            class="w-full"
-            styleClass="w-full"
-            (onClick)="SetLocalStorage(product.productId)"
-            routerLink="../modify-product"
-          />
+        <div class="flex gap-3 mt-1" style="display: flex; justify-content: space-between; width: 100%;">
+          <p-button label="Delete" severity="secondary" class="w-full" styleClass="w-full"/>
+          <p-button label="Modify" class="w-full" styleClass="w-full" (onClick)="SetLocalStorage(product.productId)" routerLink="../modify-product"/>
         </div>
       </ng-template>
+
     </p-card>
   </div>
 </div>
 
-<!-- 
 
-
-<div class="card flex justify-content-center">
-  <p-paginator
-    (onPageChange)="onPageChange($event)"
-    [first]="first"
-    [rows]="rows"
-    [totalRecords]="120"
-    [rowsPerPageOptions]="[10, 20, 30]"
-  />
-</div>
--->
 <p-paginator
   (onPageChange)="changeOutput($event)"
   [first]="0"

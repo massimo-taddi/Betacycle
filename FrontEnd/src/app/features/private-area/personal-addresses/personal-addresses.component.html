@@ -111,7 +111,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="inputType" class="form-label">Tipo Indirizzo</label>
-                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[currentRow]?.addressType}}" >
+                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[currentRow].addressType}}" >
                 </div>
                 <div class="col-12" style="margin-top: 30px;">
                     <button (click)="PutModifyAddress()" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>

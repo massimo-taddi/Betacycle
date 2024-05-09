@@ -6,6 +6,13 @@
 @import "../node_modules/primeicons/primeicons.css";
 
 /*
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
 :root {
   /*variabili di root
   --Base-color: #e6e6e6;

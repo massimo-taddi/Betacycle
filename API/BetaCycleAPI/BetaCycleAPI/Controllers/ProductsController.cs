@@ -27,10 +27,11 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
+        public async Task<ActionResult<(int,IEnumerable<Product>,string)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
             int productCount = 0;
+            List<ProductDescription> test = [];
             switch (@params.Sort)
             {
                 case "Desc":
@@ -44,6 +45,9 @@ namespace BetaCycleAPI.Controllers
                                                 //.Take(@params.PageSize)
                                                 .ToListAsync();
                     productCount = res.Count();
+
+                    
+
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
                 case "Asc":
@@ -59,10 +63,58 @@ namespace BetaCycleAPI.Controllers
                     productCount = res.Count();
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
+
+
+
+
+
+
+
+
+                //test per prendere la descrizioni dei prodotti
+                case "test":
+                    res = await (from product in _context.Products
+                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
+                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                 where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                                 select product).Distinct()
+                                                .OrderByDescending(p => p.ListPrice)
+                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                //.Take(@params.PageSize)
+                                                .ToListAsync();
+                    productCount = res.Count();
+
+
+
+
+
+
+
+                    test = await (from product in _context.ProductDescriptions
+                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
+                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                                  select product).Distinct()
+                                                .OrderByDescending(p => p.ListPrice)
+                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                //.Take(@params.PageSize)
+                                                .ToListAsync();
+
+
+
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                    break;
+
+
+
+
+
+
+
                 default:
                     return BadRequest();
             }
-            return (productCount, res);
+            return (productCount, res, "NON");
         }
 
         // GET: api/Products/5
