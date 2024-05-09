@@ -165,6 +165,7 @@ namespace BetaCycleAPI.Controllers
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            Console.WriteLine(token);
             if (id != product.ProductId || token.Claims.First(claim => claim.Type == "role").Value == "admin")
             {
                 return BadRequest();

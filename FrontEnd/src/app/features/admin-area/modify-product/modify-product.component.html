@@ -1,5 +1,5 @@
 <div class="d-flex border rounded p-3">
-  <form #newAddress="ngForm" (submit)="SubmitProduct(newAddress)" class="row">
+  <form #newAddress="ngForm" (submit)="UpdateProduct(newAddress)" class="row">
     <div class="col-md-6">
       <label for="inputName" class="form-label">Nome Prodotto*</label>
       <input
@@ -164,16 +164,16 @@
   </form>
 </div>
 <br />
-<span *ngIf="submittedProduct != null">
+<span *ngIf="updateProduct != null">
   <p-card
-    header="{{ submittedProduct.name }}"
-    subheader="{{ submittedProduct.listPrice }}"
+    header="{{ updateProduct.name }}"
+    subheader="{{ updateProduct.listPrice }}"
     [style]="{ width: '360px' }"
   >
     <ng-template pTemplate="header">
       <img
         alt="Card"
-        src="data:image/gif;base64, {{ submittedProduct.thumbNailPhoto }}"
+        src="data:image/gif;base64, {{ updateProduct?.thumbNailPhoto }}"
       />
     </ng-template>
     <p>cioa</p>

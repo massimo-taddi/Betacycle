@@ -33,7 +33,8 @@ export class ModifyProductComponent {
   product: ProductForm = new ProductForm();
   categories: ProductCategory[] = [];
   models: ProductModel[] = [];
-  submittedProduct: Product | null = null;
+  updateProduct: Product | null = null;
+
   constructor(private prodService: ProductService) {}
   modifyId: number = 0;
   ngOnInit() {
@@ -55,6 +56,16 @@ export class ModifyProductComponent {
         'nessun valore è stato passato per un prodotto da modificare'
       );
     }
+    //trova tutte le categorie di prodotti
+    this.prodService.getProductCategories().subscribe({
+      next: (categories: ProductCategory[]) => (this.categories = categories),
+      error: (err: Error) => console.log(err.message),
+    });
+    //trova tutti i modelli di un prodotto
+    this.prodService.getProductModels().subscribe({
+      next: (models: ProductModel[]) => (this.models = models),
+      error: (err: Error) => console.log(err.message),
+    });
   }
   async onThumbnailSelect(event: FileSelectEvent) {
     BlobUtil.blobToBase64String(event.files[0]).then((b64str) => {
@@ -67,14 +78,17 @@ export class ModifyProductComponent {
     this.product.thumbNailPhoto = null;
     this.product.thumbnailPhotoFileName = null;
   }
-
-  SubmitProduct(newForm: NgForm) {
-    var newProductForm = newForm.value as ProductForm;
-    newProductForm.thumbNailPhoto = this.product.thumbNailPhoto;
-    newProductForm.thumbnailPhotoFileName = this.product.thumbnailPhotoFileName;
+  //prende tutti i valori del form e li associa a modified product
+  UpdateProduct(newForm: NgForm) {
+    var modifiedProduct = newForm.value as ProductForm;
+    modifiedProduct.thumbNailPhoto = this.product.thumbNailPhoto;
+    modifiedProduct.thumbnailPhotoFileName =
+      this.product.thumbnailPhotoFileName;
     this.product.modifiedDate = new Date(Date.now());
-    this.prodService.putProduct(newProductForm, this.modifyId).subscribe({
-      next: (prod: Product) => (this.submittedProduct = prod),
+    console.log(modifiedProduct);
+    //inviamo modifiedProduct con l'id associato
+    this.prodService.putProduct(modifiedProduct, this.modifyId).subscribe({
+      next: (prod: Product) => (this.updateProduct = prod),
       error: (err: Error) => console.log(err.message),
     });
   }
