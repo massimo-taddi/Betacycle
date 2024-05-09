@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SearchParams } from '../models/SearchParams';
 import { ProductForm } from '../models/ProductForm';
 import { AuthenticationService } from './authentication.service';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,13 +28,17 @@ export class ProductService {
   getProductCategories(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/products/categories', { headers: header });
+    return this.http.get('https://localhost:7287/api/products/categories', {
+      headers: header,
+    });
   }
 
   getProductModels(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/products/models', { headers: header });
+    return this.http.get('https://localhost:7287/api/products/models', {
+      headers: header,
+    });
   }
 
   getProductById(id: number): Observable<any> {
@@ -43,6 +48,19 @@ export class ProductService {
   postProduct(productForm: ProductForm): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.post(`https://localhost:7287/api/Products`, productForm, {headers : header});
+    return this.http.post(`https://localhost:7287/api/Products`, productForm, {
+      headers: header,
+    });
+  }
+  putProduct(productForm: ProductForm, id: number): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.put(
+      `https://localhost:7287/api/Products/${id}`,
+      productForm,
+      {
+        headers: header,
+      }
+    );
   }
 }
