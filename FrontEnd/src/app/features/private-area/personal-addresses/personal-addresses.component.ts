@@ -37,6 +37,7 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpGetCustomerAddresses().subscribe({
       next: (addressList: Address[]) => {
         this.addresses = addressList
+        console.log(this.addresses)
       },
       error: (err: Error) => {
         console.log(err.message);
@@ -52,6 +53,9 @@ export class PersonalAddressesComponent implements OnInit {
 
   PutModifyAddress(){
     //DA COMPLETARE
-    console.log(this.modifyAddress);
+    this.newAddress = new AddressFormData(this.modifyAddress.addressLine1, this.modifyAddress.addressLine2,
+                     this.modifyAddress.city, this.modifyAddress.stateProvince, this.modifyAddress.countryRegion,
+                    this.modifyAddress.postalCode, this.modifyAddress.customerAddresses[0]?.addressType);
+    this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId);
   }
 }

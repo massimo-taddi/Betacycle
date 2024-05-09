@@ -90,15 +90,15 @@ namespace BetaCycleAPI.Controllers
 
 
 
-                    test = await (from product in _context.ProductDescriptions
-                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
-                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                  where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
-                                  select product).Distinct()
-                                                .OrderByDescending(p => p.ListPrice)
-                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                //.Take(@params.PageSize)
-                                                .ToListAsync();
+                    //test = await (from product in _context.ProductDescriptions
+                    //              join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
+                    //              join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                    //              where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                    //              select product).Distinct()
+                    //                            .OrderByDescending(p => p.ListPrice)
+                    //                            //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                    //                            //.Take(@params.PageSize)
+                    //                            .ToListAsync();
 
 
 

@@ -14,7 +14,7 @@ export class AddressFormData {
   
    constructor (
     addressLine1: string,
-    addressLine2: string,
+    addressLine2: string = '',
     city: string,
     stateProvince: string,
     countryRegion: string,

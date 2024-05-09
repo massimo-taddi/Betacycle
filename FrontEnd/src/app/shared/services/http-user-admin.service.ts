@@ -49,6 +49,14 @@ export class HttpUserAdminService {
     this.searchParams.next(params);
   }
 
+  httpPutCustomerAddress(newAddress: AddressFormData, id: number): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.put(`https://localhost:7287/api/addresses/${id}`, newAddress, {
+      headers: header,
+    });
+  }
+
   httpPostCustomerAddress(newAddress: AddressFormData): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));

@@ -37,22 +37,23 @@ namespace BetaCycleAPI.Controllers
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             List<Address> res = [];
-            List<CustomerAddress> custAdds = [];
+          
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 res = await _awContext.Addresses.ToListAsync();
             else
             {
-                var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
-                var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
-                                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
-                                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
                 res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId).First().CustomerId == tokenCustomerId).ToListAsync();
-                foreach (var address in res)
-                {
-                    custAdds.Add(await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).FirstAsync());
-                    //address.CustomerAddresses.Add(await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).First());
-                    address.CustomerAddresses = custAdds;
-                }
+            }
+            foreach (var address in res)
+            {
+                List<CustomerAddress> custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).ToListAsync();
+                address.CustomerAddresses = custAdd;
             }
 
             return res;
@@ -75,12 +76,23 @@ namespace BetaCycleAPI.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(int id, Address address)
+        public async Task<IActionResult> PutAddress(AddressFormData address)
         {
-            if (id != address.AddressId)
-            {
-                return BadRequest();
-            }
+            //DA COMPLETARE
+
+            //var handler = new JwtSecurityTokenHandler();
+            //var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            //List<Address> res = [];
+
+
+            //var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            //var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+            //                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+            //                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            //if (tokenCustomerId != address.AddressId)
+            //{
+            //    return BadRequest();
+            //}
 
             _awContext.Entry(address).State = EntityState.Modified;
 

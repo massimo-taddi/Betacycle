@@ -80,7 +80,7 @@
             <td>{{addr.stateProvince}}</td>
             <td>{{addr.countryRegion}}</td>
             <td>{{addr.postalCode}}</td>
-            <td>{{addr.customerAddresses[rowIndex].addressType}}</td>
+            <td>{{addr.customerAddresses[0].addressType}}</td>
             <td><p-button label="Modifica indirizzo" icon="pi pi-home" (click)="dialogBoolEdit=true; modifyAddress = addr; currentRow = rowIndex" styleClass="p-button-info"></p-button></td>
             <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
@@ -111,7 +111,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="inputType" class="form-label">Tipo Indirizzo</label>
-                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[currentRow].addressType}}" >
+                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" >
                 </div>
                 <div class="col-12" style="margin-top: 30px;">
                     <button (click)="PutModifyAddress()" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
