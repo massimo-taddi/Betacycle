@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BetaCycleAPI.Models;
 
@@ -11,33 +12,51 @@ public partial class Address
     /// <summary>
     /// Primary key for Address records.
     /// </summary>
+    [Key]
     public int AddressId { get; set; }
 
     /// <summary>
     /// First street address line.
     /// </summary>
+    /// 
+    [Required]
+    [MaxLength(70, ErrorMessage = "Massimo 70 caratteri"), MinLength(10, ErrorMessage = "Minimo 10 caratteri")]
     public string AddressLine1 { get; set; } = null!;
 
     /// <summary>
     /// Second street address line.
     /// </summary>
+    /// 
+    [MaxLength(70, ErrorMessage = "Massimo 70 caratteri")]
+
     public string? AddressLine2 { get; set; }
 
     /// <summary>
     /// Name of the city.
     /// </summary>
+    /// 
+    [Required]
+    [MaxLength(30, ErrorMessage = "Massimo 30 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string City { get; set; } = null!;
 
     /// <summary>
     /// Name of state or province.
     /// </summary>
+    /// 
+    [Required]
+    [MaxLength(30, ErrorMessage = "Massimo 30 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
+
     public string StateProvince { get; set; } = null!;
 
+    [Required]
+    [MaxLength(30, ErrorMessage = "Massimo 30 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string CountryRegion { get; set; } = null!;
 
     /// <summary>
     /// Postal code for the street address.
     /// </summary>
+    [Required]
+    [MaxLength(5, ErrorMessage = "Massimo 5 caratteri"), MinLength(5, ErrorMessage = "Minimo 5 caratteri")]
     public string PostalCode { get; set; } = null!;
 
     /// <summary>

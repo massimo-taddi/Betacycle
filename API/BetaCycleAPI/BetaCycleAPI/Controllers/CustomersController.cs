@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.ModelsCredentials;
+using BetaCycleAPI.BLogic.ObjectValidator;
 using EncryptData;
 using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
@@ -125,10 +126,14 @@ namespace BetaCycleAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
+            
+
             if (id != customer.CustomerId)
             {
                 return BadRequest();
             }
+            if (!ModelValidator.ValidateCustomer(customer))
+                return BadRequest("Campi non validi");
 
             _awContext.Entry(customer).State = EntityState.Modified;
 
@@ -167,6 +172,8 @@ namespace BetaCycleAPI.Controllers
             customer.PasswordHash = pwData.Key;
             Console.WriteLine(pwData.Value);
             customer.PasswordSalt = pwData.Value;
+            if (!ModelValidator.ValidateCustomer(customer))
+                return BadRequest("Campi non validi");
             // the changes are only written on _awContext since the data is automatically migrated to the Credentials DB
             _awContext.Customers.Add(customer);
             await _awContext.SaveChangesAsync();

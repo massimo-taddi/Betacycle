@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BetaCycleAPI.Models;
 
@@ -11,31 +12,44 @@ public partial class Product
     /// <summary>
     /// Primary key for Product records.
     /// </summary>
+    /// 
+    [Key]
     public int ProductId { get; set; }
 
     /// <summary>
     /// Name of the product.
     /// </summary>
+    /// 
+    [Required]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string Name { get; set; } = null!;
 
     /// <summary>
     /// Unique product identification number.
     /// </summary>
+    ///
+    [Required]
     public string ProductNumber { get; set; } = null!;
 
     /// <summary>
     /// Product color.
     /// </summary>
+    /// 
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri")]
     public string? Color { get; set; }
 
     /// <summary>
     /// Standard cost of the product.
     /// </summary>
+    /// 
+    [Required]
     public decimal StandardCost { get; set; }
 
     /// <summary>
     /// Selling price.
     /// </summary>
+    /// 
+    [Required]
     public decimal ListPrice { get; set; }
 
     /// <summary>
@@ -51,11 +65,15 @@ public partial class Product
     /// <summary>
     /// Product is a member of this product category. Foreign key to ProductCategory.ProductCategoryID. 
     /// </summary>
+    /// 
+    [Required]
     public int? ProductCategoryId { get; set; }
 
     /// <summary>
     /// Product is a member of this product model. Foreign key to ProductModel.ProductModelID.
     /// </summary>
+    /// 
+    [Required]
     public int? ProductModelId { get; set; }
 
     /// <summary>
@@ -76,11 +94,15 @@ public partial class Product
     /// <summary>
     /// Small image of the product.
     /// </summary>
+    /// 
+    [Required]
     public byte[]? ThumbNailPhoto { get; set; }
 
     /// <summary>
     /// Small image file name.
     /// </summary>
+    /// 
+    [Required]
     public string? ThumbnailPhotoFileName { get; set; }
 
     /// <summary>
@@ -91,6 +113,8 @@ public partial class Product
     /// <summary>
     /// Date and time the record was last updated.
     /// </summary>
+    /// 
+    [Required]
     public DateTime ModifiedDate { get; set; }
 
     public virtual ProductCategory? ProductCategory { get; set; }

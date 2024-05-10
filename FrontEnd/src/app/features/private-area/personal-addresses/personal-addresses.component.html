@@ -118,13 +118,13 @@
                 </div>
               </form>
             </p-dialog>
-            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-info"></p-button></td>
+            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
             <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
               <div class="d-flex justify-content-evenly">
                 <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Annulla</button>
-                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-danger">Conferma</button>
+                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Conferma</button>
               </div>
             </p-dialog>
         </tr>

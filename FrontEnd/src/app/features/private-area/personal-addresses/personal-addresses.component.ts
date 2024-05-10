@@ -27,6 +27,7 @@ export class PersonalAddressesComponent implements OnInit {
   modifyAddress: Address = new Address();
   typeAddress: string = '';
 
+
   constructor(private httpAddresses: HttpUserAdminService) {}
 
   ngOnInit(): void {

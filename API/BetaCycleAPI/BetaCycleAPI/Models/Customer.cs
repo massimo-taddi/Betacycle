@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BetaCycleAPI.Models;
 
@@ -11,6 +12,7 @@ public partial class Customer
     /// <summary>
     /// Primary key for Customer records.
     /// </summary>
+    [Key]
     public int CustomerId { get; set; }
 
     /// <summary>
@@ -21,21 +23,29 @@ public partial class Customer
     /// <summary>
     /// A courtesy title. For example, Mr. or Ms.
     /// </summary>
+    
     public string? Title { get; set; }
 
     /// <summary>
     /// First name of the person.
     /// </summary>
+    [Required]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string FirstName { get; set; } = null!;
 
     /// <summary>
     /// Middle name or middle initial of the person.
     /// </summary>
+    /// 
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri")]
+
     public string? MiddleName { get; set; }
 
     /// <summary>
     /// Last name of the person.
     /// </summary>
+    [Required]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string LastName { get; set; } = null!;
 
     /// <summary>
@@ -56,6 +66,10 @@ public partial class Customer
     /// <summary>
     /// E-mail address for the person.
     /// </summary>
+    [Required]
+    [DataType(DataType.EmailAddress)]
+    [EmailAddress]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string? EmailAddress { get; set; }
 
     /// <summary>
@@ -81,6 +95,8 @@ public partial class Customer
     /// <summary>
     /// Date and time the record was last updated.
     /// </summary>
+    /// 
+    [Required]
     public DateTime ModifiedDate { get; set; }
 
     public bool IsMigrated { get; set; }

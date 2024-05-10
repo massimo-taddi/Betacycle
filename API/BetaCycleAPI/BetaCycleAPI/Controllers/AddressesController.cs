@@ -15,6 +15,7 @@ using System.Net;
 using Humanizer;
 using Microsoft.SqlServer.Server;
 using System.Net.Sockets;
+using BetaCycleAPI.BLogic.ObjectValidator;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -81,9 +82,6 @@ namespace BetaCycleAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAddress(int id, AddressFormData formData)
         {
-
-            //DA COMPLETARE
-
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             Address putAddress = new Address();
@@ -117,6 +115,8 @@ namespace BetaCycleAPI.Controllers
                         Rowguid = getAddressForGuid.Rowguid,
                         ModifiedDate = modDate
                     };
+                    if (!ModelValidator.ValidateAddress(putAddress))
+                        return BadRequest("Campi non validi");
                     _awContext.Entry(putAddress).State = EntityState.Modified;
                     await _awContext.SaveChangesAsync();
                     putCustAdd = new CustomerAddress()
@@ -173,6 +173,8 @@ namespace BetaCycleAPI.Controllers
                         PostalCode = formData.PostalCode,
                         ModifiedDate = modDate
                     };
+                    if (!ModelValidator.ValidateAddress(address))
+                        return BadRequest("Campi non validi");
                     _awContext.Addresses.Add(address);
                     await _awContext.SaveChangesAsync();
                     custAdd = new CustomerAddress()
