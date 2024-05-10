@@ -161,16 +161,42 @@ namespace BetaCycleAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public async Task<IActionResult> PutProduct(int id, ProductForm productForm)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            Console.WriteLine(token);
-            if (id != product.ProductId || token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
             {
                 return BadRequest();
             }
 
+            Product getRowGuidProduct = await _context.Products.FindAsync(id);
+            _context.Products.Entry(getRowGuidProduct).State = EntityState.Detached;
+
+
+
+
+            var product = new Product()
+            {
+                ProductId=id,
+                Name = productForm.Name,
+                ProductNumber = productForm.ProductNumber,
+                Color = productForm.Color,
+                StandardCost = productForm.StandardCost,
+                ListPrice = productForm.ListPrice,
+                Size = productForm.Size,
+                Weight = productForm.Weight,
+                ProductCategoryId = productForm.ProductCategoryId,
+                SellStartDate = productForm.SellStartDate,
+                SellEndDate = productForm.SellEndDate,
+                DiscontinuedDate = productForm.DiscontinuedDate,
+                ThumbNailPhoto = productForm.ThumbNailPhoto,
+                ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
+                ModifiedDate = DateTime.Now,
+                Rowguid = getRowGuidProduct.Rowguid,
+
+            };
             _context.Entry(product).State = EntityState.Modified;
 
             try
@@ -231,9 +257,10 @@ namespace BetaCycleAPI.Controllers
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
                 return BadRequest();
             var product = await _context.Products.FindAsync(id);
+            Console.WriteLine(product);
             if (product == null)
             {
                 return NotFound();
