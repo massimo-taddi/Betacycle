@@ -42,7 +42,7 @@ export class HttpUserAdminService {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.get('https://localhost:7287/api/addresses', {
-      headers: header,
+      headers: header
     });
   }
   setSearchParams(params: SearchParams) {
@@ -61,7 +61,7 @@ export class HttpUserAdminService {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.put(`https://localhost:7287/api/addresses/${id}`, newAddress, {
-      headers: header,
+      headers: header
     });
   }
 

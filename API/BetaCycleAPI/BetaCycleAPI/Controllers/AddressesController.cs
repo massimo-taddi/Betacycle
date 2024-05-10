@@ -192,7 +192,7 @@ namespace BetaCycleAPI.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-            return CreatedAtAction("GetAddress", new { id = address.AddressId }, address);
+            return Ok();
         }
 
         // DELETE: api/Addresses/5

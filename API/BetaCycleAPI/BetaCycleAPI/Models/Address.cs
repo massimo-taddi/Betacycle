@@ -20,7 +20,7 @@ public partial class Address
     /// </summary>
     /// 
     [Required]
-    [MaxLength(70, ErrorMessage = "Massimo 70 caratteri"), MinLength(10, ErrorMessage = "Minimo 10 caratteri")]
+    [MaxLength(70, ErrorMessage = "Massimo 70 caratteri"), MinLength(6, ErrorMessage = "Minimo 6 caratteri")]
     public string AddressLine1 { get; set; } = null!;
 
     /// <summary>

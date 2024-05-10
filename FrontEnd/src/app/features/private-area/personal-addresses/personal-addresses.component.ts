@@ -8,6 +8,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CustomerAddress } from '../../../shared/models/CustomerAddress';
 import { AddressFormData } from '../../../shared/models/AddressFormData';
 import { ButtonModule } from 'primeng/button';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-personal-addresses',
@@ -58,11 +59,14 @@ export class PersonalAddressesComponent implements OnInit {
                     console.log(this.newAddress);
     this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId).subscribe({
       next: (response: any) => {
-        console.log(response)
+        if(HttpStatusCode.Ok)
+          console.log("APPOSTO");
+          
       },
       error: (err: Error) => {
+        
         console.log(err)
-      }
+      },
     });
   }
 
