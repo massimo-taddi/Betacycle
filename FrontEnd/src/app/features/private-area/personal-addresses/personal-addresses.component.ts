@@ -20,12 +20,12 @@ export class PersonalAddressesComponent implements OnInit {
   addresses: Address[] = [];
   dialogBoolAdd: boolean = false;
   dialogBoolEdit: boolean = false;
+  dialogBoolDelete: boolean = false;
   address: Address = new Address();
   customerAddress: CustomerAddress = new CustomerAddress('');
   newAddress: AddressFormData | null = null;
-  changesNotAllowed: boolean = true;
   modifyAddress: Address = new Address();
-  currentRow: number = 0;
+  typeAddress: string = '';
 
   constructor(private httpAddresses: HttpUserAdminService) {}
 
@@ -37,7 +37,6 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpGetCustomerAddresses().subscribe({
       next: (addressList: Address[]) => {
         this.addresses = addressList
-        console.log(this.addresses)
       },
       error: (err: Error) => {
         console.log(err.message);
@@ -48,14 +47,25 @@ export class PersonalAddressesComponent implements OnInit {
   SubmitAddress(newForm: NgForm){
     this.newAddress = newForm.value as AddressFormData;
     this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe();
-    this.addresses.push(this.address);
   }
 
   PutModifyAddress(){
     //DA COMPLETARE
     this.newAddress = new AddressFormData(this.modifyAddress.addressLine1, this.modifyAddress.addressLine2,
                      this.modifyAddress.city, this.modifyAddress.stateProvince, this.modifyAddress.countryRegion,
-                    this.modifyAddress.postalCode, this.modifyAddress.customerAddresses[0]?.addressType);
-    this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId);
+                    this.modifyAddress.postalCode, this.typeAddress);
+                    console.log(this.newAddress);
+    this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId).subscribe({
+      next: (response: any) => {
+        console.log(response)
+      },
+      error: (err: Error) => {
+        console.log(err)
+      }
+    });
+  }
+
+  DeleteAddress(id: number){
+    this.httpAddresses.httpDeleteCustomerAddress(id).subscribe();
   }
 }

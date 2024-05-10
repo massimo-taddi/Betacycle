@@ -44,7 +44,7 @@
                     <option>Città del Vaticano</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="inputZip" class="form-label">CAP</label>
                 <input type="text" class="form-control" id="inputZip" name="postalCode" [(ngModel)]="address.postalCode">
             </div>
@@ -81,7 +81,7 @@
             <td>{{addr.countryRegion}}</td>
             <td>{{addr.postalCode}}</td>
             <td>{{addr.customerAddresses[0].addressType}}</td>
-            <td><p-button label="Modifica indirizzo" icon="pi pi-home" (click)="dialogBoolEdit=true; modifyAddress = addr; currentRow = rowIndex" styleClass="p-button-info"></p-button></td>
+            <td><p-button label="Modifica" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
             <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <form class="row g-3 p-3">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="inputAddr2" class="form-label">Indirizzo Line 2</label>
-                    <input #addrLine2 type="text" class="form-control" name="addressLine2" value="{{modifyAddress.addressLine2}}" >
+                    <input #addrLine2 type="text" class="form-control" name="addressLine2" value="{{modifyAddress.addressLine2}}" [(ngModel)]="modifyAddress.addressLine2" [ngModelOptions]="{standalone:true}">
                 </div>
                 <div class="col-md-4">
                     <label for="inputCity" class="form-label">Citta'</label>
@@ -109,14 +109,23 @@
                     <label for="inputCap" class="form-label">CAP</label>
                     <input #addrPostalCode type="text" class="form-control" name="postalCode" value="{{modifyAddress.postalCode}}" [(ngModel)]="modifyAddress.postalCode" [ngModelOptions]="{standalone:true}" required >
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <label for="inputType" class="form-label">Tipo Indirizzo</label>
-                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" >
+                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" [(ngModel)]="typeAddress" [ngModelOptions]="{standalone:true}" required>
                 </div>
                 <div class="col-12" style="margin-top: 30px;">
                     <button (click)="PutModifyAddress()" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
                 </div>
               </form>
+            </p-dialog>
+            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-info"></p-button></td>
+            <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
+              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+              <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
+              <div class="d-flex justify-content-evenly">
+                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Annulla</button>
+                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-danger">Conferma</button>
+              </div>
             </p-dialog>
         </tr>
 

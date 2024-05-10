@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
+using Humanizer;
+using Microsoft.SqlServer.Server;
+using System.Net.Sockets;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -76,43 +79,66 @@ namespace BetaCycleAPI.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(AddressFormData address)
+        public async Task<IActionResult> PutAddress(int id, AddressFormData formData)
         {
+
             //DA COMPLETARE
 
-            //var handler = new JwtSecurityTokenHandler();
-            //var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            //List<Address> res = [];
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            Address putAddress = new Address();
+            CustomerAddress putCustAdd = new CustomerAddress();
 
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            Address getAddressForGuid = await _awContext.Addresses.FindAsync(id);
+            _awContext.Entry(getAddressForGuid).State = EntityState.Detached;
+            CustomerAddress getCustAddForGuid = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == id && ca.CustomerId == tokenCustomerId).FirstAsync();
+            _awContext.Entry(getCustAddForGuid).State = EntityState.Detached;
 
-            //var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
-            //var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
-            //                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
-            //                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
-            //if (tokenCustomerId != address.AddressId)
-            //{
-            //    return BadRequest();
-            //}
-
-            _awContext.Entry(address).State = EntityState.Modified;
-
-            try
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest("Account admin rilevato");
+            else
             {
-                await _awContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AddressExists(id))
+                try
                 {
-                    return NotFound();
+                    var modDate = DateTime.Now;
+                    putAddress = new Address()
+                    {
+                        AddressId = id,
+                        AddressLine1 = formData.AddressLine1,
+                        AddressLine2 = formData.AddressLine2,
+                        City = formData.City,
+                        StateProvince = formData.StateProvince,
+                        CountryRegion = formData.CountryRegion,
+                        PostalCode = formData.PostalCode,
+                        Rowguid = getAddressForGuid.Rowguid,
+                        ModifiedDate = modDate
+                    };
+                    _awContext.Entry(putAddress).State = EntityState.Modified;
+                    await _awContext.SaveChangesAsync();
+                    putCustAdd = new CustomerAddress()
+                    {
+                        CustomerId = (int)tokenCustomerId,
+                        AddressId = putAddress.AddressId,
+                        AddressType = formData.AddressType,
+                        Rowguid = getCustAddForGuid.Rowguid,
+                        ModifiedDate = modDate
+                    };
+                    _awContext.Entry(putCustAdd).State = EntityState.Modified;
+                    await _awContext.SaveChangesAsync();
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
-            }
 
-            return NoContent();
+
+            }
+            return Ok();
+
         }
 
         // POST: api/Addresses
@@ -171,16 +197,34 @@ namespace BetaCycleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAddress(int id)
         {
-            var address = await _awContext.Addresses.FindAsync(id);
-            if (address == null)
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            Address putAddress = new Address();
+            CustomerAddress putCustAdd = new CustomerAddress();
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            CustomerAddress custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == id && ca.CustomerId == tokenCustomerId).FirstAsync();
+            _awContext.Entry(custAdd).State = EntityState.Detached;
+            Address addr = new Address() { AddressId = id };
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                return BadRequest("Account admin rilevato");
+            else
             {
-                return NotFound();
+                try
+                {
+                    _awContext.CustomerAddresses.Remove(custAdd);
+                    await _awContext.SaveChangesAsync();
+                    _awContext.Addresses.Remove(addr);
+                    await _awContext.SaveChangesAsync();
+                }catch(Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
-
-            _awContext.Addresses.Remove(address);
-            await _awContext.SaveChangesAsync();
-
-            return NoContent();
+                return NoContent();
         }
 
         private bool AddressExists(int id)

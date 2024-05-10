@@ -49,6 +49,14 @@ export class HttpUserAdminService {
     this.searchParams.next(params);
   }
 
+  httpDeleteCustomerAddress(id: number){
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.delete(`https://localhost:7287/api/addresses/${id}`, {
+      headers: header,
+    });
+  }
+
   httpPutCustomerAddress(newAddress: AddressFormData, id: number): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
