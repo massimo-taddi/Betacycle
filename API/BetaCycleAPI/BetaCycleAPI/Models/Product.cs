@@ -95,14 +95,12 @@ public partial class Product
     /// Small image of the product.
     /// </summary>
     /// 
-    [Required]
     public byte[]? ThumbNailPhoto { get; set; }
 
     /// <summary>
     /// Small image file name.
     /// </summary>
     /// 
-    [Required]
     public string? ThumbnailPhotoFileName { get; set; }
 
     /// <summary>
@@ -116,6 +114,18 @@ public partial class Product
     /// 
     [Required]
     public DateTime ModifiedDate { get; set; }
+
+    /// <summary>
+    /// Large image of the product.
+    /// </summary>
+    /// 
+    public byte[]? LargePhoto { get; set; }
+
+    /// <summary>
+    /// Large image file name.
+    /// </summary>
+    /// 
+    public string? LargePhotoFileName { get; set; }
 
     public virtual ProductCategory? ProductCategory { get; set; }
 

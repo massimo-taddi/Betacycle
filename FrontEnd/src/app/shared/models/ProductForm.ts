@@ -14,4 +14,6 @@ export class ProductForm {
     thumbNailPhoto: string | null = null;
     thumbnailPhotoFileName: string | null = null;
     modifiedDate: Date = new Date(Date.now());
+    largePhoto: string | null = null;
+    largePhotoFileName: string | null = null;
 }

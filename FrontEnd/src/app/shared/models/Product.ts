@@ -19,4 +19,6 @@ export class Product {
   rowguid: string = '';
   modifiedDate: Date | null = null;
   productModel: ProductModel | null = null;
+  largePhoto: string = '';
+  largePhotoFileName: string = '';
 }

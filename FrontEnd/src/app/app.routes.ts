@@ -37,7 +37,7 @@ export const routes: Routes = [
     component: SignUpComponent,
   },
   {
-    path: 'search',
+    path: 'search/:search/:pageIndex/:pageSize/:sort',
     component: SearchComponent,
   },
   {

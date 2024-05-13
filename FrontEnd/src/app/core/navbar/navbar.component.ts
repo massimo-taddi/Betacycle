@@ -51,6 +51,6 @@ export class NavbarComponent implements OnInit {
     var params = new SearchParams();
     params.search = searchString.value;
     this.productService.setSearchParams(params);
-    this.router.navigate(['/search']);
+    this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
   }
 }

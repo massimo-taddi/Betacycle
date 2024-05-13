@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { SearchParams } from '../../shared/models/SearchParams';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -31,13 +32,9 @@ export class SearchComponent {
   searchParams: SearchParams = new SearchParams();
   productCount: number =0;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.searchParams.pageIndex = 1;
-    this.productService.searchParams$.subscribe(
-      par => this.searchParams = par
-    );
     this.productService
       .getProducts(this.searchParams).subscribe({
         next: (products: any) => {
@@ -47,7 +44,15 @@ export class SearchComponent {
         error: (err: Error) => {
           console.log(err.message);
         },
-      });
+    });
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.searchParams.search = params.get('search')!;
+      this.searchParams.pageIndex = +params.get('pageIndex')!; 
+      this.searchParams.pageSize = +params.get('pageSize')!;
+      this.searchParams.sort = params.get('sort')!;
+    })
+    console.log(this.searchParams);
+    this.productService.setSearchParams(this.searchParams);
   }
 
   changeOutput(event: PaginatorState){
