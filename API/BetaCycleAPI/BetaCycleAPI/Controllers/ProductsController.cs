@@ -127,9 +127,26 @@ namespace BetaCycleAPI.Controllers
             {
                 return NotFound();
             }
-            product.ProductModel = await _context.ProductModels.FindAsync(product.ProductModelId);
-            product.ProductModel.ProductModelProductDescriptions = await _context.ProductModelProductDescriptions.Where(p => p.ProductModelId == product.ProductModel.ProductModelId).ToListAsync();
-            product.ProductCategory = await _context.ProductCategories.FindAsync(product.ProductCategoryId);
+            if(product.ProductModelId !=null) 
+            {
+
+                product.ProductModel = await _context.ProductModels.FindAsync(product.ProductModelId);
+                if(product.ProductCategoryId != null) 
+                {
+                    product.ProductModel.ProductModelProductDescriptions = await _context.ProductModelProductDescriptions.Where(p => p.ProductModelId == product.ProductModel.ProductModelId).ToListAsync();
+                    product.ProductCategory = await _context.ProductCategories.FindAsync(product.ProductCategoryId);
+                }
+                else
+                {
+                    product.ProductModel.ProductModelProductDescriptions = null;
+                    product.ProductCategory = null;
+                }
+            }else
+            {
+                product.ProductModel = null;
+            }
+
+
             return product;
         }
 
@@ -161,6 +178,7 @@ namespace BetaCycleAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPut("{id}")]
+        
         public async Task<IActionResult> PutProduct(int id, ProductForm productForm)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -173,9 +191,6 @@ namespace BetaCycleAPI.Controllers
 
             Product getRowGuidProduct = await _context.Products.FindAsync(id);
             _context.Products.Entry(getRowGuidProduct).State = EntityState.Detached;
-
-
-
 
             var product = new Product()
             {

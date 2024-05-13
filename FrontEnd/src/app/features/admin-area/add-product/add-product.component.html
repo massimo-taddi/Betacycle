@@ -1,104 +1,192 @@
 <div class="d-flex border rounded p-3">
-    <form #newAddress="ngForm" (submit)="SubmitProduct(newAddress)" class="row">
-        <div class="col-md-6">
-            <label for="inputName" class="form-label">Nome Prodotto*</label>
-            <input [required]="true" type="text" class="form-control" id="inputName" name="name" [(ngModel)]="product.name">
-        </div>
-        <div class="col-md-3">
-            <label for="inputNumber" class="form-label">Numero prodotto*</label>
-            <input [required]="true" type="text" class="form-control" id="inputNumber" name="productNumber" [(ngModel)]="product.productNumber">
-        </div>
-        <div class="col-md-3">
-            <label for="inputColor" class="form-label">Colore prodotto</label>
-            <input type="text" class="form-control" id="inputColor" name="color" [(ngModel)]="product.color">
-        </div>
-        <div class="col-md-2">
-            <label for="inputStandardCost" class="form-label">Prezzo standard*</label>
-            <input [required]="true" type="number" step="0.01" class="form-control" id="inputStandardCost" name="standardCost" [(ngModel)]="product.standardCost">
-        </div>
-        <div class="col-md-2">
-            <label for="inputListPrice" class="form-label">Prezzo di listino</label>
-            <input [required]="true" type="number" step="0.01" class="form-control" id="inputListPrice" name="listPrice" [(ngModel)]="product.listPrice">
-        </div>
-        <div class="col-md-2">
-            <label for="inputSize" class="form-label">Dimensioni</label>
-            <input type="text" size="10" class="form-control" id="inputSize" name="size" [(ngModel)]="product.size">
-        </div>
-        <div class="col-md-2">
-            <label for="inputWeight" class="form-label">Peso</label>
-            <input type="number" class="form-control" id="inputWeight" name="weight" [(ngModel)]="product.weight">
-        </div>
-        <div class="col-md-4">
-            <label for="inputCategory" class="form-label">Categoria</label><br>
-            <p-dropdown 
-                id="inputCategory" 
-                [options]="categories" 
-                optionLabel="name" 
-                optionValue="productCategoryId" 
-                placeholder="Seleziona una categoria" 
-                name="productCategoryId" 
-                [style]="{'width':'100%'}"
-                [required]="true"
-                [(ngModel)]="product.productCategoryId">
-            </p-dropdown>
-        </div>
-        <div class="col-md-3">
-            <label for="inputModel" class="form-label">Modello</label><br>
-            <p-dropdown 
-                id="inputModel" 
-                [options]="models" 
-                optionLabel="name" 
-                optionValue="productModelId" 
-                placeholder="Seleziona un modello" 
-                name="productCategoryId" 
-                [required]="true"
-                [style]="{'width':'100%'}"
-                [(ngModel)]="product.productModelId">
-            </p-dropdown>
-        </div>
-        <div class="col-md-3">
-            <label for="inputSellStartDate" class="form-label">Data inizio vendite*</label>
-            <input [required]="true" type="date" class="form-control" id="inputSellStartDate" name="sellStartDate" [(ngModel)]="product.sellStartDate">
-        </div>
-        <div class="col-md-3">
-            <label for="inputSellEndDate" class="form-label">Data fine vendite</label>
-            <input type="date" class="form-control" id="inputSellEndDate" name="sellEndDate" [(ngModel)]="product.sellEndDate">
-        </div>
-        <div class="col-md-3">
-            <label for="inputDiscontinuedDate" class="form-label">Data discontinued</label>
-            <input type="date" class="form-control" id="inputDiscontinuedDate" name="discontinuedDate" [(ngModel)]="product.discontinuedDate">
-        </div>
-        <div class="mx-auto">
-            <label for="inputThumbnailPhoto" class="form-label">Immagine di thumbnail</label>
-            <p-fileUpload 
-                chooseIcon="pi pi-upload" 
-                accept="image/gif" maxFileSize="1000000" 
-                [auto]="true" 
-                [multiple]="false"
-                customUpload="true"
-                (onSelect)="onThumbnailSelect($event)" 
-                (onRemove)="onThumbnailRemove($event)"
-                chooseLabel="Browse" />
-        </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary mt-3">Aggiungi</button>
-        </div>
-    </form>
-</div><br>
+  <form #newAddress="ngForm" (submit)="SubmitProduct(newAddress)" class="row">
+    <div class="col-md-6">
+      <label for="inputName" class="form-label">Nome Prodotto*</label>
+      <input
+        [required]="true"
+        type="text"
+        class="form-control"
+        id="inputName"
+        name="name"
+        [(ngModel)]="product.name"
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="inputNumber" class="form-label">Numero prodotto*</label>
+      <input
+        [required]="true"
+        type="text"
+        class="form-control"
+        id="inputNumber"
+        name="productNumber"
+        [(ngModel)]="product.productNumber"
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="inputColor" class="form-label">Colore prodotto</label>
+      <input
+        type="text"
+        class="form-control"
+        id="inputColor"
+        name="color"
+        [(ngModel)]="product.color"
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="inputStandardCost" class="form-label">Prezzo standard*</label>
+      <input
+        [required]="true"
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="inputStandardCost"
+        name="standardCost"
+        [(ngModel)]="product.standardCost"
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="inputListPrice" class="form-label">Prezzo di listino</label>
+      <input
+        [required]="true"
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="inputListPrice"
+        name="listPrice"
+        [(ngModel)]="product.listPrice"
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="inputSize" class="form-label">Dimensioni</label>
+      <input
+        type="text"
+        size="10"
+        class="form-control"
+        id="inputSize"
+        name="size"
+        [(ngModel)]="product.size"
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="inputWeight" class="form-label">Peso</label>
+      <input
+        type="number"
+        class="form-control"
+        id="inputWeight"
+        name="weight"
+        [(ngModel)]="product.weight"
+      />
+    </div>
+    <div class="col-md-4">
+      <label for="inputCategory" class="form-label">Categoria</label><br />
+      <p-dropdown
+        id="inputCategory"
+        [options]="categories"
+        optionLabel="name"
+        optionValue="productCategoryId"
+        placeholder="Seleziona una categoria"
+        name="productCategoryId"
+        [style]="{ width: '100%' }"
+        [required]="true"
+        [(ngModel)]="product.productCategoryId"
+      >
+      </p-dropdown>
+    </div>
+    <div class="col-md-3">
+      <label for="inputModel" class="form-label">Modello</label><br />
+      <p-dropdown
+        id="inputModel"
+        [options]="models"
+        optionLabel="name"
+        optionValue="productModelId"
+        placeholder="Seleziona un modello"
+        name="productCategoryId"
+        [required]="true"
+        [style]="{ width: '100%' }"
+        [(ngModel)]="product.productModelId"
+      >
+      </p-dropdown>
+    </div>
+    <div class="col-md-3">
+      <label for="inputSellStartDate" class="form-label"
+        >Data inizio vendite*</label
+      >
+      <input
+        [required]="true"
+        type="date"
+        class="form-control"
+        id="inputSellStartDate"
+        name="sellStartDate"
+        [(ngModel)]="product.sellStartDate"
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="inputSellEndDate" class="form-label">Data fine vendite</label>
+      <input
+        type="date"
+        class="form-control"
+        id="inputSellEndDate"
+        name="sellEndDate"
+        [(ngModel)]="product.sellEndDate"
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="inputDiscontinuedDate" class="form-label"
+        >Data discontinued</label
+      >
+      <input
+        type="date"
+        class="form-control"
+        id="inputDiscontinuedDate"
+        name="discontinuedDate"
+        [(ngModel)]="product.discontinuedDate"
+      />
+    </div>
+    <div class="mx-auto">
+      <label for="inputThumbnailPhoto" class="form-label"
+        >Immagine di thumbnail</label
+      >
+      <p-fileUpload
+        chooseIcon="pi pi-upload"
+        accept="image/gif"
+        maxFileSize="1000000"
+        [auto]="true"
+        [multiple]="false"
+        customUpload="true"
+        (onSelect)="onThumbnailSelect($event)"
+        (onRemove)="onThumbnailRemove($event)"
+        chooseLabel="Browse"
+      />
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary mt-3">Aggiungi</button>
+    </div>
+  </form>
+</div>
+<br />
 <span *ngIf="submittedProduct != null">
-    <p-card header="{{ submittedProduct.name }}" subheader="{{submittedProduct.listPrice}}" [style]="{ width: '360px' }">
-        <ng-template pTemplate="header">
-            <img alt="Card" src="data:image/gif;base64, {{ submittedProduct.thumbNailPhoto }}" />
-        </ng-template>
-        <p>
-            cioa
-        </p>
-        <ng-template pTemplate="footer">
-            <div class="flex gap-3 mt-1">
-                <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" />
-                <p-button label="Save" class="w-full" styleClass="w-full" />
-            </div>
-        </ng-template>
-    </p-card>
+  <p-card
+    header="{{ submittedProduct.name }}"
+    subheader="{{ submittedProduct.listPrice }}"
+    [style]="{ width: '360px' }"
+  >
+    <ng-template pTemplate="header">
+      <img
+        alt="Card"
+        src="data:image/gif;base64, {{ submittedProduct.thumbNailPhoto }}"
+      />
+    </ng-template>
+    <p>cioa</p>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 mt-1">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          class="w-full"
+          styleClass="w-full"
+        />
+        <p-button label="Save" class="w-full" styleClass="w-full" />
+      </div>
+    </ng-template>
+  </p-card>
 </span>
-    

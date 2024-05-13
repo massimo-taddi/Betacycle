@@ -33,15 +33,12 @@ export class ProductsListComponent {
   constructor(private productService: ProductService) {}
   ngOnInit() {
     this.funzioneProdotti();
-    console.log(this.productService.getProducts(this.searchParams), typeof this.productService.getProducts(this.searchParams));
-
   }
   funzioneProdotti() {
-    console.log(this.searchParams.pageSize, "controllo in oninit");
-    
+    console.log(this.searchParams.pageSize, 'controllo in oninit');
+
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
-      
     );
 
     this.searchParams.pageIndex = 1;
@@ -57,11 +54,10 @@ export class ProductsListComponent {
         console.log(err.message);
       },
     });
-    
   }
 
   changeOutput(event: any) {
-    console.log(this.searchParams.pageSize, "controllo in change output");
+    console.log(this.searchParams.pageSize, 'controllo in change output');
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
@@ -69,10 +65,10 @@ export class ProductsListComponent {
     this.searchParams.pageIndex = event.page! + 1;
     this.searchParams.pageSize = event.rows!;
 
-    window.scroll({ 
-      top: 0, 
-      left: 0, 
-      behavior: 'auto' 
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
     });
 
     this.productService.getProducts(this.searchParams).subscribe({
