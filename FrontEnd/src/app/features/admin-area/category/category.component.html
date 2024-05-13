@@ -1,1 +1,40 @@
-<p>category works!</p>
+<div class="categoryContainer">
+  <div
+    class="card flex justify-content-center"
+    *ngFor="let category of categories"
+  >
+    <p-card
+      header="{{ category.name }}"
+      subheader="{{ category.modifiedDate }}"
+      [style]="{ width: '360px' }"
+    >
+      <p>
+        <!-- DESCRIPTION PRODUCT -->
+      </p>
+
+      <ng-template pTemplate="footer">
+        <div
+          class="flex gap-3 mt-1"
+          style="display: flex; justify-content: space-between; width: 100%"
+        >
+          <p-button
+            label="Delete"
+            severity="secondary"
+            class="w-full"
+            styleClass="w-full"
+          />
+          <p-button label="Modify" class="w-full" styleClass="w-full" />
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>
+
+<p-paginator
+  (onPageChange)="changeOutput($event)"
+  [first]="0"
+  [rows]="searchParams.pageSize"
+  [totalRecords]="categoriesCount"
+  [rowsPerPageOptions]="[10, 20, 30]"
+  [showFirstLastIcon]="false"
+></p-paginator>

@@ -1,3 +1,37 @@
-<div *ngFor="let model of models">
-  {{ model.name }} {{ model.productModelId }} {{ model.catalogDescription }}
+<div class="productContainer">
+  <div class="card flex justify-content-center" *ngFor="let model of models">
+    <p-card
+      header="{{ model.name }}"
+      subheader="{{ model.modifiedDate }}"
+      [style]="{ width: '360px' }"
+    >
+      <p>
+        <!-- DESCRIPTION PRODUCT -->
+      </p>
+
+      <ng-template pTemplate="footer">
+        <div
+          class="flex gap-3 mt-1"
+          style="display: flex; justify-content: space-between; width: 100%"
+        >
+          <p-button
+            label="Delete"
+            severity="secondary"
+            class="w-full"
+            styleClass="w-full"
+          />
+          <p-button label="Modify" class="w-full" styleClass="w-full" />
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
 </div>
+
+<p-paginator
+  (onPageChange)="changeOutput($event)"
+  [first]="0"
+  [rows]="searchParams.pageSize"
+  [totalRecords]="modelCount"
+  [rowsPerPageOptions]="[10, 20, 30]"
+  [showFirstLastIcon]="false"
+></p-paginator>

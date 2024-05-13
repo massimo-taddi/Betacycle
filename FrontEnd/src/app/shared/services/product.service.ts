@@ -40,6 +40,17 @@ export class ProductService {
       headers: header,
     });
   }
+  //work in progress
+  getNProductModels(params: SearchParams): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get(
+      `https://localhost:7287/api/Products/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
+      {
+        headers: header,
+      }
+    );
+  }
 
   getProductById(id: number): Observable<any> {
     return this.http.get(`https://localhost:7287/api/Products/${id}`);

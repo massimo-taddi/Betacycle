@@ -27,7 +27,7 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<(int,IEnumerable<Product>,string)>> GetProducts([FromQuery] ProductSpecParams @params)
+        public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
             int productCount = 0;
@@ -63,14 +63,6 @@ namespace BetaCycleAPI.Controllers
                     productCount = res.Count();
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
-
-
-
-
-
-
-
-
                 //test per prendere la descrizioni dei prodotti
                 case "test":
                     res = await (from product in _context.Products
@@ -105,16 +97,10 @@ namespace BetaCycleAPI.Controllers
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
 
-
-
-
-
-
-
                 default:
                     return BadRequest();
             }
-            return (productCount, res, "NON");
+            return (productCount, res);
         }
 
         // GET: api/Products/5
@@ -162,7 +148,8 @@ namespace BetaCycleAPI.Controllers
             return await _context.ProductCategories.ToListAsync();
         }
 
-        // GET: api/products/categories
+        // GET: api/products/models
+        
         [Authorize]
         [HttpGet]
         [Route("models")]
@@ -174,6 +161,38 @@ namespace BetaCycleAPI.Controllers
             return await _context.ProductModels.ToListAsync();
         }
 
+        //GET:api/products/models
+        //get a number of models
+        [Authorize]
+        [HttpGet]
+        [Route("Nmodels")]
+        public async Task<ActionResult<(int,IEnumerable<ProductModel>)>> GetNProductModels([FromQuery] ProductSpecParams @params)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            List<ProductModel> productModels = new List<ProductModel>();
+            int modelCount = 0;
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
+
+            switch (@params.Sort)
+            {
+                case "Desc":
+                    productModels = await _context.ProductModels.OrderBy(product => product.ModifiedDate).ToListAsync();
+                    modelCount = productModels.Count();
+                    break;
+                case "Asc":
+                    productModels = await _context.ProductModels.OrderByDescending(product => product.ModifiedDate).ToListAsync();
+                    modelCount = productModels.Count();
+                    break;
+            }
+            
+
+            
+            productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+            
+            return (modelCount,productModels);
+        }
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]

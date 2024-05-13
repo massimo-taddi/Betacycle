@@ -35,8 +35,6 @@ export class ProductsListComponent {
     this.funzioneProdotti();
   }
   funzioneProdotti() {
-    console.log(this.searchParams.pageSize, 'controllo in oninit');
-
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
@@ -47,7 +45,6 @@ export class ProductsListComponent {
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
-        console.log(products.item2);
         this.productCount = products.item1;
       },
       error: (err: Error) => {
@@ -57,7 +54,6 @@ export class ProductsListComponent {
   }
 
   changeOutput(event: any) {
-    console.log(this.searchParams.pageSize, 'controllo in change output');
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
@@ -74,7 +70,6 @@ export class ProductsListComponent {
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
-
         this.productCount = products.item1;
       },
       error: (err: Error) => {
