@@ -51,24 +51,23 @@ namespace BetaCycleAPI.Controllers
                     case "Desc":
                         //ritornare n customer 
                         res = await (from customer in _awContext.Customers
-                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) select customer)
-                                     .OrderByDescending(x => x.FirstName).ToListAsync();
-                            
+                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer != null
+                                     select customer)
+                                     .OrderBy(x => x.FirstName).ToListAsync();
+                        customerCount = res.Count();  
                             
                         break;
                     case "Asc":
                         //ritornare n customer 
                         res = await (from customer in _awContext.Customers
-                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
+                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer!=null
                                      select customer)
                                      .OrderBy(x => x.FirstName).ToListAsync();
+                        customerCount = res.Count();
                         break;
-                }
-                   
-
-
-                customerCount = res.Count();
+                }             
                 res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                return (customerCount,res);
                 
             }
             else

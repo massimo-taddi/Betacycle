@@ -33,6 +33,14 @@ export class ProductService {
     });
   }
 
+  getNProductCategories(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get('https://localhost:7287/api/products/categories', {
+      headers: header,
+    });
+  }
+
   getProductModels(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));

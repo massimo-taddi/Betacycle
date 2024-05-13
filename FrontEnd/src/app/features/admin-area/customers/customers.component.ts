@@ -33,6 +33,7 @@ export class CustomersComponent {
     this.searchParams.pageSize = 10;
     this.AdminService.httpGetCustomerInfo(this.searchParams).subscribe({
       next: (customers: any) => {
+        console.log(customers);
         this.customers = customers.item2;
         this.customersCount = customers.item1;
       },

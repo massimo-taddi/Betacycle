@@ -147,9 +147,42 @@ namespace BetaCycleAPI.Controllers
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
             return await _context.ProductCategories.ToListAsync();
         }
+        // GET: api/products/categories
+        //Get a number of product categories
+        [Authorize]
+        [HttpGet]
+        [Route("Ncategories")]
+        public async Task<ActionResult<(int,IEnumerable<ProductCategory>)>> GetNproductCategories([FromQuery] ProductSpecParams @params)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            int categoryNumber = 0;
+            List<ProductCategory> res = [];
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") 
+                return BadRequest();
+
+            switch (@params.Sort)
+            {
+                case "Desc":
+                    res = await (from category in _context.ProductCategories
+                                 where category.Name.Contains(@params.Search)
+                                 select category).OrderBy(c=>c.Name).ToListAsync();
+                    categoryNumber = res.Count();
+                    break;
+                case "Asc":
+                    res = await (from category in _context.ProductCategories
+                                 where category.Name.Contains(@params.Search)
+                                 select category).OrderByDescending(c => c.Name).ToListAsync();
+                    categoryNumber = res.Count();
+                    break;
+            }
+
+            return (categoryNumber,res) ;
+        }
+
 
         // GET: api/products/models
-        
+
         [Authorize]
         [HttpGet]
         [Route("models")]
@@ -161,7 +194,7 @@ namespace BetaCycleAPI.Controllers
             return await _context.ProductModels.ToListAsync();
         }
 
-        //GET:api/products/models
+        //GET:api/products/Nmodels
         //get a number of models
         [Authorize]
         [HttpGet]
@@ -177,10 +210,12 @@ namespace BetaCycleAPI.Controllers
 
             switch (@params.Sort)
             {
+                //aggiungere i search
                 case "Desc":
                     productModels = await _context.ProductModels.OrderBy(product => product.ModifiedDate).ToListAsync();
                     modelCount = productModels.Count();
                     break;
+                //aggiungere il search
                 case "Asc":
                     productModels = await _context.ProductModels.OrderByDescending(product => product.ModifiedDate).ToListAsync();
                     modelCount = productModels.Count();
