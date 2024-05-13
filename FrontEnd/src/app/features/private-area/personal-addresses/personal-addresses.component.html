@@ -1,7 +1,12 @@
 <!-- <li *ngFor="let address of addresses">
     {{address.addressLine1}}
 </li> -->
+<<<<<<< Updated upstream
 <h1 style="position: fixed">Indirizzi</h1>
+=======
+<p-toast></p-toast>
+<h1 style="position: fixed;">Indirizzi</h1>
+>>>>>>> Stashed changes
 <div class="d-flex justify-content-end">
   <button
     pbutton
@@ -120,6 +125,7 @@
   </p-dialog>
 </div>
 <p-table [value]="addresses">
+<<<<<<< Updated upstream
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th scope="col">#</th>
@@ -311,3 +317,79 @@
     </tr>
   </ng-template>
 </p-table>
+=======
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Indirizzo Line 1</th>
+            <th scope="col">Indirizzo Line 2</th>
+            <th scope="col">Citta'</th>
+            <th scope="col">Regione</th>
+            <th scope="col">Stato</th>
+            <th scope="col">CAP</th>
+            <th scope="col">Tipo Indirizzo</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-addr let-rowIndex="rowIndex" let-columns="columns">
+        <tr style="border-bottom: 1px solid grey;">
+            <td>{{rowIndex+1}}</td>
+            <td>{{addr.addressLine1}}</td>
+            <td>{{addr.addressLine2}}</td>
+            <td>{{addr.city}}</td>
+            <td>{{addr.stateProvince}}</td>
+            <td>{{addr.countryRegion}}</td>
+            <td>{{addr.postalCode}}</td>
+            <td>{{addr.customerAddresses[0].addressType}}</td>
+            <td><p-button label="Modifica" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
+            <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
+              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+              <form #putForm="ngForm" class="row g-3 p-3">
+                <div class="col-md-6">
+                    <label for="inputAddr1" class="form-label">Indirizzo Line 1*</label>
+                    <input #addrLine1="ngModel" type="text" class="form-control" name="addressLine1" value="{{modifyAddress.addressLine1}}" [(ngModel)]="modifyAddress.addressLine1" [ngModelOptions]="{standalone:true}" required >
+                </div>
+                <div class="col-md-6">
+                    <label for="inputAddr2" class="form-label">Indirizzo Line 2</label>
+                    <input #addrLine2 type="text" class="form-control" name="addressLine2" value="{{modifyAddress.addressLine2}}" [(ngModel)]="modifyAddress.addressLine2" required [ngModelOptions]="{standalone:true}">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputCity" class="form-label">Citta'*</label>
+                    <input #addrCity="ngModel" type="text" class="form-control" name="city" value="{{modifyAddress.city}}" [(ngModel)]="modifyAddress.city" [ngModelOptions]="{standalone:true}" required >
+                </div>
+                <div class="col-md-4">
+                    <label for="inputRegion" class="form-label">Regione*</label>
+                    <input #addrStateProv="ngModel" type="text" class="form-control" name="stateProvince" value="{{modifyAddress.stateProvince}}" [(ngModel)]="modifyAddress.stateProvince" [ngModelOptions]="{standalone:true}" required >
+                </div>
+                <div class="col-md-4">
+                    <label for="inputCountry" class="form-label">Stato*</label>
+                    <input #addrCountry="ngModel" type="text" class="form-control" name="countryRegion" value="{{modifyAddress.countryRegion}}" [(ngModel)]="modifyAddress.countryRegion" [ngModelOptions]="{standalone:true}" required >
+                </div>
+                <div class="col-md-2">
+                    <label for="inputCap" class="form-label">CAP*</label>
+                    <input #addrPostalCode="ngModel" type="text" class="form-control" maxlength="5" minlength="5" name="postalCode" value="{{modifyAddress.postalCode}}" [(ngModel)]="modifyAddress.postalCode" [ngModelOptions]="{standalone:true}" required >
+                </div>
+                <div class="col-md-6">
+                    <label for="inputType" class="form-label">Tipo Indirizzo*</label>
+                    <input #addrCustType="ngModel" type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" [(ngModel)]="typeAddress" [ngModelOptions]="{standalone:true}" required>
+                </div>
+                <div class="col-12" style="margin-top: 30px;">
+                    <button [disabled]="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid" (click)="PutModifyAddress(); dialogBoolEdit = false;" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
+                </div>
+                <div class="col-12" style="margin-top: 10px; color: red;" *ngIf="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid">
+                    Ricontrolla i campi inseriti
+                </div>
+              </form>
+            </p-dialog>
+            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
+            <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
+              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+              <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
+              <div class="d-flex justify-content-evenly">
+                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Annulla</button>
+                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Conferma</button>
+              </div>
+            </p-dialog>
+        </tr>
+    </ng-template>
+</p-table>
+>>>>>>> Stashed changes

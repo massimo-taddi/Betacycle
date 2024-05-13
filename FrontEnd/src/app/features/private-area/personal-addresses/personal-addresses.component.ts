@@ -9,13 +9,18 @@ import { CustomerAddress } from '../../../shared/models/CustomerAddress';
 import { AddressFormData } from '../../../shared/models/AddressFormData';
 import { ButtonModule } from 'primeng/button';
 import { HttpStatusCode } from '@angular/common/http';
+import {MessageService} from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'app-personal-addresses',
   standalone: true,
-  imports: [CommonModule ,TableModule, FormsModule, DialogModule, ButtonModule],
+  imports: [CommonModule ,TableModule, FormsModule, DialogModule, ButtonModule, ToastModule],
   templateUrl: './personal-addresses.component.html',
-  styleUrl: './personal-addresses.component.css'
+  styleUrl: './personal-addresses.component.css',
+  providers: [MessageService]
 })
 export class PersonalAddressesComponent implements OnInit {
   addresses: Address[] = [];
@@ -29,10 +34,11 @@ export class PersonalAddressesComponent implements OnInit {
   typeAddress: string = '';
 
 
-  constructor(private httpAddresses: HttpUserAdminService) {}
+  constructor(private httpAddresses: HttpUserAdminService, private messageService: MessageService, private primengConfig: PrimeNGConfig) {}
 
   ngOnInit(): void {
     this.getUserAddresses();
+    this.primengConfig.ripple = true;
   }
 
   private getUserAddresses() {
@@ -46,9 +52,26 @@ export class PersonalAddressesComponent implements OnInit {
     });
   }
 
+  showSuccess(content: string) {
+    this.messageService.add({severity:'success', summary: 'Success', detail: content});
+  }
+
+  showError(content: string) {
+    this.messageService.add({severity:'error', summary: 'Error', detail: content});
+  }
+
   SubmitAddress(newForm: NgForm){
     this.newAddress = newForm.value as AddressFormData;
-    this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe();
+    this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe({
+      next: (response: any) => {
+        if(HttpStatusCode.Ok)
+          this.showSuccess('Indirizzo aggiunto con successo')
+      },
+      error: (err: Error) => {
+        this.showError("Errore nell'aggiunta")
+        console.log(err)
+      },
+    });
   }
 
   PutModifyAddress(){
@@ -60,17 +83,25 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId).subscribe({
       next: (response: any) => {
         if(HttpStatusCode.Ok)
-          console.log("APPOSTO");
-          
+          this.showSuccess('Modifica avvenuta con successo')
       },
       error: (err: Error) => {
-        
+        this.showError('Errore nella modifica')
         console.log(err)
       },
     });
   }
 
   DeleteAddress(id: number){
-    this.httpAddresses.httpDeleteCustomerAddress(id).subscribe();
+    this.httpAddresses.httpDeleteCustomerAddress(id).subscribe({
+      next: (response: any) => {
+        if(HttpStatusCode.Ok)
+          this.showSuccess('Eliminazione avvenuta con successo')
+      },
+      error: (err: Error) => {
+        this.showError('Errore nella cancellazione')
+        console.log(err)
+      },
+    });
   }
 }
