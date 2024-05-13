@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProductModel } from '../../../shared/models/ProductModel';
+import { Router } from '@angular/router';
 import {
   FileRemoveEvent,
   FileSelectEvent,
@@ -35,7 +36,7 @@ export class ModifyProductComponent {
   models: ProductModel[] = [];
   updateProduct: Product | null = null;
 
-  constructor(private prodService: ProductService) {}
+  constructor(private prodService: ProductService, private router: Router) {}
   modifyId: number = 0;
   ngOnInit() {
     const localStoragePosition: string | null =
@@ -91,5 +92,6 @@ export class ModifyProductComponent {
       next: (prod: Product) => (this.updateProduct = prod),
       error: (err: Error) => console.log(err.message),
     });
+    this.router.navigate(['/admin/products-list']);
   }
 }

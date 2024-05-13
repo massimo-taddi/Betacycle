@@ -1,7 +1,6 @@
 export class ProductModel {
   productModelId: number = 0;
   name: string = '';
-
-  //---
-  //Guardare CatalogDescription
+  catalogDescription: string = '';
+  modifiedDate: string = '';
 }

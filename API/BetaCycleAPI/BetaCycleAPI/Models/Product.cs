@@ -22,7 +22,7 @@ public partial class Product
     /// 
     [Required]
     [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = null;
 
     /// <summary>
     /// Unique product identification number.
@@ -66,14 +66,14 @@ public partial class Product
     /// Product is a member of this product category. Foreign key to ProductCategory.ProductCategoryID. 
     /// </summary>
     /// 
-    [Required]
+   
     public int? ProductCategoryId { get; set; }
 
     /// <summary>
     /// Product is a member of this product model. Foreign key to ProductModel.ProductModelID.
     /// </summary>
     /// 
-    [Required]
+    
     public int? ProductModelId { get; set; }
 
     /// <summary>

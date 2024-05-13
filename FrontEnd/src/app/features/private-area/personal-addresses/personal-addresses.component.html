@@ -1,133 +1,313 @@
 <!-- <li *ngFor="let address of addresses">
     {{address.addressLine1}}
 </li> -->
-<h1 style="position: fixed;">Indirizzi</h1>
+<h1 style="position: fixed">Indirizzi</h1>
 <div class="d-flex justify-content-end">
-    <button pbutton pripple label="New" icon="pi pi-plus"
-        style="margin-bottom: 30px;"
-        class="p-element p-ripple p-button-success mr-2 p-button p-component" (click)="dialogBoolAdd = true">
-        <span class="p-button-icon p-button-icon-left pi pi-plus" aria-hidden="true"></span>
-        <span class="p-button-label">Aggiungi Indirizzo</span>
-        <span class="p-ink" aria-hidden="true" role="presentation"></span>
-    </button>
-    <p-dialog header="Creazione Nuovo Indirizzo" [modal]="true" [(visible)]="dialogBoolAdd" [style]="{ width: '65rem' }"
-        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-        <form #newAddress="ngForm" (submit)="SubmitAddress(newAddress)" class="row g-3">
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Indirizzo Line 1</label>
-                <input type="text" class="form-control" id="inputAddress1" placeholder="123 Via Marconi" name="addressLine1" [(ngModel)]="address.addressLine1">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress2" class="form-label">Indirizzo Line 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Appartamento, studio, o piano" name="addressLine2" [(ngModel)]="address.addressLine2">
-            </div>
-            <div class="col-md-6">
-                <label for="inputCity" class="form-label">Città</label>
-                <input type="text" class="form-control" id="inputCity" name="city" [(ngModel)]="address.city">
-            </div>
-            <div class="col-md-6">
-                <label for="inputRegion" class="form-label">Regione</label>
-                <input type="text" class="form-control" id="inputRegion" name="stateProvince" [(ngModel)]="address.stateProvince">
-            </div>
-            <div class="col-md-4">
-                <label for="inputState" class="form-label">Stato</label>
-                <select id="inputState" class="form-select" name="countryRegion" [(ngModel)]="address.countryRegion">
-                    <option selected>Seleziona</option>
-                    <option>Italia</option>
-                    <option>Svizzera</option>
-                    <option>Francia</option>
-                    <option>Germania</option>
-                    <option>Stati Uniti</option>
-                    <option>Regno Unito</option>
-                    <option>Malta</option>
-                    <option>San Marino</option>
-                    <option>Città del Vaticano</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="inputZip" class="form-label">CAP</label>
-                <input type="text" class="form-control" id="inputZip" name="postalCode" [(ngModel)]="address.postalCode">
-            </div>
-            <div class="col-md-6">
-                <label for="inputType" class="form-label">Tipo Indirizzo</label>
-                <input type="text" class="form-control" id="inputType" name="addressType" [(ngModel)]="customerAddress.addressType">
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Aggiungi</button>
-            </div>
-        </form>
-    </p-dialog>
+  <button
+    pbutton
+    pripple
+    label="New"
+    icon="pi pi-plus"
+    style="margin-bottom: 30px"
+    class="p-element p-ripple p-button-success mr-2 p-button p-component"
+    (click)="dialogBoolAdd = true"
+  >
+    <span
+      class="p-button-icon p-button-icon-left pi pi-plus"
+      aria-hidden="true"
+    ></span>
+    <span class="p-button-label">Aggiungi Indirizzo</span>
+    <span class="p-ink" aria-hidden="true" role="presentation"></span>
+  </button>
+  <p-dialog
+    header="Creazione Nuovo Indirizzo"
+    [modal]="true"
+    [(visible)]="dialogBoolAdd"
+    [style]="{ width: '65rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  >
+    <form
+      #newAddress="ngForm"
+      (submit)="SubmitAddress(newAddress)"
+      class="row g-3"
+    >
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Indirizzo Line 1</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputAddress1"
+          placeholder="123 Via Marconi"
+          name="addressLine1"
+          [(ngModel)]="address.addressLine1"
+        />
+      </div>
+      <div class="col-12">
+        <label for="inputAddress2" class="form-label">Indirizzo Line 2</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputAddress2"
+          placeholder="Appartamento, studio, o piano"
+          name="addressLine2"
+          [(ngModel)]="address.addressLine2"
+        />
+      </div>
+      <div class="col-md-6">
+        <label for="inputCity" class="form-label">Città</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputCity"
+          name="city"
+          [(ngModel)]="address.city"
+        />
+      </div>
+      <div class="col-md-6">
+        <label for="inputRegion" class="form-label">Regione</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputRegion"
+          name="stateProvince"
+          [(ngModel)]="address.stateProvince"
+        />
+      </div>
+      <div class="col-md-4">
+        <label for="inputState" class="form-label">Stato</label>
+        <select
+          id="inputState"
+          class="form-select"
+          name="countryRegion"
+          [(ngModel)]="address.countryRegion"
+        >
+          <option selected>Seleziona</option>
+          <option>Italia</option>
+          <option>Svizzera</option>
+          <option>Francia</option>
+          <option>Germania</option>
+          <option>Stati Uniti</option>
+          <option>Regno Unito</option>
+          <option>Malta</option>
+          <option>San Marino</option>
+          <option>Città del Vaticano</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="inputZip" class="form-label">CAP</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputZip"
+          name="postalCode"
+          [(ngModel)]="address.postalCode"
+        />
+      </div>
+      <div class="col-md-6">
+        <label for="inputType" class="form-label">Tipo Indirizzo</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputType"
+          name="addressType"
+          [(ngModel)]="customerAddress.addressType"
+        />
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Aggiungi</button>
+      </div>
+    </form>
+  </p-dialog>
 </div>
 <p-table [value]="addresses">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Indirizzo Line 1</th>
-            <th scope="col">Indirizzo Line 2</th>
-            <th scope="col">Citta'</th>
-            <th scope="col">Regione</th>
-            <th scope="col">Stato</th>
-            <th scope="col">CAP</th>
-            <th scope="col">Tipo Indirizzo</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-addr let-rowIndex="rowIndex" let-columns="columns">
-        <tr style="border-bottom: 1px solid grey;">
-            <td>{{rowIndex+1}}</td>
-            <td>{{addr.addressLine1}}</td>
-            <td>{{addr.addressLine2}}</td>
-            <td>{{addr.city}}</td>
-            <td>{{addr.stateProvince}}</td>
-            <td>{{addr.countryRegion}}</td>
-            <td>{{addr.postalCode}}</td>
-            <td>{{addr.customerAddresses[0].addressType}}</td>
-            <td><p-button label="Modifica" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
-            <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
-              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-              <form class="row g-3 p-3">
-                <div class="col-md-6">
-                    <label for="inputAddr1" class="form-label">Indirizzo Line 1</label>
-                    <input #addrLine1 type="text" class="form-control" name="addressLine1" value="{{modifyAddress.addressLine1}}" [(ngModel)]="modifyAddress.addressLine1" [ngModelOptions]="{standalone:true}" required >
-                </div>
-                <div class="col-md-6">
-                    <label for="inputAddr2" class="form-label">Indirizzo Line 2</label>
-                    <input #addrLine2 type="text" class="form-control" name="addressLine2" value="{{modifyAddress.addressLine2}}" [(ngModel)]="modifyAddress.addressLine2" [ngModelOptions]="{standalone:true}">
-                </div>
-                <div class="col-md-4">
-                    <label for="inputCity" class="form-label">Citta'</label>
-                    <input #addrCity type="text" class="form-control" name="city" value="{{modifyAddress.city}}" [(ngModel)]="modifyAddress.city" [ngModelOptions]="{standalone:true}" required >
-                </div>
-                <div class="col-md-4">
-                    <label for="inputRegion" class="form-label">Regione</label>
-                    <input #addrStateProv type="text" class="form-control" name="stateProvince" value="{{modifyAddress.stateProvince}}" [(ngModel)]="modifyAddress.stateProvince" [ngModelOptions]="{standalone:true}" required >
-                </div>
-                <div class="col-md-4">
-                    <label for="inputCountry" class="form-label">Stato</label>
-                    <input #addrCountry type="text" class="form-control" name="countryRegion" value="{{modifyAddress.countryRegion}}" [(ngModel)]="modifyAddress.countryRegion" [ngModelOptions]="{standalone:true}" required >
-                </div>
-                <div class="col-md-2">
-                    <label for="inputCap" class="form-label">CAP</label>
-                    <input #addrPostalCode type="text" class="form-control" name="postalCode" value="{{modifyAddress.postalCode}}" [(ngModel)]="modifyAddress.postalCode" [ngModelOptions]="{standalone:true}" required >
-                </div>
-                <div class="col-md-6">
-                    <label for="inputType" class="form-label">Tipo Indirizzo</label>
-                    <input #addrCustType type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" [(ngModel)]="typeAddress" [ngModelOptions]="{standalone:true}" required>
-                </div>
-                <div class="col-12" style="margin-top: 30px;">
-                    <button (click)="PutModifyAddress()" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
-                </div>
-              </form>
-            </p-dialog>
-            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
-            <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
-              [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-              <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
-              <div class="d-flex justify-content-evenly">
-                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Annulla</button>
-                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Conferma</button>
-              </div>
-            </p-dialog>
-        </tr>
-
-    </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Indirizzo Line 1</th>
+      <th scope="col">Indirizzo Line 2</th>
+      <th scope="col">Citta'</th>
+      <th scope="col">Regione</th>
+      <th scope="col">Stato</th>
+      <th scope="col">CAP</th>
+      <th scope="col">Tipo Indirizzo</th>
+    </tr>
+  </ng-template>
+  <ng-template
+    pTemplate="body"
+    let-addr
+    let-rowIndex="rowIndex"
+    let-columns="columns"
+  >
+    <tr style="border-bottom: 1px solid grey">
+      <td>{{ rowIndex + 1 }}</td>
+      <td>{{ addr.addressLine1 }}</td>
+      <td>{{ addr.addressLine2 }}</td>
+      <td>{{ addr.city }}</td>
+      <td>{{ addr.stateProvince }}</td>
+      <td>{{ addr.countryRegion }}</td>
+      <td>{{ addr.postalCode }}</td>
+      <td>{{ addr.customerAddresses[0].addressType }}</td>
+      <td>
+        <p-button
+          label="Modifica"
+          icon="pi pi-pencil"
+          (click)="
+            dialogBoolEdit = true;
+            modifyAddress = addr;
+            typeAddress = modifyAddress.customerAddresses[0].addressType
+          "
+          styleClass="p-button-info"
+        ></p-button>
+      </td>
+      <p-dialog
+        header="Modifica dell'indirizzo"
+        [modal]="true"
+        blockScroll="true"
+        draggable="false"
+        [(visible)]="dialogBoolEdit"
+        [style]="{ width: '70rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      >
+        <form class="row g-3 p-3">
+          <div class="col-md-6">
+            <label for="inputAddr1" class="form-label">Indirizzo Line 1</label>
+            <input
+              #addrLine1
+              type="text"
+              class="form-control"
+              name="addressLine1"
+              value="{{ modifyAddress.addressLine1 }}"
+              [(ngModel)]="modifyAddress.addressLine1"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="inputAddr2" class="form-label">Indirizzo Line 2</label>
+            <input
+              #addrLine2
+              type="text"
+              class="form-control"
+              name="addressLine2"
+              value="{{ modifyAddress.addressLine2 }}"
+              [(ngModel)]="modifyAddress.addressLine2"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="inputCity" class="form-label">Citta'</label>
+            <input
+              #addrCity
+              type="text"
+              class="form-control"
+              name="city"
+              value="{{ modifyAddress.city }}"
+              [(ngModel)]="modifyAddress.city"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="inputRegion" class="form-label">Regione</label>
+            <input
+              #addrStateProv
+              type="text"
+              class="form-control"
+              name="stateProvince"
+              value="{{ modifyAddress.stateProvince }}"
+              [(ngModel)]="modifyAddress.stateProvince"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="inputCountry" class="form-label">Stato</label>
+            <input
+              #addrCountry
+              type="text"
+              class="form-control"
+              name="countryRegion"
+              value="{{ modifyAddress.countryRegion }}"
+              [(ngModel)]="modifyAddress.countryRegion"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="inputCap" class="form-label">CAP</label>
+            <input
+              #addrPostalCode
+              type="text"
+              class="form-control"
+              name="postalCode"
+              value="{{ modifyAddress.postalCode }}"
+              [(ngModel)]="modifyAddress.postalCode"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="inputType" class="form-label">Tipo Indirizzo</label>
+            <input
+              #addrCustType
+              type="text"
+              class="form-control"
+              name="addressType"
+              value="{{ modifyAddress.customerAddresses[0].addressType }}"
+              [(ngModel)]="typeAddress"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+          </div>
+          <div class="col-12" style="margin-top: 30px">
+            <button
+              (click)="PutModifyAddress()"
+              type="submit"
+              style="padding: 10px"
+              class="btn btn-primary"
+            >
+              Modifica indirizzo
+            </button>
+          </div>
+        </form>
+      </p-dialog>
+      <td>
+        <p-button
+          label="Elimina"
+          icon="pi pi-trash"
+          (click)="dialogBoolDelete = true"
+          styleClass="p-button-danger"
+        ></p-button>
+      </td>
+      <p-dialog
+        header="Eliminazione dell'indirizzo"
+        [modal]="true"
+        blockScroll="true"
+        draggable="false"
+        [(visible)]="dialogBoolDelete"
+        [style]="{ width: '40rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      >
+        <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
+        <div class="d-flex justify-content-evenly">
+          <button
+            type="button"
+            (click)="dialogBoolDelete = false"
+            style="padding: 10px"
+            class="btn btn-outline-secondary"
+          >
+            Annulla
+          </button>
+          <button
+            type="button"
+            (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false"
+            style="padding: 10px"
+            class="btn btn-danger"
+          >
+            Conferma
+          </button>
+        </div>
+      </p-dialog>
+    </tr>
+  </ng-template>
 </p-table>

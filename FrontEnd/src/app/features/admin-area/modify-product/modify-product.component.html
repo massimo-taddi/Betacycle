@@ -159,7 +159,13 @@
       />
     </div>
     <div class="col-12">
-      <button type="submit" class="btn btn-primary mt-3">Aggiungi</button>
+      <button
+        type="submit"
+        class="btn btn-primary mt-3"
+        routerLink="./product-list"
+      >
+        Modifica
+      </button>
     </div>
   </form>
 </div>
@@ -173,20 +179,8 @@
     <ng-template pTemplate="header">
       <img
         alt="Card"
-        src="data:image/gif;base64, {{ updateProduct?.thumbNailPhoto }}"
+        src="data:image/gif;base64, {{ updateProduct.thumbNailPhoto }}"
       />
-    </ng-template>
-    <p>cioa</p>
-    <ng-template pTemplate="footer">
-      <div class="flex gap-3 mt-1">
-        <p-button
-          label="Cancel"
-          severity="secondary"
-          class="w-full"
-          styleClass="w-full"
-        />
-        <p-button label="Save" class="w-full" styleClass="w-full" />
-      </div>
     </ng-template>
   </p-card>
 </span>

@@ -18,6 +18,9 @@ import { PasswordResetComponent } from './core/password-reset/password-reset.com
 import { PasswordForgotComponent } from './core/password-reset/password-forgot/password-forgot.component';
 import { PasswordForgotResetComponent } from './core/password-reset/password-forgot/password-forgot-reset/password-forgot-reset.component';
 
+import { CategoryComponent } from './features/admin-area/category/category.component';
+import { ModelComponent } from './features/admin-area/model/model.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -62,25 +65,33 @@ export const routes: Routes = [
         children: [
           {
             path: 'pwreset',
-            component: PasswordResetComponent
-          }
-        ]
+            component: PasswordResetComponent,
+          },
+        ],
       },
     ],
   },
-  
+
   {
     path: 'forgotpwd',
-    component: PasswordForgotComponent
+    component: PasswordForgotComponent,
   },
   {
     path: 'resetforgot',
-    component: PasswordForgotResetComponent
+    component: PasswordForgotResetComponent,
   },
   {
     path: 'admin',
     component: AdminAreaComponent,
     children: [
+      {
+        path: 'category',
+        component: CategoryComponent,
+      },
+      {
+        path: 'model',
+        component: ModelComponent,
+      },
       {
         path: 'add-product',
         component: AddProductComponent,
