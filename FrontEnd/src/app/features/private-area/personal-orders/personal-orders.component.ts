@@ -61,7 +61,7 @@ export class PersonalOrdersComponent implements OnInit {
         }
       },
       error: (err: Error) => {
-        console.log('SONO QUI');
+        console.log(err.message);
       },
     });
   }

@@ -1,33 +1,3 @@
-<!-- <table class="table">
-  <thead>
-    <tr>
-      <th scope="col"># Ordine</th>
-      <th scope="col">Data ordine</th>
-      <th scope="col">Data Spedizione</th>
-      <th scope="col">Indirizzo di spedizione</th>
-      <th scope="col">Stato dell'ordine</th>
-      <th scope="col">Costo dei prodotti</th>
-      <th scope="col">Tasse</th>
-      <th scope="col">Costo spedizione</th>
-      <th scope="col">Totale</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let order of orders;">
-      <th scope="col">{{order.salesOrderNumber}}</th>
-      <th scope="col">{{order.orderDate}}</th>
-      <th scope="col">{{order.shipDate}}</th>
-      <th scope="col">{{order.shipToAddress?.addressLine1}},
-        {{order.shipToAddress?.addressLine2}}, {{order.shipToAddress?.city}},
-        {{order.shipToAddress?.countryRegion}}</th>
-      <th scope="col">{{orderStatusString(order.status)}}</th>
-      <th scope="col">{{order.subTotal}}</th>
-      <th scope="col">{{order.taxAmt}}</th>
-      <th scope="col">{{order.freight}}</th>
-      <th scope="col">{{order.totalDue}}</th>
-    </tr>
-  </tbody>
-</table> -->
 
 <h1 style="margin-bottom: 30px;">I miei ordini</h1>
   <p-table [value]="orders">
@@ -69,7 +39,6 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-eachDet let-rowIndex="rowIndex">
                   <tr style="border-bottom: 1px solid grey;" [pEditableRow]="true">
-                    <!--DA REVISIONARE-->
                     <td><img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{eachDet.product.thumbNailPhoto}}" alt="{{eachDet.product.thumbNailPhotoFileName}}"></td>
                     <td>{{eachDet.product.name}}</td>
                     <td>{{eachDet.product.color}}</td>
