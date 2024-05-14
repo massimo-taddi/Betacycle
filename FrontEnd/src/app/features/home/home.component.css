@@ -4,19 +4,40 @@
     object-fit: cover;
 }
 .carousel-item{
-    max-height: 500px;
+    height: 500px;
 }
+
+.bg-item{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#bcimg-first{
+    background-image: url("/assets/images/Banner_BG_Home_1.svg");
+}
+
+#bcimg-second{
+    background-image: url("/assets/video/biking_video_carousel.gif");
+    background-color: aqua;
+}
+
+#bcimg-third{
+    background-image: url("/assets/images/bike-contacts-bg.png");
+}
+
 .carousel-item img{
     position: relative;
-    top: -200px;
+    top: -2vh;
 }
 .carousel-caption>*{
     color: black;
 }
 
 .carousel-caption {
-    max-width: fit-content;
-    
+    min-width: 250px;
+    max-width: 400px;
+    max-height: none;
     text-align: right;
     top:50%; left:65%; bottom:auto;
     -webkit-transform:translate(0, -50%); -ms-transform:translate(0, -50%); transform:translate(0, -50%);
@@ -28,14 +49,35 @@
     color: white;
     background-color: lightblue;
 }
-.item video{
-    width: 100%;
-    height: 100% ;
-    object-fit: cover;
-}
 .phrase>*{
     display: inline-block;
 }
 .carousel-caption span{
     color: #687995;
+}
+
+.bcmain-page-container{
+    width: 70vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: right;
+    position: relative;
+    transform: translate(calc(100% - 55vw), 100%);
+}
+.bc-sub-button{
+    text-decoration: none;
+    color: white;
+    padding: 15px 20px;
+    background-color: #3B82F6;
+    border-radius: 10px;
+    font-size: clamp(0.938rem, 0.61vw + 0.831rem, 1.563rem);
+    line-height: clamp(1.406rem, 0.61vw + 1.3rem, 2.031rem);
+    transition: 0.25s ease-in-out;
+}
+.bc-sub-button:hover{
+    color: #3B82F6;
+    background-color: white;
+    transition: 0.25s ease-in-out;
 }
