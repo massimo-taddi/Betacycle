@@ -35,23 +35,23 @@ export class SearchComponent {
   constructor(private productService: ProductService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.searchParams.search = params.get('search')!;
+      this.searchParams.pageIndex = +params.get('pageIndex')!; 
+      this.searchParams.pageSize = +params.get('pageSize')!;
+      this.searchParams.sort = params.get('sort')!;
+    });
     this.productService
       .getProducts(this.searchParams).subscribe({
         next: (products: any) => {
+          console.log(products);
           this.products = products.item2;
           this.productCount = products.item1;
         },
         error: (err: Error) => {
           console.log(err.message);
         },
-    });
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.searchParams.search = params.get('search')!;
-      this.searchParams.pageIndex = +params.get('pageIndex')!; 
-      this.searchParams.pageSize = +params.get('pageSize')!;
-      this.searchParams.sort = params.get('sort')!;
-    })
-    console.log(this.searchParams);
+    });    
     this.productService.setSearchParams(this.searchParams);
   }
 
