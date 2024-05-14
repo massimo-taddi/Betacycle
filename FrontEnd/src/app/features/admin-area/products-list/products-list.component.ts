@@ -75,6 +75,6 @@ export class ProductsListComponent {
   }
   SetLocalStorage(modifyId: number) {
     let modifyIdString = modifyId.toString();
-    localStorage.setItem('ModifyId', modifyIdString);
+    sessionStorage.setItem('ModifyId', modifyIdString);
   }
 }

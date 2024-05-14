@@ -35,18 +35,20 @@ export class ModifyProductComponent {
   categories: ProductCategory[] = [];
   models: ProductModel[] = [];
   updateProduct: Product | null = null;
-
+  uploadFiles: any[] = [];
   constructor(private prodService: ProductService, private router: Router) {}
   modifyId: number = 0;
   ngOnInit() {
-    const localStoragePosition: string | null =
-      localStorage.getItem('ModifyId');
+    const sessionStorageProductId: string | null =
+      sessionStorage.getItem('ModifyId');
+    console.log(sessionStorageProductId);
 
-    if (localStoragePosition) {
-      this.modifyId = parseInt(localStoragePosition, 10);
+    if (sessionStorageProductId) {
+      this.modifyId = parseInt(sessionStorageProductId, 10);
       this.prodService.getProductById(this.modifyId).subscribe({
         next: (product: any) => {
           this.product = product;
+          sessionStorage.removeItem('ModifyId');
         },
         error: (err: Error) => {
           console.log(err.message);
@@ -86,7 +88,7 @@ export class ModifyProductComponent {
     modifiedProduct.thumbnailPhotoFileName =
       this.product.thumbnailPhotoFileName;
     this.product.modifiedDate = new Date(Date.now());
-    console.log(modifiedProduct);
+
     //inviamo modifiedProduct con l'id associato
     this.prodService.putProduct(modifiedProduct, this.modifyId).subscribe({
       next: (prod: Product) => (this.updateProduct = prod),

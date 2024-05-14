@@ -262,6 +262,7 @@ namespace BetaCycleAPI.Controllers
                 Size = productForm.Size,
                 Weight = productForm.Weight,
                 ProductCategoryId = productForm.ProductCategoryId,
+                ProductModelId = productForm.ProductModelId,    
                 SellStartDate = productForm.SellStartDate,
                 SellEndDate = productForm.SellEndDate,
                 DiscontinuedDate = productForm.DiscontinuedDate,
@@ -298,6 +299,7 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Product>> PostProduct(ProductForm productForm)
         {
+
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
@@ -312,6 +314,7 @@ namespace BetaCycleAPI.Controllers
                 Size = productForm.Size,
                 Weight = productForm.Weight,
                 ProductCategoryId = productForm.ProductCategoryId,
+                ProductModelId = productForm.ProductModelId,
                 SellStartDate = productForm.SellStartDate,
                 SellEndDate = productForm.SellEndDate,
                 DiscontinuedDate = productForm.DiscontinuedDate,
@@ -319,6 +322,8 @@ namespace BetaCycleAPI.Controllers
                 ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
                 ModifiedDate = DateTime.Now
             };
+
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 

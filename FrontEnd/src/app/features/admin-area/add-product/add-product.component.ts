@@ -6,7 +6,12 @@ import { ProductCategory } from '../../../shared/models/ProductCategory';
 import { ProductService } from '../../../shared/services/product.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProductModel } from '../../../shared/models/ProductModel';
-import { FileRemoveEvent, FileSelectEvent, FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
+import {
+  FileRemoveEvent,
+  FileSelectEvent,
+  FileUploadEvent,
+  FileUploadModule,
+} from 'primeng/fileupload';
 import { Product } from '../../../shared/models/Product';
 import { CardModule } from 'primeng/card';
 import * as BlobUtil from 'blob-util';
@@ -14,7 +19,13 @@ import * as BlobUtil from 'blob-util';
 @Component({
   selector: 'app-add-product',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, FileUploadModule, CardModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DropdownModule,
+    FileUploadModule,
+    CardModule,
+  ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css',
 })
@@ -27,22 +38,22 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.prodService.getProductCategories().subscribe({
-      next: (categories: ProductCategory[]) => this.categories = categories,
-      error: (err: Error) => console.log(err.message)
+      next: (categories: ProductCategory[]) => (this.categories = categories),
+      error: (err: Error) => console.log(err.message),
     });
     this.prodService.getProductModels().subscribe({
-      next: (models: ProductModel[]) => this.models = models,
-      error: (err: Error) => console.log(err.message)
+      next: (models: ProductModel[]) => {
+        this.models = models;
+      },
+      error: (err: Error) => console.log(err.message),
     });
   }
 
   async onThumbnailSelect(event: FileSelectEvent) {
-    BlobUtil.blobToBase64String(event.files[0]).then(
-      (b64str) => {
-        this.product.thumbNailPhoto = b64str;
-        this.product.thumbnailPhotoFileName = event.files[0].name;
-      }
-    )
+    BlobUtil.blobToBase64String(event.files[0]).then((b64str) => {
+      this.product.thumbNailPhoto = b64str;
+      this.product.thumbnailPhotoFileName = event.files[0].name;
+    });
   }
 
   onThumbnailRemove(event: FileRemoveEvent) {
@@ -56,8 +67,10 @@ export class AddProductComponent implements OnInit {
     newProductForm.thumbnailPhotoFileName = this.product.thumbnailPhotoFileName;
     this.product.modifiedDate = new Date(Date.now());
     this.prodService.postProduct(newProductForm).subscribe({
-      next: (prod: Product) => this.submittedProduct = prod,
-      error: (err: Error) => console.log(err.message)
+      next: (prod: Product) => (
+        (this.submittedProduct = prod), console.log(this.submittedProduct)
+      ),
+      error: (err: Error) => console.log(err.message),
     });
   }
 }
