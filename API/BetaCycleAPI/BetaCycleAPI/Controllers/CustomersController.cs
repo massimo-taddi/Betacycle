@@ -20,6 +20,7 @@ namespace BetaCycleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CustomersController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _awContext;
@@ -37,7 +38,6 @@ namespace BetaCycleAPI.Controllers
         /// </summary>
         /// <returns>admins: A list of all the customers found, customers: a list with a single item containing their information</returns>
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<(int, IEnumerable<Customer>)>> GetCustomers([FromQuery] ProductSpecParams @params)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -95,7 +95,6 @@ namespace BetaCycleAPI.Controllers
         /// <param name="id">The id of the <c>Customer</c> to find</param>
         /// <returns>The customer with the specified id</returns>
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -124,7 +123,6 @@ namespace BetaCycleAPI.Controllers
         /// <param name="customer">The customer record representing the updated information</param>
         /// <returns>The response, which depends on the DB response</returns>
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
             
@@ -160,29 +158,15 @@ namespace BetaCycleAPI.Controllers
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         /// <summary>
-        /// Given a SignUpForm object, posts it to the DB
+        /// Given a Customer object, posts it to the DB
         /// </summary>
-        /// <param name="toInsert">The SignUpForm to insert</param>
+        /// <param name="customer">The Customer object, from which fields CustomerId, SaltHash and rowguid are ignored</param>
         /// <returns>A Task<ActionResult<Customer>> representing the posted customer</returns>
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer([FromBody] SignUpForm toInsert)
+        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            Customer customer = new Customer
-            {
-                Title = toInsert.Title,
-                FirstName = toInsert.FirstName,
-                MiddleName = toInsert.MiddleName,
-                LastName = toInsert.LastName,
-                Suffix = toInsert.Suffix,
-                CompanyName = toInsert.CompanyName,
-                SalesPerson = toInsert.SalesPerson,
-                EmailAddress = toInsert.EmailAddress,
-                Phone = toInsert.Phone,
-                IsMigrated = toInsert.IsMigrated,
-                // CustomerAddresses = toInsert.CustomerAddresses
-            };
             // customer.PasswordHash is NOT supposed to be hashed at this point
-            KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(toInsert.Password);
+            KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(customer.PasswordHash);
             // this is where it gets hashed ^
             customer.PasswordHash = pwData.Key;
             Console.WriteLine(pwData.Value);
