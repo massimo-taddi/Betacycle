@@ -19,8 +19,6 @@ export class Customer {
   isMigrated: boolean = false;
   customerAddresses: CustomerAddress[] = [];
 
-  //public virtual ICollection<SalesOrderHeader> SalesOrderHeaders ();
-
   constructor(
     title: string,
     firstName: string,
