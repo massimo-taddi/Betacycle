@@ -1,44 +1,58 @@
-<div class="w-25" style="margin-right: 10%; padding-top: 5%;">
-    <form class="form-signin">
-        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Registrati</h1>
-        <label for="inputTitle" class="sr-only">Titolo</label>
-        <input type="text" #Title class="form-control" placeholder="Titolo" autofocus="" maxlength="8">
-        
-        <label for="inputFirstName" class="sr-only">Nome</label>
-        <input type="text" #FirstName class="form-control" placeholder="Nome*" required autofocus="" maxlength="50">
-
-        <label for="inputMiddleName" class="sr-only">Secondo Nome</label>
-        <input type="email" #MiddleName class="form-control" placeholder="Secondo Nome" autofocus="" maxlength="50">
-
-        <label for="inputLastName" class="sr-only">Cognome</label>
-        <input type="text" #LastName class="form-control" placeholder="Cognome*" required autofocus="" maxlength="50">
-
-        <label for="inputSuffix" class="sr-only">Suffix</label>
-        <input type="text" #Suffix class="form-control" placeholder="Suffisso" autofocus="" maxlength="10">
-
-        <label for="inputCompany" class="sr-only">Nome Azienda</label>
-        <input type="text" #CompanyName class="form-control" placeholder="Nome Azienda" autofocus="" maxlength="128">
-
-        <label for="inputSalesPerson" class="sr-only">Responsabile vendite</label>
-        <input type="email" #SalesPerson class="form-control" placeholder="Responsabile vendite" autofocus="" maxlength="256">
-
-        <label for="inputEmail" class="sr-only">Email</label>
-        <input type="email" #EmailAddress class="form-control" placeholder="Email*" required autofocus="" maxlength="">
-
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" #Password class="form-control" placeholder="Password*" required>
-
-        <label for="inputPhone" class="sr-only">Phone</label>
-        <input type="tel" #Phone class="form-control" placeholder="Telefono" autofocus="" maxlength="50">
-
-        <div class="checkbox mb-3">
-            <label>
-            <input type="checkbox" value="remember-me" [(ngModel)]="stayLoggedIn" [ngModelOptions]="{standalone:true}"> Rimani collegato
-            </label>
+<div class="w-50 mx-auto" style="margin-right: 10%; padding-top: 100px;">
+    <form class="p-fluid" #signUp="ngForm" (submit)="SignUp(signUp)">
+        <h1 class="p-mb-3">Registrati</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputTitle">Titolo</label>
+                    <input type="text" pInputText class="form-control" placeholder="Titolo" [(ngModel)]="signUpForm.title" maxlength="8" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="inputFirstName">Nome*</label>
+                    <input type="text" pInputText class="form-control" placeholder="Nome*" [(ngModel)]="signUpForm.firstName" required maxlength="50" name="firstName">
+                </div>
+                <div class="form-group">
+                    <label for="inputMiddleName">Secondo Nome</label>
+                    <input type="text" pInputText class="form-control" placeholder="Secondo Nome" [(ngModel)]="signUpForm.middleName" maxlength="50" name="middleName">
+                </div>
+                <div class="form-group">
+                    <label for="inputLastName">Cognome*</label>
+                    <input type="text" pInputText class="form-control" placeholder="Cognome*" [(ngModel)]="signUpForm.lastName" required maxlength="50" name="lastName">
+                </div>
+                <div class="form-group">
+                    <label for="inputPhone">Telefono</label>
+                    <input type="tel" class="form-control" placeholder="Telefono" [(ngModel)]="signUpForm.phone" maxlength="50" name="phone">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputSuffix">Suffisso</label>
+                    <input type="text" pInputText class="form-control" placeholder="Suffisso" [(ngModel)]="signUpForm.suffix" maxlength="10" name="suffix">
+                </div>
+                <div class="form-group">
+                    <label for="inputCompany">Nome Azienda</label>
+                    <input type="text" pInputText class="form-control" placeholder="Nome Azienda" [(ngModel)]="signUpForm.companyName" maxlength="128" name="companyName">
+                </div>
+                <div class="form-group">
+                    <label for="inputSalesPerson">Responsabile vendite</label>
+                    <input type="text" pInputText class="form-control" placeholder="Responsabile vendite" [(ngModel)]="signUpForm.salesPerson" maxlength="256" name="salesPerson">
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail">Email*</label>
+                    <input type="text" pInputText class="form-control" placeholder="Email*" [(ngModel)]="signUpForm.emailAddress" required maxlength="" name="emailAddress">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword">Password*</label>
+                    <p-password [style]="{'height': '38px', 'min-height': '35px'}"  [(ngModel)]="signUpForm.password" placeholder="Password*" [feedback]="true" [toggleMask]="true" name="password"></p-password>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="
-            SignUp(Title.value, FirstName.value, MiddleName.value, LastName.value, Suffix.value, CompanyName.value, SalesPerson.value, EmailAddress.value, Phone.value, Password.value, false, []);
-        ">Sign Up</button>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="stayLoggedIn" binary="true" [ngModelOptions]="{standalone: true}">
+                <label class="form-check-label">Rimani collegato</label>
+            </div>
+        </div>
+        <button class="btn btn-primary mt-3" type="submit">Sign Up</button>
     </form>
 </div>
