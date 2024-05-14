@@ -1,0 +1,19 @@
+<div class="container" style="padding-top: 100px;">
+    <div class="row border rounded pb-2">
+        <div class="col-md-8">
+            <h2>Shopping Basket</h2>
+            <p>Your items:</p>
+            <ul>
+                <li *ngFor="let item of basketItems">
+                    {{ item.productName }} - {{ item.price }} - Quantity: {{ item.quantity }} - Total: {{ item.total }}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h2>Order Summary</h2>
+            <p>Total items: {{ basketItems.length }}</p>
+            <p>Total price: {{ calculateTotalPrice() }}</p>
+            <button pButton type="button" label="Checkout" class="btn btn-primary">Checkout</button>
+        </div>
+    </div>
+</div>
