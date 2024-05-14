@@ -52,7 +52,7 @@ export class CategoryComponent {
       left: 0,
       behavior: 'auto',
     });
-
+    //deve essere un get NCategory
     this.service.getProducts(this.searchParams).subscribe({
       next: (category: any) => {
         this.categories = category.item2;

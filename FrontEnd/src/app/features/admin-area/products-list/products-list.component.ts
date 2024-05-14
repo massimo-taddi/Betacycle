@@ -35,13 +35,8 @@ export class ProductsListComponent {
     this.funzioneProdotti();
   }
   funzioneProdotti() {
-    this.productService.searchParams$.subscribe(
-      (par) => (this.searchParams = par)
-    );
-
-    this.searchParams.pageIndex = 1;
-    this.searchParams.pageSize = 10;
-
+    this.searchParams.search = '';
+    this.searchParams.sort = 'Desc';
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
@@ -54,10 +49,6 @@ export class ProductsListComponent {
   }
 
   changeOutput(event: any) {
-    this.productService.searchParams$.subscribe(
-      (par) => (this.searchParams = par)
-    );
-
     this.searchParams.pageIndex = event.page! + 1;
     this.searchParams.pageSize = event.rows!;
 

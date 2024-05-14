@@ -34,8 +34,8 @@ export class ModelComponent {
     this.funzioneModels();
   }
   funzioneModels() {
-    this.service.searchParams$.subscribe((par) => (this.searchParams = par));
-
+    this.searchParams.search = '';
+    this.searchParams.sort = 'Desc';
     this.service.getNProductModels(this.searchParams).subscribe({
       next: (model: any) => {
         this.modelCount = model.item1;

@@ -35,6 +35,10 @@ namespace BetaCycleAPI.Controllers
             switch (@params.Sort)
             {
                 case "Desc":
+                    if(@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
                     res = await (from product in _context.Products
                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
@@ -45,16 +49,17 @@ namespace BetaCycleAPI.Controllers
                                                 //.Take(@params.PageSize)
                                                 .ToListAsync();
                     productCount = res.Count();
-
-                    
-
                     res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
                 case "Asc":
+                    if (@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
                     res = await (from product in _context.Products
                                  join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
                                  join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                 where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                                 where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search) 
                                  select product).Distinct()
                                                 .OrderBy(p => p.ListPrice)
                                                 //.Skip((@params.PageIndex - 1) * @params.PageSize)                          
@@ -75,7 +80,7 @@ namespace BetaCycleAPI.Controllers
                                                 //.Take(@params.PageSize)
                                                 .ToListAsync();
                     productCount = res.Count();
-
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
 
 
 
@@ -94,7 +99,7 @@ namespace BetaCycleAPI.Controllers
 
 
 
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                    
                     break;
 
                 default:
