@@ -81,3 +81,58 @@
     background-color: white;
     transition: 0.25s ease-in-out;
 }
+
+.bc-support{
+    color:white;
+    text-decoration: none;
+    transition: 0.25s ease-in-out;
+}
+.bc-support:hover{
+    color: #3B82F6;
+    transition: 0.25s ease-in-out;
+}
+
+.bc-review-row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    height: fit-content;
+    margin-top: 25px;
+    /* margin-bottom: 100px; */
+    column-gap: 25px;
+    overflow: hidden;
+}
+.bc-review-card{
+    max-width: 350px;
+    max-height: 300px;
+}
+.bc-card-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: max-content;
+    padding: 25px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+#frame-maps{
+    width: 500px;
+    height: 500px;   
+}
+
+.bc-imgfr{
+    border-radius: 10px;
+    overflow: hidden;
+    width: 500px;
+    height: 500px;
+}
+
+.featurette-divider{
+    margin-top: 120px;
+    margin-bottom: 120px;
+}
+
+.bc-info{
+    color: #1e1e1e;
+}
