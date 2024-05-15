@@ -33,7 +33,7 @@ public partial class ProductCategory
     /// </summary>
     public DateTime ModifiedDate { get; set; }
 
-    public bool Discontinued { get; set; }
+    public bool Discontinued { get; set; } = false;
 
     public virtual ICollection<ProductCategory> InverseParentProductCategory { get; set; } = new List<ProductCategory>();
 

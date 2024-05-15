@@ -15,7 +15,7 @@ public partial class ProductModel
 
     public DateTime ModifiedDate { get; set; }
 
-    public bool Discontinued { get; set; }
+    public bool Discontinued { get; set; } = false;
 
     public virtual ICollection<ProductModelProductDescription> ProductModelProductDescriptions { get; set; } = new List<ProductModelProductDescription>();
 
