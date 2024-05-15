@@ -270,6 +270,7 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasComment("Name of the product.");
+            entity.Property(e => e.OnSale).HasDefaultValue(true);
             entity.Property(e => e.ProductCategoryId)
                 .HasComment("Product is a member of this product category. Foreign key to ProductCategory.ProductCategoryID. ")
                 .HasColumnName("ProductCategoryID");

@@ -127,6 +127,8 @@ public partial class Product
     /// 
     public string? LargePhotoFileName { get; set; }
 
+    public bool OnSale { get; set; }
+
     public virtual ProductCategory? ProductCategory { get; set; }
 
     public virtual ProductModel? ProductModel { get; set; }
