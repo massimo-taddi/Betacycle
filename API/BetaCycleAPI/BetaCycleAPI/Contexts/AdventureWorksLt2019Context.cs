@@ -38,6 +38,10 @@ public partial class AdventureWorksLt2019Context : DbContext
 
     public virtual DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
 
+    public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+    public virtual DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+
     public virtual DbSet<VGetAllCategory> VGetAllCategories { get; set; }
 
     public virtual DbSet<VProductAndDescription> VProductAndDescriptions { get; set; }
@@ -147,12 +151,17 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.Property(e => e.SalesPerson)
                 .HasMaxLength(256)
                 .HasComment("The customer's sales person, an employee of AdventureWorks Cycles.");
+            entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
             entity.Property(e => e.Suffix)
                 .HasMaxLength(10)
                 .HasComment("Surname suffix. For example, Sr. or Jr.");
             entity.Property(e => e.Title)
                 .HasMaxLength(8)
                 .HasComment("A courtesy title. For example, Mr. or Ms.");
+
+            entity.HasOne(d => d.ShoppingCart).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.ShoppingCartId)
+                .HasConstraintName("FK_Customer_ShoppingCart");
         });
 
         modelBuilder.Entity<CustomerAddress>(entity =>
@@ -250,6 +259,7 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.Property(e => e.DiscontinuedDate)
                 .HasComment("Date the product was discontinued.")
                 .HasColumnType("datetime");
+            entity.Property(e => e.LargePhotoFileName).HasMaxLength(50);
             entity.Property(e => e.ListPrice)
                 .HasComment("Selling price.")
                 .HasColumnType("money");
@@ -560,6 +570,42 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.HasOne(d => d.ShipToAddress).WithMany(p => p.SalesOrderHeaderShipToAddresses)
                 .HasForeignKey(d => d.ShipToAddressId)
                 .HasConstraintName("FK_SalesOrderHeader_Address_ShipTo_AddressID");
+        });
+
+        modelBuilder.Entity<ShoppingCart>(entity =>
+        {
+            entity.ToTable("ShoppingCart", "SalesLT");
+
+            entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Rowguid)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("rowguid");
+        });
+
+        modelBuilder.Entity<ShoppingCartItem>(entity =>
+        {
+            entity.ToTable("ShoppingCartItem", "SalesLT");
+
+            entity.Property(e => e.ShoppingCartItemId).HasColumnName("ShoppingCartItemID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.Rowguid)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("rowguid");
+            entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCartItems)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ShoppingCartItem_Product");
+
+            entity.HasOne(d => d.ShoppingCart).WithMany(p => p.ShoppingCartItems)
+                .HasForeignKey(d => d.ShoppingCartId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ShoppingCartItem_ShoppingCart");
         });
 
         modelBuilder.Entity<VGetAllCategory>(entity =>

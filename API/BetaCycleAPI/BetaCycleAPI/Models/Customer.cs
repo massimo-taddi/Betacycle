@@ -101,7 +101,11 @@ public partial class Customer
 
     public bool IsMigrated { get; set; }
 
+    public int? ShoppingCartId { get; set; }
+
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaders { get; set; } = new List<SalesOrderHeader>();
+
+    public virtual ShoppingCart? ShoppingCart { get; set; }
 }
