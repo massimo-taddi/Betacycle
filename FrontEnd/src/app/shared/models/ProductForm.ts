@@ -16,4 +16,5 @@ export class ProductForm {
     modifiedDate: Date = new Date(Date.now());
     largePhoto: string | null = null;
     largePhotoFileName: string | null = null;
+    onSale: boolean = false;
 }

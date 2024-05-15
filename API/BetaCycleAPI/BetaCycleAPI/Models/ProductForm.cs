@@ -88,5 +88,7 @@
         /// Date and time the record was last updated.
         /// </summary>
         public DateTime ModifiedDate { get; set; }
+
+        public bool OnSale { get; set; } = true;
     }
 }

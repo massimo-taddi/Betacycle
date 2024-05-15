@@ -320,14 +320,22 @@ namespace BetaCycleAPI.Controllers
                 DiscontinuedDate = productForm.DiscontinuedDate,
                 ThumbNailPhoto = productForm.ThumbNailPhoto,
                 ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
-                ModifiedDate = DateTime.Now
+                ModifiedDate = DateTime.Now,
+                OnSale = productForm.OnSale
             };
 
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+          _context.Products.Add(product);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
-            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            
         }
 
         // DELETE: api/Products/5

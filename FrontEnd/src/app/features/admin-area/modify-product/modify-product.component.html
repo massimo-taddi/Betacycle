@@ -142,7 +142,7 @@
         [(ngModel)]="product.discontinuedDate"
       />
     </div>
-    <div class="mx-auto">
+    <div class="mx-auto col-10">
       <label for="inputThumbnailPhoto" class="form-label"
         >Immagine di thumbnail</label
       >
@@ -157,6 +157,15 @@
         (onRemove)="onThumbnailRemove($event)"
         chooseLabel="Browse"
       />
+    </div>
+    <div class="col-2">
+      <label for="inputOnSale" class="form-label"
+        >In vendita:</label
+      ><br>
+      <p-inputSwitch
+        id="inputOnSale"
+        name="onSale"
+        [(ngModel)]="product.onSale"/>
     </div>
     <div class="col-12">
       <button

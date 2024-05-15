@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import * as BlobUtil from 'blob-util';
 import { Product } from '../../../shared/models/Product';
 import { ProductCategory } from '../../../shared/models/ProductCategory';
+import { InputSwitch, InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
   selector: 'app-modify-product',
@@ -26,6 +27,7 @@ import { ProductCategory } from '../../../shared/models/ProductCategory';
     DropdownModule,
     FileUploadModule,
     CardModule,
+    InputSwitchModule
   ],
   templateUrl: './modify-product.component.html',
   styleUrl: './modify-product.component.css',

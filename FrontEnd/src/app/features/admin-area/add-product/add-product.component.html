@@ -57,7 +57,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputSize" class="form-label">Dimensioni</label>
+      <label for="inputSize" class="form-label">Dimensioni&nbsp;</label>
       <input
         type="text"
         size="10"
@@ -68,7 +68,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputWeight" class="form-label">Peso</label>
+      <label for="inputWeight" class="form-label">Peso&nbsp;</label>
       <input
         type="number"
         class="form-control"
@@ -78,7 +78,7 @@
       />
     </div>
     <div class="col-md-4">
-      <label for="inputCategory" class="form-label">Categoria</label><br />
+      <label for="inputCategory" class="form-label">Categoria&nbsp;</label><br />
       <p-dropdown
         id="inputCategory"
         [options]="categories"
@@ -142,7 +142,7 @@
         [(ngModel)]="product.discontinuedDate"
       />
     </div>
-    <div class="mx-auto">
+    <div class="mx-auto col-10">
       <label for="inputThumbnailPhoto" class="form-label"
         >Immagine di thumbnail</label
       >
@@ -157,6 +157,15 @@
         (onRemove)="onThumbnailRemove($event)"
         chooseLabel="Browse"
       />
+    </div>
+    <div class="col-2">
+      <label for="inputOnSale" class="form-label"
+        >In vendita:</label
+      ><br>
+      <p-inputSwitch
+        id="inputOnSale"
+        name="onSale"
+        [(ngModel)]="product.onSale"/>
     </div>
     <div class="col-12">
       <button type="submit" class="btn btn-primary mt-3">Aggiungi</button>

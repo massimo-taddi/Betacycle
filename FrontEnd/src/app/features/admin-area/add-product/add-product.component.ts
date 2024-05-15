@@ -15,6 +15,7 @@ import {
 import { Product } from '../../../shared/models/Product';
 import { CardModule } from 'primeng/card';
 import * as BlobUtil from 'blob-util';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
   selector: 'app-add-product',
@@ -25,6 +26,7 @@ import * as BlobUtil from 'blob-util';
     DropdownModule,
     FileUploadModule,
     CardModule,
+    InputSwitchModule
   ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css',
