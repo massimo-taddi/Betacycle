@@ -33,12 +33,10 @@ export class ProductService {
     });
   }
 
-  getNProductCategories(): Observable<any> {
-    var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/products/categories', {
-      headers: header,
-    });
+  getNProductCategories(searchParams: SearchParams): Observable<any> {
+    return this.http.get(
+      `https://localhost:7287/api/Products/Ncategories?PageIndex=${searchParams.pageIndex}&PageSize=${searchParams.pageSize}&Sort=${searchParams.sort}&Search=${searchParams.search}`
+    );
   }
 
   getProductModels(): Observable<any> {
@@ -50,13 +48,8 @@ export class ProductService {
   }
   //work in progress
   getNProductModels(params: SearchParams): Observable<any> {
-    var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.get(
-      `https://localhost:7287/api/Products/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
-      {
-        headers: header,
-      }
+      `https://localhost:7287/api/Products/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
     );
   }
 

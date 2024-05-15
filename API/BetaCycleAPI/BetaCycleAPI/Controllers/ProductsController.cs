@@ -154,34 +154,39 @@ namespace BetaCycleAPI.Controllers
         }
         // GET: api/products/categories
         //Get a number of product categories
-        [Authorize]
         [HttpGet]
         [Route("Ncategories")]
         public async Task<ActionResult<(int,IEnumerable<ProductCategory>)>> GetNproductCategories([FromQuery] ProductSpecParams @params)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             int categoryNumber = 0;
             List<ProductCategory> res = [];
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") 
-                return BadRequest();
-
             switch (@params.Sort)
             {
                 case "Desc":
+                    if (@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
                     res = await (from category in _context.ProductCategories
                                  where category.Name.Contains(@params.Search)
                                  select category).OrderBy(c=>c.Name).ToListAsync();
                     categoryNumber = res.Count();
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
                 case "Asc":
+                    if (@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
                     res = await (from category in _context.ProductCategories
                                  where category.Name.Contains(@params.Search)
                                  select category).OrderByDescending(c => c.Name).ToListAsync();
                     categoryNumber = res.Count();
-                    break;
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                    break;  
+                default:
+                    return BadRequest();
             }
-
             return (categoryNumber,res) ;
         }
 
@@ -201,36 +206,38 @@ namespace BetaCycleAPI.Controllers
 
         //GET:api/products/Nmodels
         //get a number of models
-        [Authorize]
+        
         [HttpGet]
         [Route("Nmodels")]
         public async Task<ActionResult<(int,IEnumerable<ProductModel>)>> GetNProductModels([FromQuery] ProductSpecParams @params)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
             List<ProductModel> productModels = new List<ProductModel>();
             int modelCount = 0;
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
-
-
             switch (@params.Sort)
             {
-                //aggiungere i search
                 case "Desc":
-                    productModels = await _context.ProductModels.OrderBy(product => product.ModifiedDate).ToListAsync();
+                    if (@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
+                    productModels = await _context.ProductModels.Where(product => product.Name.Contains(@params.Search)).OrderBy(product => product.ModifiedDate).ToListAsync();
                     modelCount = productModels.Count();
+                    productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
-                //aggiungere il search
+                
                 case "Asc":
+                    if (@params.Search == null)
+                    {
+                        @params.Search = "";
+                    }
                     productModels = await _context.ProductModels.OrderByDescending(product => product.ModifiedDate).ToListAsync();
                     modelCount = productModels.Count();
+                    productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                     break;
+                default:
+                    return BadRequest();
             }
-            
-
-            
-            productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-            
             return (modelCount,productModels);
         }
         // PUT: api/Products/5

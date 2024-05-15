@@ -30,9 +30,16 @@ export class CategoryComponent {
 
   constructor(private service: ProductService) {}
   ngOnInit() {
-    this.service.getProductCategories().subscribe({
+    this.ShowCategories();
+  }
+  ShowCategories() {
+    //modificare la chiamata a controller
+    this.searchParams.search = '';
+    this.searchParams.sort = 'Desc';
+    this.service.getNProductCategories(this.searchParams).subscribe({
       next: (category: any) => {
-        this.categories = category;
+        this.categories = category.item2;
+        this.categoriesCount = category.item1;
       },
       error: (err: Error) => {
         console.log(err.message);
@@ -40,9 +47,9 @@ export class CategoryComponent {
     });
   }
 
-  //modificare la chiamata a controller
   changeOutput(event: any) {
-    this.service.searchParams$.subscribe((par) => (this.searchParams = par));
+    this.searchParams.search = '';
+    this.searchParams.sort = 'Desc';
 
     this.searchParams.pageIndex = event.page! + 1;
     this.searchParams.pageSize = event.rows!;
@@ -53,8 +60,9 @@ export class CategoryComponent {
       behavior: 'auto',
     });
     //deve essere un get NCategory
-    this.service.getProducts(this.searchParams).subscribe({
+    this.service.getNProductCategories(this.searchParams).subscribe({
       next: (category: any) => {
+        console.log(category);
         this.categories = category.item2;
         this.categoriesCount = category.item1;
       },
