@@ -159,9 +159,6 @@ public partial class AdventureWorksLt2019Context : DbContext
                 .HasMaxLength(8)
                 .HasComment("A courtesy title. For example, Mr. or Ms.");
 
-            entity.HasOne(d => d.ShoppingCart).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.ShoppingCartId)
-                .HasConstraintName("FK_Customer_ShoppingCart");
         });
 
         modelBuilder.Entity<CustomerAddress>(entity =>

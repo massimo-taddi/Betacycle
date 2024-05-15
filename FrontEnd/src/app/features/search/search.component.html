@@ -27,7 +27,8 @@
                   </div>
                   <!-- Product actions-->
                   <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                      <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                        <button class="btn btn-outline-dark mt-auto" (click)="addProductToCart(product)">Add to cart</button>
+                      <!-- add to cart action: takes product as parameter and adds 1 of that item to the shopping cart -->
                   </div>
               </div>
           </div>

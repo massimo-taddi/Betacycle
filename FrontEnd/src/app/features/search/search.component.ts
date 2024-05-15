@@ -11,6 +11,7 @@ import { SearchParams } from '../../shared/models/SearchParams';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { BasketService } from '../../shared/services/basket.service';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -31,10 +32,12 @@ export class SearchComponent implements OnInit {
   products!: Product[];
   searchParams: SearchParams = new SearchParams();
   productCount: number = 0;
+  justAddedProduct: Product | null = null;
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private basketService: BasketService
   ) {}
 
   ngOnInit(): void {
@@ -64,21 +67,30 @@ export class SearchComponent implements OnInit {
       next: (products: any) => {
         this.products = products.item2;
         this.productCount = products.item1;
-        console.log(this.productCount);
-        console.log(this.products);
       },
       error: (err: Error) => {
         console.log(err.message);
       },
     });
   }
-  getParamsFromUrl() {
+  private getParamsFromUrl() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.searchParams.search = params.get('search')!;
       this.searchParams.pageIndex = +params.get('pageIndex')!;
       this.searchParams.pageSize = +params.get('pageSize')!;
       this.searchParams.sort = params.get('sort')!;
       this.fillProducts();
+    });
+  }
+
+  addProductToCart(product: Product) {
+    this.basketService.postBasketItem(product).subscribe({
+      next: (prod: Product) => {
+        this.justAddedProduct = prod;
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      },
     });
   }
 }

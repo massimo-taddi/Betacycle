@@ -13,7 +13,5 @@ public partial class ShoppingCart
 
     public Guid Rowguid { get; set; }
 
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-
     public virtual ICollection<ShoppingCartItem> ShoppingCartItems { get; set; } = new List<ShoppingCartItem>();
 }
