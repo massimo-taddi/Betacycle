@@ -18,7 +18,7 @@
 }
 
 #bcimg-second{
-    background-image: url("/assets/video/biking_video_carousel.gif");
+    /* background-image: url("/assets/video/biking_video_carousel.gif"); */
     background-color: aqua;
 }
 
@@ -135,4 +135,8 @@
 
 .bc-info{
     color: #1e1e1e;
+}
+
+.bc-pbutton{
+    margin-right: 20px;
 }
