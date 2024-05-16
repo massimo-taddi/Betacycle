@@ -13,7 +13,7 @@ namespace BetaCycleAPI
 {
     public partial class RecommendProduct
     {
-        public const string RetrainFilePath =  @"C:\Users\tomto\Desktop\Academy .NET\Betacycle\API\BetaCycleAPI\BetaCycleAPI\Data\aiTrainingData.csv";
+        public const string RetrainFilePath =  @"C:\Users\Betacom\Desktop\GitRepos\Betacycle\API\BetaCycleAPI\BetaCycleAPI\Data\aiTrainingData.csv";
         public const char RetrainSeparatorChar = ';';
         public const bool RetrainHasHeader =  true;
 
@@ -92,7 +92,7 @@ namespace BetaCycleAPI
             // Data process configuration with pipeline data transformations
             var pipeline = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"ProductID",inputColumnName:@"ProductID",addKeyValueAnnotationsAsText:false)      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"CustomerID",inputColumnName:@"CustomerID",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.Recommendation().Trainers.MatrixFactorization(new MatrixFactorizationTrainer.Options(){LabelColumnName=@"pairWeight",MatrixColumnIndexColumnName=@"CustomerID",MatrixRowIndexColumnName=@"ProductID",ApproximationRank=13,LearningRate=0.00965005561179215,NumberOfIterations=390,Quiet=true}))      
+                                    .Append(mlContext.Recommendation().Trainers.MatrixFactorization(new MatrixFactorizationTrainer.Options(){LabelColumnName=@"pairWeight",MatrixColumnIndexColumnName=@"CustomerID",MatrixRowIndexColumnName=@"ProductID",ApproximationRank=127,LearningRate=0.0715940722652043,NumberOfIterations=694,Quiet=true}))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"CustomerID",inputColumnName:@"CustomerID"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"ProductID",inputColumnName:@"ProductID"));
 
