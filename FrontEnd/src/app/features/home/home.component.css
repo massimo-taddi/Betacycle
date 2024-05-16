@@ -140,3 +140,8 @@
 .bc-pbutton{
     margin-right: 20px;
 }
+
+.bc-scolltopbtn{
+    background-color: #687995;
+    border-radius: 10px;
+}

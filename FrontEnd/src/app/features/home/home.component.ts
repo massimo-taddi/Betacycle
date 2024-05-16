@@ -5,8 +5,7 @@ import { TagModule } from 'primeng/tag';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-import { ProductService } from '../../shared/services/product.service';
+import { ScrollTopModule } from 'primeng/scrolltop';import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/Product';
 
 @Component({
@@ -19,6 +18,7 @@ import { Product } from '../../shared/models/Product';
     CarouselModule,
     ButtonModule,
     RouterModule,
+    ScrollTopModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
