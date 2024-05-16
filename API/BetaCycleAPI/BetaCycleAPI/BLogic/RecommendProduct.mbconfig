@@ -1,0 +1,109 @@
+﻿{
+  "Scenario": "Recommendation",
+  "DataSource": {
+    "Type": "TabularFile",
+    "Version": 1,
+    "FilePath": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\Data\\aiTrainingData.csv",
+    "Delimiter": ";",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "CustomerID",
+        "ColumnPurpose": "User",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "ProductID",
+        "ColumnPurpose": "Item",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "pairWeight",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 4
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -60.586591690763115,
+        "RuntimeInSeconds": 15.469,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProductID",
+            "InputColumnName": "ProductID",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "CustomerID",
+            "InputColumnName": "CustomerID",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "pairWeight",
+            "MatrixColumnIndexColumnName": "CustomerID",
+            "MatrixRowIndexColumnName": "ProductID",
+            "ApproximationRank": 13,
+            "LearningRate": 0.0096500556117921528,
+            "NumberOfIterations": 390,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "CustomerID",
+            "InputColumnName": "CustomerID"
+          },
+          "e4": {
+            "OutputColumnName": "ProductID",
+            "InputColumnName": "ProductID"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "MapValueToKey",
+      "e1": "MapValueToKey",
+      "e2": "MatrixFactorization",
+      "e3": "MapKeyToValue",
+      "e4": "MapKeyToValue"
+    },
+    "Schema": "e0 * e1 * e2 * e3 * e4",
+    "MetricName": "RSquared",
+    "ModelFilePath": "C:\\Users\\tomto\\Desktop\\Academy .NET\\Betacycle\\API\\BetaCycleAPI\\BetaCycleAPI\\BLogic\\RecommendProduct.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 4,
+  "TrainingOption": {
+    "Version": 1,
+    "Type": "RecommendationTrainingOption",
+    "TrainingTime": 30,
+    "LabelColumn": "pairWeight",
+    "UserIdColumn": "CustomerID",
+    "ItemIdColumn": "ProductID",
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "TrainValidateSplitValidationOption",
+      "SplitRatio": 0.2
+    }
+  }
+}

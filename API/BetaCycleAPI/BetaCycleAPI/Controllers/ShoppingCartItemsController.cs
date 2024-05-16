@@ -109,6 +109,7 @@ namespace BetaCycleAPI.Controllers
         // POST: api/ShoppingCartItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [ActionName("PostShoppingCartItemAsync")]
         public async Task<ActionResult<ShoppingCartItem>> PostShoppingCartItem(ShoppingCartItem shoppingCartItem)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -138,8 +139,7 @@ namespace BetaCycleAPI.Controllers
             _awContext.ShoppingCartItems.Add(shoppingCartItem);
             await _awContext.SaveChangesAsync();
 
-            // funziona tutto tranne createdatroute
-            return CreatedAtRoute("shoppingcart", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
+            return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
         }
 
         // DELETE: api/ShoppingCartItems/5
