@@ -41,13 +41,20 @@ export class HomeComponent implements OnInit{
 
     FillProducts(){
       //TEST DEL CAROUSEL CON FOR
-      for(this.i=708;this.i< 717;this.i++){
-        this.http.getProductById(this.i).subscribe({
-          next: (data: any) =>{
-            this.products.push(data);
-          }
-        });
-      }
+      // for(this.i=708;this.i< 717;this.i++){
+      //   this.http.getProductById(this.i).subscribe({
+      //     next: (data: any) =>{
+      //       this.products.push(data);
+      //     }
+      //   });
+      // }
+      this.http.getRecommendedProducts().subscribe({
+        next: (data: any) =>{
+          this.products = data;
+        },
+        error: (err: Error) =>{
+          console.log(err);        }
+      })
       console.log(this.products);
     }
 }

@@ -21,6 +21,7 @@ import { PasswordForgotResetComponent } from './core/password-reset/password-for
 import { CategoryComponent } from './features/admin-area/category/category.component';
 import { ModelComponent } from './features/admin-area/model/model.component';
 import { BasketComponent } from './core/basket/basket.component';
+import { ProductPageComponent } from './features/product-page/product-page.component';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,10 @@ export const routes: Routes = [
   {
     path: 'basket',
     component: BasketComponent,
+  },
+  {
+    path: 'product-page',
+    component: ProductPageComponent,
   },
   {
     path: 'personal',

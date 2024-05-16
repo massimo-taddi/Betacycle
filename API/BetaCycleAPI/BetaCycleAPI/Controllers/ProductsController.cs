@@ -241,11 +241,15 @@ namespace BetaCycleAPI.Controllers
             return (modelCount,productModels);
         }
 
+        //GET:api/products/Recommendations
+       //get recommended products
+
         [HttpGet]
         [Route("Recommendations")]
         [Authorize]
         public async Task<ActionResult<List<Product>>> GetRecommendedProducts()
         {
+            //endpoint verificato, arriva qui
             return BadRequest();
         }
 
