@@ -33,19 +33,4 @@
       <HintPath>..\..\..\Libraries\EncryptData.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup Label="Recommend">
-    <None Include="Recommend.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="MLModel">
-    <None Include="MLModel.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="RecommendProduct">
-    <None Include="RecommendProduct.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>

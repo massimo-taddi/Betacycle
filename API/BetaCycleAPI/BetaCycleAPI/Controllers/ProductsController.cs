@@ -240,8 +240,15 @@ namespace BetaCycleAPI.Controllers
             }
             return (modelCount,productModels);
         }
-        // PUT: api/Products/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
+        [HttpGet]
+        [Route("Recommendations")]
+        [Authorize]
+        public async Task<ActionResult<List<Product>>> GetRecommendedProducts()
+        {
+            return BadRequest();
+        }
+
         [Authorize]
         [HttpPut("{id}")]
         
