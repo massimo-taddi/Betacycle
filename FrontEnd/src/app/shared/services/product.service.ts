@@ -58,4 +58,12 @@ export class ProductService {
       }
     );
   }
+
+  getRandomProducts(): Observable<any> {
+    return this.http.get(
+      `https://localhost:7287/api/Products/RandomProducts`,
+
+    );
+  }
+  
 }

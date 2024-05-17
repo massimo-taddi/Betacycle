@@ -178,11 +178,13 @@
     <hr class="featurette-divider" />
 
     <div class="row featurette">
-      <h1>I nostri bestseller...</h1>
+      <h1 *ngIf="isUserLoggedIn; else randomProd">Prodotti per te...</h1>
+      <ng-template #randomProd><h1>Alcuni dei nostri prodotti...</h1></ng-template>
       <p-carousel 
         [value]="products" 
         [numVisible]="3" 
         [numScroll]="3" 
+        [responsiveOptions]="responsiveOptions"
         autoplayInterval="3000">
         <ng-template let-product pTemplate="item">
                 <div class="border-1 surface-border border-round m-2 p-3">
@@ -200,7 +202,7 @@
                     </div>
                       <div class="bc-productcard-footer">
                         <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;"></button>
-                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(product.productId)">Dettagli</button>
+                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="ProductDetails(product.productId)">Dettagli</button>
                       </div>
                     </div>
                 </div>

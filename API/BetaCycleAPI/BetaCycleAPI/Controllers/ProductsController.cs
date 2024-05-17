@@ -191,7 +191,7 @@ namespace BetaCycleAPI.Controllers
         }
         [HttpGet]
         [Route("RandomProducts")]
-        private async Task<List<Product>> RandomProducts()
+        public async Task<List<Product>> RandomProducts()
         {
             List<Product> res = [];
             var allProds = await _context.Products.ToListAsync();

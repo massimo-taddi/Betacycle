@@ -7,6 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { Router, RouterModule } from '@angular/router';
 import { ScrollTopModule } from 'primeng/scrolltop';import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/Product';
+import { LoginComponent } from '../../core/login/login.component';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -18,45 +20,73 @@ import { Product } from '../../shared/models/Product';
     CarouselModule,
     ButtonModule,
     RouterModule,
-    ScrollTopModule
+    ScrollTopModule,
+    LoginComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit{
-  constructor(private http: ProductService, private router: Router){
+  isUserLoggedIn: boolean = false;
+  isUserAdmin: boolean = false;
+
+  constructor(private http: ProductService, private router: Router, private authenticationService: AuthenticationService){
   }
   responsiveOptions : any[]=[
     {
-        breakpoint: '--bs-breakpoint-lg',
+        breakpoint: getComputedStyle(document.body)
+        .getPropertyValue('--bs-breakpoint-lg')
+        .trim(),
         numVisible: 2,
-        numScroll: 3
-    }]
+        numScroll: 2
+    },
+    {
+      breakpoint: getComputedStyle(document.body)
+      .getPropertyValue('--bs-breakpoint-sm')
+      .trim(),
+      numVisible: 1,
+      numScroll: 1
+  }
+  ]
     products: Product[] =[];
-    i: number =0;
 
     ngOnInit(): void{
-      this.FillProducts()
+      this.authenticationService.isLoggedIn$.subscribe(
+        (res) => (this.isUserLoggedIn = res)
+      );
+      if (localStorage.getItem('jwtToken') != null)
+        sessionStorage.setItem('jwtToken', localStorage.getItem('jwtToken')!);
+      this.authenticationService.isAdmin$.subscribe(
+        (res) => (this.isUserAdmin = res)
+      );
+      if(this.isUserLoggedIn)
+        this.FillRecommendProducts();
+      else
+        this.FillRandProducts();
     }
 
-    FillProducts(){
-      //TEST DEL CAROUSEL CON FOR
-      for(this.i=708;this.i< 717;this.i++){
-        this.http.getProductById(this.i).subscribe({
-          next: (data: any) =>{
-            this.products.push(data);
-          }
-        });
-      }
-      // this.http.getRecommendedProducts().subscribe({
-      //   next: (data: any) =>{
-      //     this.products = data;
-      //   },
-      //   error: (err: Error) =>{
-      //     console.log(err);        }
-      // })
+    FillRecommendProducts(){
+      this.http.getRecommendedProducts().subscribe({
+        next: (data: any) =>{
+          this.products = data;
+          console.log(data)
+        },
+        error: (err: Error) =>{
+          console.log(err);        }
+      })
     }
-    productDetails(id: number){
+    ProductDetails(id: number){
       this.router.navigate(['/product-page', id]);
+    }
+
+    FillRandProducts(){
+      this.http.getRandomProducts().subscribe({
+        next: (data: any) =>{
+          this.products = data;
+          console.log(data)
+        },
+        error: (err: Error) =>{
+          console.log(err);        }
+      })
     }
 }
