@@ -53,7 +53,7 @@ namespace BetaCycleAPI
 
         #endregion
 
-        private static string MLNetModelPath = Path.GetFullPath("RecommendProduct.mlnet");
+        private static string MLNetModelPath = Path.GetFullPath("BLogic/RecommendProduct.mlnet");
 
         public static readonly Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(() => CreatePredictEngine(), true);
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -19,10 +20,11 @@ namespace BetaCycleAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _context;
-
-        public ProductsController(AdventureWorksLt2019Context context)
+        private readonly AdventureWorks2019CredentialsContext _credentialsContext;
+        public ProductsController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext)
         {
             _context = context;
+            _credentialsContext = credentialsContext;
         }
 
         // GET: api/Products
@@ -151,12 +153,55 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<ActionResult<List<Product>>> GetRecommendedProducts()
         {
-            //endpoint verificato, arriva qui
-            return BadRequest();
+            List<Product> res = [];
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _context.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+
+            var evaluationScoresMaxHeap = new PriorityQueue<int, float>(new FloatMaxCompare());
+
+            foreach(var prod in await _context.Products.ToListAsync())
+            {
+                if(prod.OnSale)
+                {
+                    var prediction = RecommendProduct.Predict(new RecommendProduct.ModelInput() { CustomerID = tokenCustomerId, ProductID = prod.ProductId });
+                    if(prediction.ProductID != 0F) {
+                        evaluationScoresMaxHeap.Enqueue(prod.ProductId, prediction.Score);
+                    }
+                    else
+                    {
+                        return await randomProducts();
+                    }
+                }
+            }
+            for(int i = 0; i < 9; i++)
+            {
+                res.Add(await _context.Products.FindAsync(evaluationScoresMaxHeap.Dequeue()));
+            }
+            return res;
+        }
+        private class FloatMaxCompare : IComparer<float>
+        {
+            public int Compare(float x, float y) => y.CompareTo(x);
+        }
+        private async Task<List<Product>> randomProducts()
+        {
+            List<Product> res = [];
+            var allProds = await _context.Products.ToListAsync();
+            Random rnd = new Random();
+            for (int i = 0; i < 9; i++)
+            {
+                res.Add(allProds[(int)rnd.Next(allProds.Count)]);
+            }
+            return res;
         }
 
 
-        
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
