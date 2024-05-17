@@ -1,3 +1,22 @@
 .card {
   --bs-card-border-width: none;
 }
+
+.bc-item:hover{
+  border: 1px solid #687995;
+}
+.bc-item{
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+.bc-btn-product{
+  padding: 10px 15px;
+  border-color: #687995;
+}
+.bc-productcard-footer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+}

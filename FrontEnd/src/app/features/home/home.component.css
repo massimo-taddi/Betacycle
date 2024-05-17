@@ -145,3 +145,28 @@
     background-color: #687995;
     border-radius: 10px;
 }
+
+.bc-item{
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+.bc-btn-product{
+    padding: 10px 15px;
+    border-color: #687995;
+}
+.bc-productcard-footer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+}
+.bc-img-container{
+    text-align: center;
+}
+.bc-recom-img{
+    margin: auto;
+    display: block;
+}
+
+

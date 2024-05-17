@@ -12,6 +12,8 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
+import { Router, RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -24,6 +26,7 @@ import { BasketService } from '../../shared/services/basket.service';
     CommonModule,
     PaginatorModule,
     ProgressSpinnerModule,
+    RouterModule
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
@@ -37,7 +40,8 @@ export class SearchComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
-    private basketService: BasketService
+    private basketService: BasketService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,5 +96,9 @@ export class SearchComponent implements OnInit {
         console.log(err.message);
       },
     });
+  }
+
+  productDetails(id: number){
+    this.router.navigate(['/product-page', id]);
   }
 }

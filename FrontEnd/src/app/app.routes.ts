@@ -52,7 +52,7 @@ export const routes: Routes = [
     component: BasketComponent,
   },
   {
-    path: 'product-page',
+    path: 'product-page/:productId',
     component: ProductPageComponent,
   },
   {

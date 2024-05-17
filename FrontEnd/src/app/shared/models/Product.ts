@@ -1,3 +1,4 @@
+import { ProductCategory } from './ProductCategory';
 import { ProductModel } from './ProductModel';
 
 export class Product {
@@ -19,6 +20,8 @@ export class Product {
   rowguid: string = '';
   modifiedDate: Date | null = null;
   productModel: ProductModel | null = null;
+  productCategory: ProductCategory | null = null;
   largePhoto: string = '';
   largePhotoFileName: string = '';
+  onSale: boolean = false;
 }
