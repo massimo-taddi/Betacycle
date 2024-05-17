@@ -22,6 +22,8 @@ import { CategoryComponent } from './features/admin-area/category/category.compo
 import { ModelComponent } from './features/admin-area/model/model.component';
 import { BasketComponent } from './core/basket/basket.component';
 import { ProductPageComponent } from './features/product-page/product-page.component';
+import { ModifyCategoryComponent } from './features/admin-area/modify-category/modify-category.component';
+import { ModifyModelComponent } from './features/admin-area/modify-model/modify-model.component';
 
 export const routes: Routes = [
   {
@@ -117,6 +119,14 @@ export const routes: Routes = [
       {
         path: 'modify-product',
         component: ModifyProductComponent,
+      },
+      {
+        path: 'modify-category',
+        component: ModifyCategoryComponent,
+      },
+      {
+        path: 'modify-model',
+        component: ModifyModelComponent,
       },
     ],
   },
