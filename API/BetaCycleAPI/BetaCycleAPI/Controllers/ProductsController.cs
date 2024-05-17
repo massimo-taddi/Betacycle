@@ -175,7 +175,7 @@ namespace BetaCycleAPI.Controllers
                     }
                     else
                     {
-                        return await randomProducts();
+                        return await RandomProducts();
                     }
                 }
             }
@@ -189,7 +189,9 @@ namespace BetaCycleAPI.Controllers
         {
             public int Compare(float x, float y) => y.CompareTo(x);
         }
-        private async Task<List<Product>> randomProducts()
+        [HttpGet]
+        [Route("RandomProducts")]
+        private async Task<List<Product>> RandomProducts()
         {
             List<Product> res = [];
             var allProds = await _context.Products.ToListAsync();
