@@ -3,15 +3,30 @@
         <div class="col-md-8">
             <h2>Shopping Basket</h2>
             <p>Your items:</p>
-            <ul>
-                <li *ngFor="let item of basketItems">
-                    {{ getProductName(item.productId) }} - {{ getProductPrice(item.productId) }} - Quantity: {{ item.quantity }} - Total: {{ item.quantity * getProductPrice(item.productId) }}
-                </li>
-            </ul>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of basketItemsProductsMap | keyvalue">
+                        <td><img style="width: 100px;" src="data:image/gif;base64, {{item.value.largePhoto}}" alt="..."></td>
+                        <td>{{ item.value.name }}</td>
+                        <td>
+                            <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
+                        </td>
+                        <td>{{ item.key.quantity * item.value.listPrice }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-4">
             <h2>Order Summary</h2>
-            <p>Total items: {{ basketItems.length }}</p>
+            <p>Total items: {{ basketItemsProductsMap.size }}</p>
             <p>Total price: {{ calculateTotalPrice() }}</p>
             <button pButton type="button" label="Checkout" class="btn btn-primary">Checkout</button>
         </div>

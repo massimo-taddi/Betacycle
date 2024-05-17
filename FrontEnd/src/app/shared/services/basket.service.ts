@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ShoppingCartItem } from '../models/ShoppingCartItem';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -12,7 +12,7 @@ export class BasketService {
 
   constructor(private authService: AuthenticationService, private http: HttpClient) { }
 
-  getBasketItems(): ShoppingCartItem[] { 
+  getRemoteBasketItems(): Observable<any> { 
     var isLoggedIn;
     this.authService.isLoggedIn$.subscribe((isLogged) => {
       isLoggedIn = isLogged;
@@ -22,18 +22,12 @@ export class BasketService {
     var items: ShoppingCartItem[] = [];
     if (isLoggedIn) {
       // get basket items from server
-      this.http.get('https://localhost:7287/api/shoppingcart', {headers: header}).subscribe({
-        next: (basketItems: any) => {
-          items = basketItems;
-        },
-        error: (err: Error) => {
-          console.log(err.message);
-        }
-      });
+      return this.http.get('https://localhost:7287/api/shoppingcart', {headers: header});
     } else {
       // get basket items from local storage
+      // ancora da fare
+      return of(items);
     }
-    return items;
    }
 
    postBasketItem(product: Product): Observable<any> {
@@ -45,5 +39,11 @@ export class BasketService {
     item.modifiedDate = new Date(Date.now());
     item.quantity = 1;
     return this.http.post('https://localhost:7287/api/shoppingcart', item, {headers: header});
+   }
+
+   putBasketItem(item: ShoppingCartItem): Observable<any> {
+    var header = new HttpHeaders();
+    this.authService.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.put(`https://localhost:7287/api/shoppingcart/${item.shoppingCartItemId}`, item, {headers: header});
    }
 }

@@ -44,7 +44,7 @@ namespace BetaCycleAPI.Controllers
 
             try
             {
-                var shoppingCartId = _awContext.Customers.Find(tokenCustomerId).ShoppingCartId;
+                var shoppingCartId = _awContext.Customers.Find((int)tokenCustomerId).ShoppingCartId;
                 return await _awContext.ShoppingCartItems.Where(item => item.ShoppingCartId == shoppingCartId).ToListAsync();
             } catch (Exception e)
             {

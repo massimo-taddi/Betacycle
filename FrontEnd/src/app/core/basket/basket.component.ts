@@ -4,46 +4,58 @@ import { ShoppingCartItem } from '../../shared/models/ShoppingCartItem';
 import { BasketService } from '../../shared/services/basket.service';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/Product';
+import { FormsModule, NgModel } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DropdownModule, FormsModule],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.css'
 })
 export class BasketComponent implements OnInit {
-  basketItems: ShoppingCartItem[] = [];
+  basketItemsProductsMap: Map<ShoppingCartItem, Product> = new Map();
+  rangeArray = [...Array(10)].map((_, i) => 1 + i * 1);
 
   constructor(private shoppingCartService: BasketService, private productService: ProductService) { }
 
   ngOnInit() {
-    this.basketItems = this.shoppingCartService.getBasketItems();
+    this.fillBasket();
   }
 
-  calculateTotalPrice() { }
-  getProductName(productId: number): string { 
-    var prodName: string = '';
-    this.productService.getProductById(productId).subscribe({
-      next: (prod: Product) => {
-        prodName = prod.name;
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      }
-    });
-    return prodName;
+  updateQuantity(item: ShoppingCartItem) {
+    this.shoppingCartService.putBasketItem(item);
   }
-  getProductPrice(productId: number): number { 
-    var prodPrice: number = 0;
-    this.productService.getProductById(productId).subscribe({
-      next: (prod: Product) => {
-        prodPrice = prod.listPrice;
+
+  private fillBasket() {
+    this.shoppingCartService.getRemoteBasketItems().subscribe({
+      next: (items: ShoppingCartItem[]) => {
+        var basketItems = items;
+        basketItems.forEach((item) => {
+          this.productService.getProductById(item.productId).subscribe({
+            next: (product: Product) => {
+              this.basketItemsProductsMap.set(item, product);
+            },
+            error: (err: Error) => {
+              console.log(err.message);
+            }
+          });
+        });
       },
       error: (err: Error) => {
         console.log(err.message);
       }
     });
-    return prodPrice;
+    
+
+  }
+
+  calculateTotalPrice() { 
+    var totalPrice = 0;
+    this.basketItemsProductsMap.forEach((product, item) => {
+      totalPrice += (product.listPrice * item.quantity);
+    });
+    return totalPrice;
   }
 }
