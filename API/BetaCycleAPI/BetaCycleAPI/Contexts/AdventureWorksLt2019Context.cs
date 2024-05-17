@@ -205,7 +205,6 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.Property(e => e.ErrorLogId)
                 .HasComment("Primary key for ErrorLog records.")
                 .HasColumnName("ErrorLogID");
-            entity.Property(e => e.ErrorLine).HasComment("The line number at which the error occurred.");
             entity.Property(e => e.ErrorMessage)
                 .HasMaxLength(4000)
                 .HasComment("The message text of the error that occurred.");
@@ -222,17 +221,6 @@ public partial class AdventureWorksLt2019Context : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasComment("The date and time at which the error occurred.")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Ipaddress)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("IPAddress");
-            entity.Property(e => e.Osdevice)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("OSDevice");
-            entity.Property(e => e.UserName)
-                .HasMaxLength(8)
-                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Product>(entity =>
