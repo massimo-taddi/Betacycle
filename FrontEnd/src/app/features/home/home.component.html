@@ -187,8 +187,8 @@
         <ng-template let-product pTemplate="item">
                 <div class="border-1 surface-border border-round m-2 p-3">
                     <div class="mb-3">
-                        <div class="relative mx-auto">
-                          <img style="max-width: fit-content;" class="card-img-top" src="data:image/gif;base64, {{product.largePhoto}}" alt="{{product.largePhotoFileName}}">
+                        <div class="relative mx-auto bc-img-container">
+                          <img style="max-width: fit-content;" class="bc-recom-img card-img-top" src="data:image/gif;base64, {{product.largePhoto}}" alt="{{product.largePhotoFileName}}">
                         </div>
                     </div>
                     <div class="mb-3 font-medium">
@@ -198,10 +198,10 @@
                     <div class="mt-0 font-semibold text-xl">
                         {{ '$' + product.listPrice }}
                     </div>
-                        <div>
-                            <p-button class="bc-pbutton" severity="secondary" [outlined]="true" label="Dettagli" />
-                            <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
-                        </div>
+                      <div class="bc-productcard-footer">
+                        <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;"></button>
+                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(product.productId)">Dettagli</button>
+                      </div>
                     </div>
                 </div>
         </ng-template>

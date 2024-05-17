@@ -12,7 +12,7 @@
 <section class="py-5">
   <div class="container px-4 px-lg-5 mt-5">
       <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" *ngIf=" products!=null; else spinner">
-          <div class="col mb-5" *ngFor="let product of products">
+          <div class="col mb-5 bc-item" *ngFor="let product of products">
               <div class="card h-100">
                   <!-- Product image-->
                   <img class="card-img-top" src="data:image/gif;base64, {{product.largePhoto}}" alt="...">
@@ -26,8 +26,9 @@
                       </div>
                   </div>
                   <!-- Product actions-->
-                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <button class="btn btn-outline-dark mt-auto" (click)="addProductToCart(product)">Add to cart</button>
+                  <div class="card-footer bc-productcard-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;" (click)="addProductToCart(product)"></button>
+                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(product.productId)">Dettagli</button>
                       <!-- add to cart action: takes product as parameter and adds 1 of that item to the shopping cart -->
                   </div>
               </div>
