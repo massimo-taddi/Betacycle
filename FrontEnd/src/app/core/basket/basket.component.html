@@ -19,7 +19,7 @@
                         <td>
                             <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
                         </td>
-                        <td>{{ item.key.quantity * item.value.listPrice }}</td>
+                        <td>${{ item.key.quantity * item.value.listPrice }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -27,7 +27,7 @@
         <div class="col-md-4">
             <h2>Order Summary</h2>
             <p>Total items: {{ basketItemsProductsMap.size }}</p>
-            <p>Total price: {{ calculateTotalPrice() }}</p>
+            <p>Total price: ${{ calculateTotalPrice() | number: '1.0-2' }}</p>
             <button pButton type="button" label="Checkout" class="btn btn-primary">Checkout</button>
         </div>
     </div>

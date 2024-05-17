@@ -18,8 +18,6 @@ public partial class ErrorLog
     /// </summary>
     public DateTime ErrorTime { get; set; }
 
-    public string? UserName { get; set; }
-
     /// <summary>
     /// The error number of the error that occurred.
     /// </summary>
@@ -41,18 +39,9 @@ public partial class ErrorLog
     public string? ErrorProcedure { get; set; }
 
     /// <summary>
-    /// The line number at which the error occurred.
-    /// </summary>
-    public int? ErrorLine { get; set; }
-
-    /// <summary>
     /// The message text of the error that occurred.
     /// </summary>
     public string ErrorMessage { get; set; } = null!;
-
-    public string? Ipaddress { get; set; }
-
-    public string? Osdevice { get; set; }
 
     public string? ErrorSource { get; set; }
 }

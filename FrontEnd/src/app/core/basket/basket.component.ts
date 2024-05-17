@@ -25,7 +25,11 @@ export class BasketComponent implements OnInit {
   }
 
   updateQuantity(item: ShoppingCartItem) {
-    this.shoppingCartService.putBasketItem(item);
+    this.shoppingCartService.putBasketItem(item).subscribe({
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
   }
 
   private fillBasket() {
@@ -51,7 +55,7 @@ export class BasketComponent implements OnInit {
 
   }
 
-  calculateTotalPrice() { 
+  calculateTotalPrice(): number { 
     var totalPrice = 0;
     this.basketItemsProductsMap.forEach((product, item) => {
       totalPrice += (product.listPrice * item.quantity);
