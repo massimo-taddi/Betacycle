@@ -17,6 +17,8 @@ import * as BlobUtil from 'blob-util';
 import { Product } from '../../../shared/models/Product';
 import { ProductCategory } from '../../../shared/models/ProductCategory';
 import { InputSwitch, InputSwitchModule } from 'primeng/inputswitch';
+import { CategoryService } from '../../../shared/services/category.service';
+import { ModelService } from '../../../shared/services/model.service';
 
 @Component({
   selector: 'app-modify-product',
@@ -27,7 +29,7 @@ import { InputSwitch, InputSwitchModule } from 'primeng/inputswitch';
     DropdownModule,
     FileUploadModule,
     CardModule,
-    InputSwitchModule
+    InputSwitchModule,
   ],
   templateUrl: './modify-product.component.html',
   styleUrl: './modify-product.component.css',
@@ -38,7 +40,12 @@ export class ModifyProductComponent {
   models: ProductModel[] = [];
   updateProduct: Product | null = null;
   uploadFiles: any[] = [];
-  constructor(private prodService: ProductService, private router: Router) {}
+  constructor(
+    private prodService: ProductService,
+    private router: Router,
+    private categoryService: CategoryService,
+    private modelService: ModelService
+  ) {}
   modifyId: number = 0;
   ngOnInit() {
     const sessionStorageProductId: string | null =
@@ -62,12 +69,12 @@ export class ModifyProductComponent {
       );
     }
     //trova tutte le categorie di prodotti
-    this.prodService.getProductCategories().subscribe({
+    this.categoryService.getProductCategories().subscribe({
       next: (categories: ProductCategory[]) => (this.categories = categories),
       error: (err: Error) => console.log(err.message),
     });
     //trova tutti i modelli di un prodotto
-    this.prodService.getProductModels().subscribe({
+    this.modelService.getProductModels().subscribe({
       next: (models: ProductModel[]) => (this.models = models),
       error: (err: Error) => console.log(err.message),
     });

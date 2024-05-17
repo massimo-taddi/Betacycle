@@ -1,1 +1,28 @@
-<p>modify-category works!</p>
+<div class="modelContainer">
+  <div class="card flex justify-content-center">
+    <p-card
+      header="{{ model.name }}"
+      subheader="{{ model.modifiedDate }}"
+      [style]="{ width: '360px' }"
+    >
+      <p>
+        <!-- DESCRIPTION PRODUCT -->
+      </p>
+
+      <ng-template pTemplate="footer">
+        <div
+          class="flex gap-3 mt-1"
+          style="display: flex; justify-content: space-between; width: 100%"
+        >
+          <p-button
+            label="Modify"
+            class="w-full"
+            styleClass="w-full"
+            (onClick)="Update()"
+            routerLink="../modify-model"
+          />
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

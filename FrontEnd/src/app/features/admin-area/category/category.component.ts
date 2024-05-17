@@ -6,8 +6,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { ProductCategory } from '../../../shared/models/ProductCategory';
-
+import { RouterModule } from '@angular/router';
 import { ProductService } from '../../../shared/services/product.service';
+import { CategoryService } from '../../../shared/services/category.service';
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -17,6 +18,7 @@ import { ProductService } from '../../../shared/services/product.service';
     FormsModule,
     ButtonModule,
     CommonModule,
+    RouterModule,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.css',
@@ -28,7 +30,7 @@ export class CategoryComponent {
   rows: number = 10;
   categoriesCount: number = 0;
 
-  constructor(private service: ProductService) {}
+  constructor(private service: CategoryService) {}
   ngOnInit() {
     this.ShowCategories();
   }
@@ -70,5 +72,10 @@ export class CategoryComponent {
         console.log(err.message);
       },
     });
+  }
+  NavigateModify(categoryId: number) {
+    let stringCategoryID = categoryId.toString();
+
+    sessionStorage.setItem('ModifyIdCategory', stringCategoryID);
   }
 }

@@ -25,34 +25,6 @@ export class ProductService {
     );
   }
 
-  getProductCategories(): Observable<any> {
-    var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/products/categories', {
-      headers: header,
-    });
-  }
-
-  getNProductCategories(searchParams: SearchParams): Observable<any> {
-    return this.http.get(
-      `https://localhost:7287/api/Products/Ncategories?PageIndex=${searchParams.pageIndex}&PageSize=${searchParams.pageSize}&Sort=${searchParams.sort}&Search=${searchParams.search}`
-    );
-  }
-
-  getProductModels(): Observable<any> {
-    var header = new HttpHeaders();
-    this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/products/models', {
-      headers: header,
-    });
-  }
-  //work in progress
-  getNProductModels(params: SearchParams): Observable<any> {
-    return this.http.get(
-      `https://localhost:7287/api/Products/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
-    );
-  }
-
   getProductById(id: number): Observable<any> {
     return this.http.get(`https://localhost:7287/api/Products/${id}`);
   }
@@ -76,7 +48,7 @@ export class ProductService {
     );
   }
 
-  getRecommendedProducts(): Observable<any>{
+  getRecommendedProducts(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.get(

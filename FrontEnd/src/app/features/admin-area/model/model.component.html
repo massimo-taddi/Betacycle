@@ -1,4 +1,4 @@
-<div class="productContainer">
+<div class="modelContainer">
   <div class="card flex justify-content-center" *ngFor="let model of models">
     <p-card
       header="{{ model.name }}"
@@ -15,12 +15,12 @@
           style="display: flex; justify-content: space-between; width: 100%"
         >
           <p-button
-            label="Delete"
-            severity="secondary"
+            label="Modify"
             class="w-full"
             styleClass="w-full"
+            (onClick)="SetLocalStorage(model.productModelId)"
+            routerLink="../modify-model"
           />
-          <p-button label="Modify" class="w-full" styleClass="w-full" />
         </div>
       </ng-template>
     </p-card>

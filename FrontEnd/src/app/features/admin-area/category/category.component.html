@@ -18,12 +18,12 @@
           style="display: flex; justify-content: space-between; width: 100%"
         >
           <p-button
-            label="Delete"
-            severity="secondary"
+            label="Modify"
             class="w-full"
             styleClass="w-full"
+            (onClick)="NavigateModify(category.productCategoryId)"
+            routerLink="../modify-category"
           />
-          <p-button label="Modify" class="w-full" styleClass="w-full" />
         </div>
       </ng-template>
     </p-card>

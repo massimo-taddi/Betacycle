@@ -7,6 +7,8 @@ import { CardModule } from 'primeng/card';
 import { Button, ButtonModule } from 'primeng/button';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
+import { RouterModule } from '@angular/router';
+import { ModelService } from '../../../shared/services/model.service';
 @Component({
   selector: 'app-model',
   standalone: true,
@@ -17,6 +19,7 @@ import { SearchParams } from '../../../shared/models/SearchParams';
     PaginatorModule,
     FormsModule,
     ButtonModule,
+    RouterModule,
   ],
   templateUrl: './model.component.html',
   styleUrl: './model.component.css',
@@ -28,7 +31,7 @@ export class ModelComponent {
   rows: number = 10;
   modelCount: number = 0;
 
-  constructor(private service: ProductService) {}
+  constructor(private service: ModelService) {}
 
   ngOnInit() {
     this.funzioneModels();
@@ -65,4 +68,8 @@ export class ModelComponent {
     });
   }
   onPageChange(event: PaginatorState) {}
+  SetLocalStorage(id: number) {
+    let stringModifyId = id.toString();
+    sessionStorage.setItem('ModifyModelId', stringModifyId);
+  }
 }

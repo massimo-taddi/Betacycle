@@ -16,6 +16,8 @@ import { Product } from '../../../shared/models/Product';
 import { CardModule } from 'primeng/card';
 import * as BlobUtil from 'blob-util';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CategoryService } from '../../../shared/services/category.service';
+import { ModelService } from '../../../shared/services/model.service';
 
 @Component({
   selector: 'app-add-product',
@@ -26,7 +28,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DropdownModule,
     FileUploadModule,
     CardModule,
-    InputSwitchModule
+    InputSwitchModule,
   ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css',
@@ -36,14 +38,18 @@ export class AddProductComponent implements OnInit {
   categories: ProductCategory[] = [];
   models: ProductModel[] = [];
   submittedProduct: Product | null = null;
-  constructor(private prodService: ProductService) {}
+  constructor(
+    private prodService: ProductService,
+    private categoryService: CategoryService,
+    private modelService: ModelService
+  ) {}
 
   ngOnInit(): void {
-    this.prodService.getProductCategories().subscribe({
+    this.categoryService.getProductCategories().subscribe({
       next: (categories: ProductCategory[]) => (this.categories = categories),
       error: (err: Error) => console.log(err.message),
     });
-    this.prodService.getProductModels().subscribe({
+    this.modelService.getProductModels().subscribe({
       next: (models: ProductModel[]) => {
         this.models = models;
       },

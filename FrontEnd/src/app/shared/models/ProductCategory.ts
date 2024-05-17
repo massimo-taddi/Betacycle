@@ -1,6 +1,6 @@
 export class ProductCategory {
-  productCategoryid: number = 0;
-  parentProductCategoryid: number = 0;
+  productCategoryId: number = 0;
+  parentProductCategoryId: number = 0;
   name: string = '';
   rowguid: string = '';
   modifiedDate: Date | null = null;

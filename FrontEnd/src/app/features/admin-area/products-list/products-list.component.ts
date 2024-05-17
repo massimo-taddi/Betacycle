@@ -8,7 +8,7 @@ import { ProductService } from '../../../shared/services/product.service';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { CardModule } from 'primeng/card';
-import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-products-list',
   standalone: true,
