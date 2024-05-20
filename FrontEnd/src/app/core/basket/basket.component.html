@@ -1,3 +1,4 @@
+<p-toast/>
 <div class="container" style="padding-top: 100px;">
     <div class="row border rounded pb-2">
         <div class="col-md-8">
@@ -10,6 +11,7 @@
                         <th>Name</th>
                         <th>Quantity</th>
                         <th>Total</th>
+                        <th></th> <!-- Add a new column for the delete button -->
                     </tr>
                 </thead>
                 <tbody>
@@ -20,6 +22,9 @@
                             <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
                         </td>
                         <td>${{ (item.key.quantity * item.value.listPrice) | number: '1.0-2' }}</td>
+                        <td>
+                            <button pButton type="button" class="btn btn-danger pi pi-trash" (click)="deleteItem(item.key)"></button>
+                        </td> <!-- Add the delete button with the pi p-delete icon -->
                     </tr>
                 </tbody>
             </table>

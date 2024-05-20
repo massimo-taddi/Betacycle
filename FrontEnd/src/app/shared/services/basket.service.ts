@@ -46,4 +46,16 @@ export class BasketService {
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.put(`https://localhost:7287/api/shoppingcart/${item.shoppingCartItemId}`, item, {headers: header});
    }
+
+   isItemInBasket(productId: number): Observable<any> {
+    var header = new HttpHeaders();
+    this.authService.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get(`https://localhost:7287/api/shoppingcart/isproductadded?productId=${productId}`, {headers: header});
+   }
+
+   deleteBasketItem(itemId: number): Observable<any> {
+    var header = new HttpHeaders();
+    this.authService.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.delete(`https://localhost:7287/api/shoppingcart/${itemId}`, {headers: header});
+   }
 }

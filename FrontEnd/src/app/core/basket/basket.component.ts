@@ -6,19 +6,22 @@ import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/Product';
 import { FormsModule, NgModel } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [CommonModule, DropdownModule, FormsModule],
+  imports: [CommonModule, DropdownModule, FormsModule, ToastModule],
   templateUrl: './basket.component.html',
-  styleUrl: './basket.component.css'
+  styleUrl: './basket.component.css',
+  providers: [MessageService]
 })
 export class BasketComponent implements OnInit {
   basketItemsProductsMap: Map<ShoppingCartItem, Product> = new Map();
   rangeArray = [...Array(10)].map((_, i) => 1 + i * 1);
 
-  constructor(private shoppingCartService: BasketService, private productService: ProductService) { }
+  constructor(private shoppingCartService: BasketService, private productService: ProductService, private messageService: MessageService) { }
 
   ngOnInit() {
     this.fillBasket();
@@ -51,8 +54,22 @@ export class BasketComponent implements OnInit {
         console.log(err.message);
       }
     });
-    
+  }
 
+  deleteItem(item: ShoppingCartItem) {
+    this.shoppingCartService.deleteBasketItem(item.productId).subscribe({
+      next: () => {
+        this.basketItemsProductsMap.delete(item);
+        this.showItemDeletedMessage();
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
+  }
+
+  showItemDeletedMessage() {
+    this.messageService.add({ severity: 'success', detail: 'Item deleted' });
   }
 
   calculateTotalPrice(): number { 

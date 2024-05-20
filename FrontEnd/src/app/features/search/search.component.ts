@@ -13,6 +13,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
 import { Router, RouterModule } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search',
@@ -26,10 +28,12 @@ import { Router, RouterModule } from '@angular/router';
     CommonModule,
     PaginatorModule,
     ProgressSpinnerModule,
-    RouterModule
+    RouterModule,
+    ToastModule
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
+  providers: [MessageService]
 })
 export class SearchComponent implements OnInit {
   products!: Product[];
@@ -41,7 +45,8 @@ export class SearchComponent implements OnInit {
     private productService: ProductService,
     private route: ActivatedRoute,
     private basketService: BasketService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -88,17 +93,46 @@ export class SearchComponent implements OnInit {
   }
 
   addProductToCart(product: Product) {
-    this.basketService.postBasketItem(product).subscribe({
-      next: (prod: Product) => {
-        this.justAddedProduct = prod;
+    let itemExists = false;
+    this.basketService.isItemInBasket(product.productId).subscribe({
+      next: (res: any) => {
+        itemExists = res;
+        if (itemExists) {
+          this.showError();
+        } else {
+          this.basketService.postBasketItem(product).subscribe({
+            next: (prod: Product) => {
+              this.justAddedProduct = prod;
+            },
+            error: (err: Error) => {
+              console.log(err.message);
+            },
+          });
+          this.showAdded();
+        }
       },
       error: (err: Error) => {
         console.log(err.message);
       },
     });
+    
   }
 
   productDetails(id: number){
     this.router.navigate(['/product-page', id]);
+  }
+
+  showAdded() {
+    this.messageService.add({
+      severity: 'success',
+      detail: 'Added product to cart'
+    });
+  }
+
+  showError() {
+    this.messageService.add({
+      severity: 'error',
+      detail: 'This product is already in your cart'
+    });
   }
 }

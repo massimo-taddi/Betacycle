@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Versioning;
 using BetaCycleAPI.BLogic;
+using Microsoft.CodeAnalysis;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace BetaCycleAPI.Controllers
             _credentialsContext = credentialsContext;
         }
 
-        // GET: api/ShoppingCartItems
+        // GET: api/ShoppingCart
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShoppingCartItem>>> GetShoppingCartItems()
         {
@@ -54,21 +55,36 @@ namespace BetaCycleAPI.Controllers
             }
         }
 
-        //// GET: api/ShoppingCartItems/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ShoppingCartItem>> GetShoppingCartItem(int id)
-        //{
-        //    var shoppingCartItem = await _awContext.ShoppingCartItems.FindAsync(id);
+        // GET: api/ShoppingCart/isproductadded
+        [HttpGet]
+        [Route("isproductadded")]
+        public async Task<ActionResult<bool>> isProductAdded(int productId)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
 
-        //    if (shoppingCartItem == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
 
-        //    return shoppingCartItem;
-        //}
+            var cartId = (await _awContext.Customers.FindAsync((int)tokenCustomerId)).ShoppingCartId;
+            if (cartId == null)
+            {
+                return false;
+            }
 
-        // PUT: api/ShoppingCartItems/5
+            try
+            {
+                return await _awContext.ShoppingCartItems.Where(item => item.ProductId == productId && item.ShoppingCartId == cartId).AnyAsync();
+            }catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+        }
+
+        // PUT: api/ShoppingCart/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShoppingCartItem(int id, ShoppingCartItem shoppingCartItem)
@@ -108,7 +124,7 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/ShoppingCartItems
+        // POST: api/ShoppingCart
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ActionName("PostShoppingCartItemAsync")]
@@ -151,18 +167,25 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
         }
 
-        // DELETE: api/ShoppingCartItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShoppingCartItem(int id)
+        // DELETE: api/ShoppingCart/5
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteShoppingCartItem(int productId)
         {
-            var shoppingCartItem = await _awContext.ShoppingCartItems.FindAsync(id);
-            if (shoppingCartItem == null)
-            {
-                return NotFound();
-            }
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   (int)_credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            var customer = await _awContext.Customers.FindAsync(tokenCustomerId);
             try
             {
-                _awContext.ShoppingCartItems.Remove(shoppingCartItem);
+                var productsToRemove = await _awContext.ShoppingCartItems.Where(item => item.ProductId == productId && item.ShoppingCartId == customer.ShoppingCartId).ToListAsync();
+                foreach(var prod in productsToRemove)
+                {
+                    _awContext.ShoppingCartItems.Remove(prod);
+                }
                 await _awContext.SaveChangesAsync();
             }catch(Exception e)
             {
