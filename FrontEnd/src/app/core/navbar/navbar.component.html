@@ -53,7 +53,7 @@
   styleClass="bg-light p-sidebar-mask"
   [modal]="true"
 >
-  <h3>Right Sidebar</h3>
+  <h3 style="text-align: center; margin-bottom: 50px;">Menu</h3>
   <form
     class="d-flex ms-auto me-auto"
     onsubmit="return false;"
@@ -78,17 +78,17 @@
     </button>
   </form>
   <ul>
-    <li *ngIf="!isUserLoggedIn" class="nav-item">
+    <li *ngIf="!isUserLoggedIn" class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/login" (click)="sidebarVisible = false"
         >Login</a
       >
     </li>
-    <li *ngIf="!isUserLoggedIn" class="nav-item">
+    <li *ngIf="!isUserLoggedIn" class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/signup" (click)="sidebarVisible = false"
         >Sign up</a
       >
     </li>
-    <li *ngIf="isUserLoggedIn && !isUserAdmin" class="nav-item">
+    <li *ngIf="isUserLoggedIn && !isUserAdmin" class="nav-item bc-nav-item">
       <a
         class="nav-link"
         routerLink="/personal/myinfo"
@@ -96,12 +96,12 @@
         >Area personale</a
       >
     </li>
-    <li *ngIf="isUserAdmin" class="nav-item">
+    <li *ngIf="isUserAdmin" class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/admin" (click)="sidebarVisible = false"
         >Zona Amministratori</a
       >
     </li>
-    <li *ngIf="isUserLoggedIn" class="nav-item">
+    <li *ngIf="isUserLoggedIn" class="nav-item bc-nav-item">
       <a
         class="nav-link"
         routerLink="/home"
@@ -109,17 +109,12 @@
         >Logout</a
       >
     </li>
-    <li class="nav-item">
+    <li class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/search" (click)="sidebarVisible = false"
         >RicercaApprofondita</a
       >
     </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/product-page" (click)="sidebarVisible = false"
-        >Product page test</a
-      >
-    </li>
-    <li class="nav-item">
+    <li class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/admin" (click)="sidebarVisible = false"
         >AreaAdmin</a
       >

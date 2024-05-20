@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace BetaCycleAPI.Controllers
 {
     [Route("app/[controller]")]
@@ -37,13 +38,16 @@ namespace BetaCycleAPI.Controllers
         public async Task<IActionResult> GenerateToken(LoginCredentials loginCredentials)
         {
             // qui si controlla sul db
+            string clientIp = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
             var dbCheckResult = await CredentialsDBChecker.ValidateLogin(loginCredentials.Username.ToLower(), loginCredentials.Password);
             switch(dbCheckResult)
             {
                 case DBCheckResponse.FoundMigrated:
+                    LogTracer.AddLog(loginCredentials.Username, "LOGIN", clientIp, DateTime.Now);
                     var token = generateJwtToken(loginCredentials.Username, false);
                     return Ok(new { token });
                 case DBCheckResponse.FoundAdmin:
+                    LogTracer.AddLog(loginCredentials.Username, "LOGIN", clientIp, DateTime.Now);
                     token = generateJwtToken(loginCredentials.Username, true);
                     return Ok(new { token });
                 case DBCheckResponse.FoundNotMigrated:

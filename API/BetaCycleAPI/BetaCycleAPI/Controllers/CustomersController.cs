@@ -93,8 +93,7 @@ namespace BetaCycleAPI.Controllers
             }
             return (customerCount,res);
         }
-
-
+     
         // GET: api/Customers/5
         /// <summary>
         /// Get a <c>Customer</c> object with the specified id
