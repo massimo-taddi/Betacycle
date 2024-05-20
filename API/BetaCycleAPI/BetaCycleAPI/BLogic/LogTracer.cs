@@ -40,6 +40,10 @@ namespace BetaCycleAPI.BLogic
                 {
                     Console.WriteLine("Errore durante l'inserimento dei dati: " + ex.Message);
                 }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -67,6 +71,10 @@ namespace BetaCycleAPI.BLogic
                 catch (Exception ex)
                 {
                     throw;
+                }
+                finally
+                {
+                    connection.Close();
                 }
             }
 
