@@ -1,9 +1,17 @@
 <div class="modelContainer">
   <div class="card flex justify-content-center">
     <p-card [style]="{ width: '360px' }">
-      <p>ModelName<input type="text" pInputText [(ngModel)]="model.name" /></p>
-
-      Discontinued<p-inputSwitch [(ngModel)]="model.discontinued" />
+      <p>
+        Parent Product Category<p-inputNumber
+          type="text"
+          [(ngModel)]="category.parentProductCategoryId"
+          placeholder="its a macro Category"
+        />
+      </p>
+      <p>
+        CategoryName<input type="text" pInputText [(ngModel)]="category.name" />
+      </p>
+      Discontinued<p-inputSwitch [(ngModel)]="category.discontinued" />
 
       <ng-template pTemplate="footer">
         <div
@@ -14,8 +22,7 @@
             label="Modify"
             class="w-full"
             styleClass="w-full"
-            (onClick)="Put()"
-            routerLink="../modify-model"
+            (onClick)="Post()"
           />
         </div>
       </ng-template>

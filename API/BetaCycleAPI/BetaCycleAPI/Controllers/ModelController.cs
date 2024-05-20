@@ -1,4 +1,5 @@
-﻿using BetaCycleAPI.Contexts;
+﻿using BetaCycleAPI.BLogic.ObjectValidator;
+using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -18,20 +19,17 @@ namespace BetaCycleAPI.Controllers
         {
             _context = context;
         }
-        // GET: api/products/models
+        // GET: api/Model/models
 
-        [Authorize]
+        
         [HttpGet]
-        [Route("models")]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
             return await _context.ProductModels.ToListAsync();
         }
 
-        //GET:api/products/Nmodels
+        //GET:api/Model/Nmodels
         //get a number of models
 
         [HttpGet]
@@ -66,6 +64,125 @@ namespace BetaCycleAPI.Controllers
                     return BadRequest();
             }
             return (modelCount, productModels);
+        }
+        //GET: api/Model/SingleModel
+        //get single category
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductModel>> GetSingleModel(int id)
+        {
+            var category = await _context.ProductModels.FindAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return Ok(category);
+        }
+
+        //PUT:api/Model/ModifyModel/{id}
+        //updates a single record in the product model table
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> ModifyModel(int id,string name,bool discontinued)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+            
+            ProductModel getRowguidProductModel = await _context.ProductModels.FindAsync(id);
+            _context.ProductModels.Entry(getRowguidProductModel).State = EntityState.Detached;
+
+            ProductModel res = new ProductModel()
+            {
+                ProductModelId = id,
+                Name = name,
+                ModifiedDate = DateTime.Now,
+                Rowguid = getRowguidProductModel.Rowguid,
+                Discontinued = discontinued,
+                
+            };
+            _context.Entry(res).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                Console.WriteLine("errore try modifica modello");
+            }
+
+            return NoContent();
+        }
+
+
+        //POST:
+        //it insert a record in the productModel Table
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult>PostAModel( string name, bool discontinued)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+            ProductModel res = new ProductModel()
+            {
+                
+                Name = name,
+                ModifiedDate = DateTime.Now,
+                Discontinued = discontinued,
+
+            };
+            _context.ProductModels.Add(res);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return NoContent();
+        }
+        //DELETE
+        //Delete a single record from the ProductModel Table
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+            var res= await _context.ProductModels.FindAsync(id);
+
+
+            _context.ProductModels.Remove(res);
+            try
+            {
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return NoContent();
         }
     }
 }

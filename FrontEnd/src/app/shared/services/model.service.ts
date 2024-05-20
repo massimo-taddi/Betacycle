@@ -18,7 +18,7 @@ export class ModelService {
   getProductModels(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.get('https://localhost:7287/api/Model/models', {
+    return this.http.get('https://localhost:7287/api/Model', {
       headers: header,
     });
   }
@@ -26,6 +26,27 @@ export class ModelService {
   getNProductModels(params: SearchParams): Observable<any> {
     return this.http.get(
       `https://localhost:7287/api/Model/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
+    );
+  }
+  getSingleModel(id: number) {
+    return this.http.get(`https://localhost:7287/api/Model/${id}`);
+  }
+  putModel(id: number, name: string, discontinued: boolean) {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.put(
+      `https://localhost:7287/api/Model/${id}?name=${name}&discontinued=${discontinued}`,
+      {},
+      { headers: header }
+    );
+  }
+  postModel(name: string, discontinued: boolean) {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.post(
+      `https://localhost:7287/api/Model?name=${name}&discontinued=${discontinued}`,
+      {},
+      { headers: header }
     );
   }
 }

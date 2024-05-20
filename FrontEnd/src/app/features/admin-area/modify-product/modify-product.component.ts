@@ -50,7 +50,6 @@ export class ModifyProductComponent {
   ngOnInit() {
     const sessionStorageProductId: string | null =
       sessionStorage.getItem('ModifyId');
-    console.log(sessionStorageProductId);
 
     if (sessionStorageProductId) {
       this.modifyId = parseInt(sessionStorageProductId, 10);

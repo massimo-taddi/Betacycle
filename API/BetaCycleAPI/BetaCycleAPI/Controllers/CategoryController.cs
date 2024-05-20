@@ -2,6 +2,7 @@
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,18 +20,16 @@ namespace BetaCycleAPI.Controllers
         {
             _context = context;
         }
-        // GET: api/products/categories
-        [Authorize]
+        // GET: api/Category/categories
+        //Get all categories
+        
         [HttpGet]
-        [Route("categories")]
+        
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
             return await _context.ProductCategories.ToListAsync();
         }
-        // GET: api/products/categories
+        // GET: api/Category/categories
         //Get a number of product categories
         [HttpGet]
         [Route("Ncategories")]
@@ -68,5 +67,116 @@ namespace BetaCycleAPI.Controllers
             return (categoryNumber, res);
         }
 
+        //GET: api/Category/SingleCategory
+        //get single category
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductCategory>> GetSingleProductCategory(int id)
+        {
+            var category = await _context.ProductCategories.FindAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
+        //PUT
+        //It modifies a category or a macroCategory
+        [HttpPut("{id}")]
+        [Authorize]
+
+        public async Task<IActionResult> ModifyCategory(int id,string name,bool discontinued,int? parentCategory)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
+            ProductCategory getRowguidProductModel = await _context.ProductCategories.FindAsync(id);
+            _context.ProductCategories.Entry(getRowguidProductModel).State = EntityState.Detached;
+
+
+            ProductCategory res = new ProductCategory()
+            {
+                ProductCategoryId = id,
+                Name = name,
+                Discontinued = discontinued,
+                ModifiedDate = DateTime.Now,
+                Rowguid=getRowguidProductModel.Rowguid,
+                ParentProductCategoryId = parentCategory,
+            };
+            _context.Entry(res).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return NoContent();
+        }
+
+
+        //POST
+        //it post a new record in productCategory table
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> PostCategory(int? parentProductCategory,string name)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
+            ProductCategory res = new ProductCategory() 
+            {
+            
+                ParentProductCategoryId=parentProductCategory,
+                Discontinued=false,
+                ModifiedDate = DateTime.Now,
+                Name = name,
+            };
+
+            _context.ProductCategories.Add(res);
+            try
+            {
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return NoContent();
+        }
+
+
+        //DELETE 
+
+        [HttpDelete("{id}")]
+        [Authorize]
+
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+                return BadRequest();
+            var category = await _context.ProductCategories.FindAsync(id);
+            _context.ProductCategories.Remove(category);
+            try
+            {
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return NoContent();
+        }
     }
 }

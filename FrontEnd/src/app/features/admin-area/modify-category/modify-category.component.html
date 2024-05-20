@@ -1,13 +1,24 @@
 <div class="modelContainer">
   <div class="card flex justify-content-center">
-    <p-card
-      header="{{ model.name }}"
-      subheader="{{ model.modifiedDate }}"
-      [style]="{ width: '360px' }"
-    >
+    <p-card [style]="{ width: '360px' }">
       <p>
-        <!-- DESCRIPTION PRODUCT -->
+        Product identifier<p-inputNumber
+          type="text"
+          [(ngModel)]="category.productCategoryId"
+          readonly="true"
+        />
       </p>
+      <p>
+        Parent Product Category<p-inputNumber
+          type="text"
+          [(ngModel)]="category.parentProductCategoryId"
+          placeholder="its a macro Category"
+        />
+      </p>
+      <p>
+        CategoryName<input type="text" pInputText [(ngModel)]="category.name" />
+      </p>
+      Discontinued<p-inputSwitch [(ngModel)]="category.discontinued" />
 
       <ng-template pTemplate="footer">
         <div

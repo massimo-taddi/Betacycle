@@ -6,9 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { ProductCategory } from '../../../shared/models/ProductCategory';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../shared/services/product.service';
 import { CategoryService } from '../../../shared/services/category.service';
+import { DialogModule } from 'primeng/dialog';
+import { ProductCategoryForm } from '../../../shared/models/ProductCategoryForm';
+import { PrimeNGConfig } from 'primeng/api';
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -19,6 +22,7 @@ import { CategoryService } from '../../../shared/services/category.service';
     ButtonModule,
     CommonModule,
     RouterModule,
+    DialogModule,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.css',
@@ -29,8 +33,16 @@ export class CategoryComponent {
   first: number = 0;
   rows: number = 10;
   categoriesCount: number = 0;
+  dialogBoolAdd: boolean = false;
+  dialogBoolEdit: boolean = false;
+  dialogBoolDelete: boolean = false;
+  category: ProductCategoryForm = new ProductCategoryForm();
 
-  constructor(private service: CategoryService) {}
+  constructor(
+    private service: CategoryService,
+    primengCongig: PrimeNGConfig,
+    private router: Router
+  ) {}
   ngOnInit() {
     this.ShowCategories();
   }
@@ -75,7 +87,6 @@ export class CategoryComponent {
   }
   NavigateModify(categoryId: number) {
     let stringCategoryID = categoryId.toString();
-
     sessionStorage.setItem('ModifyIdCategory', stringCategoryID);
   }
 }

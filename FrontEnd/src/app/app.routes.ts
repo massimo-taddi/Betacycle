@@ -24,6 +24,8 @@ import { BasketComponent } from './core/basket/basket.component';
 import { ProductPageComponent } from './features/product-page/product-page.component';
 import { ModifyCategoryComponent } from './features/admin-area/modify-category/modify-category.component';
 import { ModifyModelComponent } from './features/admin-area/modify-model/modify-model.component';
+import { AddCategoryComponent } from './features/admin-area/add-category/add-category.component';
+import { AddModelComponent } from './features/admin-area/add-model/add-model.component';
 
 export const routes: Routes = [
   {
@@ -127,6 +129,14 @@ export const routes: Routes = [
       {
         path: 'modify-model',
         component: ModifyModelComponent,
+      },
+      {
+        path: 'add-category',
+        component: AddCategoryComponent,
+      },
+      {
+        path: 'add-model',
+        component: AddModelComponent,
       },
     ],
   },
