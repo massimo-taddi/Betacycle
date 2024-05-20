@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
+using BetaCycleAPI.BLogic;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -34,78 +35,86 @@ namespace BetaCycleAPI.Controllers
             List<Product> res = [];
             int productCount = 0;
             List<ProductDescription> test = [];
-            switch (@params.Sort)
+            try
             {
-                case "Desc":
-                    if(@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    res = await (from product in _context.Products
-                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                 where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                 select product).Distinct()
-                                                .OrderByDescending(p => p.ListPrice)
-                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                //.Take(@params.PageSize)
-                                                .ToListAsync();
-                    productCount = res.Count();
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
-                case "Asc":
-                    if (@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    res = await (from product in _context.Products
-                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                 where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                 select product).Distinct()
-                                                .OrderBy(p => p.ListPrice)
-                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)                          
-                                                //.Take(@params.PageSize)
-                                                .ToListAsync();
-                    productCount = res.Count();
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
-                //test per prendere la descrizioni dei prodotti
-                case "test":
-                    res = await (from product in _context.Products
-                                 join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                 join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                 where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                 select product).Distinct()
-                                                .OrderByDescending(p => p.ListPrice)
-                                                //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                //.Take(@params.PageSize)
-                                                .ToListAsync();
-                    productCount = res.Count();
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                switch (@params.Sort)
+                {
+                    case "Desc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        res = await (from product in _context.Products
+                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
+                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
+                                     select product).Distinct()
+                                                    .OrderByDescending(p => p.ListPrice)
+                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                    //.Take(@params.PageSize)
+                                                    .ToListAsync();
+                        productCount = res.Count();
+                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    case "Asc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        res = await (from product in _context.Products
+                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
+                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
+                                     select product).Distinct()
+                                                    .OrderBy(p => p.ListPrice)
+                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)                          
+                                                    //.Take(@params.PageSize)
+                                                    .ToListAsync();
+                        productCount = res.Count();
+                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    //test per prendere la descrizioni dei prodotti
+                    case "test":
+                        res = await (from product in _context.Products
+                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
+                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
+                                     select product).Distinct()
+                                                    .OrderByDescending(p => p.ListPrice)
+                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                                                    //.Take(@params.PageSize)
+                                                    .ToListAsync();
+                        productCount = res.Count();
+                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
 
 
 
 
 
 
-                    //test = await (from product in _context.ProductDescriptions
-                    //              join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
-                    //              join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                    //              where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
-                    //              select product).Distinct()
-                    //                            .OrderByDescending(p => p.ListPrice)
-                    //                            //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                    //                            //.Take(@params.PageSize)
-                    //                            .ToListAsync();
+                        //test = await (from product in _context.ProductDescriptions
+                        //              join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
+                        //              join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
+                        //              where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
+                        //              select product).Distinct()
+                        //                            .OrderByDescending(p => p.ListPrice)
+                        //                            //.Skip((@params.PageIndex - 1) * @params.PageSize)
+                        //                            //.Take(@params.PageSize)
+                        //                            .ToListAsync();
 
 
 
-                    
-                    break;
 
-                default:
-                    return BadRequest();
+                        break;
+
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return (productCount, res);
         }
@@ -164,24 +173,30 @@ namespace BetaCycleAPI.Controllers
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
 
             var evaluationScoresMaxHeap = new PriorityQueue<int, float>(new FloatMaxCompare());
-
-            foreach(var prod in await _context.Products.ToListAsync())
+            try
             {
-                if(prod.OnSale)
+                foreach(var prod in await _context.Products.ToListAsync())
                 {
-                    var prediction = RecommendProduct.Predict(new RecommendProduct.ModelInput() { CustomerID = tokenCustomerId, ProductID = prod.ProductId });
-                    if(prediction.ProductID != 0F) {
-                        evaluationScoresMaxHeap.Enqueue(prod.ProductId, prediction.Score);
-                    }
-                    else
+                    if(prod.OnSale)
                     {
-                        return await RandomProducts();
+                        var prediction = RecommendProduct.Predict(new RecommendProduct.ModelInput() { CustomerID = tokenCustomerId, ProductID = prod.ProductId });
+                        if(prediction.ProductID != 0F) {
+                            evaluationScoresMaxHeap.Enqueue(prod.ProductId, prediction.Score);
+                        }
+                        else
+                        {
+                            return await RandomProducts();
+                        }
                     }
                 }
-            }
-            for(int i = 0; i < 9; i++)
+                for (int i = 0; i < 9; i++)
+                {
+                    res.Add(await _context.Products.FindAsync(evaluationScoresMaxHeap.Dequeue()));
+                }
+            }catch(Exception e)
             {
-                res.Add(await _context.Products.FindAsync(evaluationScoresMaxHeap.Dequeue()));
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return res;
         }
@@ -191,14 +206,22 @@ namespace BetaCycleAPI.Controllers
         }
         [HttpGet]
         [Route("RandomProducts")]
-        public async Task<List<Product>> RandomProducts()
+        public async Task<ActionResult<List<Product>>> RandomProducts()
         {
             List<Product> res = [];
-            var allProds = await _context.Products.ToListAsync();
-            Random rnd = new Random();
-            for (int i = 0; i < 9; i++)
+            try
             {
-                res.Add(allProds[(int)rnd.Next(allProds.Count)]);
+                var allProds = await _context.Products.ToListAsync();
+                Random rnd = new Random();
+                for (int i = 0; i < 9; i++)
+                {
+                    res.Add(allProds[(int)rnd.Next(allProds.Count)]);
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return res;
         }
@@ -249,7 +272,7 @@ namespace BetaCycleAPI.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!ProductExists(id))
                 {
@@ -257,7 +280,8 @@ namespace BetaCycleAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    await DBErrorLogger.WriteExceptionLog(_context, e);
+                    return BadRequest();
                 }
             }
 
@@ -303,7 +327,8 @@ namespace BetaCycleAPI.Controllers
                 return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
             }catch(Exception e)
             {
-                return BadRequest(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
 
             
@@ -323,10 +348,15 @@ namespace BetaCycleAPI.Controllers
             {
                 return NotFound();
             }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
+            try
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
             return NoContent();
         }
 

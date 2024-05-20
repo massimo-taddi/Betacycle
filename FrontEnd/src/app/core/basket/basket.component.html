@@ -19,7 +19,7 @@
                         <td>
                             <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
                         </td>
-                        <td>${{ item.key.quantity * item.value.listPrice }}</td>
+                        <td>${{ (item.key.quantity * item.value.listPrice) | number: '1.0-2' }}</td>
                     </tr>
                 </tbody>
             </table>

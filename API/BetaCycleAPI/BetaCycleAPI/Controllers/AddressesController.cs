@@ -16,6 +16,7 @@ using Humanizer;
 using Microsoft.SqlServer.Server;
 using System.Net.Sockets;
 using BetaCycleAPI.BLogic.ObjectValidator;
+using BetaCycleAPI.BLogic;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -48,16 +49,23 @@ namespace BetaCycleAPI.Controllers
                                    _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
 
-            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
-                res = await _awContext.Addresses.ToListAsync();
-            else
+            try
             {
-                res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId).First().CustomerId == tokenCustomerId).ToListAsync();
-            }
-            foreach (var address in res)
+                if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+                    res = await _awContext.Addresses.ToListAsync();
+                else
+                {
+                    res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId).First().CustomerId == tokenCustomerId).ToListAsync();
+                }
+                foreach (var address in res)
+                {
+                    List<CustomerAddress> custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).ToListAsync();
+                    address.CustomerAddresses = custAdd;
+                }
+            } catch(Exception e)
             {
-                List<CustomerAddress> custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).ToListAsync();
-                address.CustomerAddresses = custAdd;
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
 
             return res;
@@ -130,15 +138,13 @@ namespace BetaCycleAPI.Controllers
                     _awContext.Entry(putCustAdd).State = EntityState.Modified;
                     await _awContext.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    return BadRequest(ex.Message);
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
-
-
             }
             return Ok();
-
         }
 
         // POST: api/Addresses
@@ -187,9 +193,10 @@ namespace BetaCycleAPI.Controllers
                     _awContext.CustomerAddresses.Add(custAdd);
                     await _awContext.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    return BadRequest(ex.Message);
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
             }
             return Ok();
@@ -221,12 +228,13 @@ namespace BetaCycleAPI.Controllers
                     await _awContext.SaveChangesAsync();
                     _awContext.Addresses.Remove(addr);
                     await _awContext.SaveChangesAsync();
-                }catch(Exception ex)
+                }catch(Exception e)
                 {
-                    return BadRequest(ex.Message);
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
             }
-                return NoContent();
+            return NoContent();
         }
 
         private bool AddressExists(int id)

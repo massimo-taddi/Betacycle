@@ -1,4 +1,5 @@
-﻿using BetaCycleAPI.BLogic.ObjectValidator;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -25,8 +26,14 @@ namespace BetaCycleAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
         {
-
-            return await _context.ProductModels.ToListAsync();
+            try
+            {
+                return await _context.ProductModels.ToListAsync();
+            }catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
         }
 
         //GET:api/Model/Nmodels
@@ -39,29 +46,37 @@ namespace BetaCycleAPI.Controllers
 
             List<ProductModel> productModels = new List<ProductModel>();
             int modelCount = 0;
-            switch (@params.Sort)
+            try
             {
-                case "Desc":
-                    if (@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    productModels = await _context.ProductModels.Where(product => product.Name.Contains(@params.Search)).OrderBy(product => product.ModifiedDate).ToListAsync();
-                    modelCount = productModels.Count();
-                    productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
+                switch (@params.Sort)
+                {
+                    case "Desc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        productModels = await _context.ProductModels.Where(product => product.Name.Contains(@params.Search)).OrderBy(product => product.ModifiedDate).ToListAsync();
+                        modelCount = productModels.Count();
+                        productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
 
-                case "Asc":
-                    if (@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    productModels = await _context.ProductModels.OrderByDescending(product => product.ModifiedDate).ToListAsync();
-                    modelCount = productModels.Count();
-                    productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
-                default:
-                    return BadRequest();
+                    case "Asc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        productModels = await _context.ProductModels.OrderByDescending(product => product.ModifiedDate).ToListAsync();
+                        modelCount = productModels.Count();
+                        productModels = productModels.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return (modelCount, productModels);
         }
@@ -113,9 +128,10 @@ namespace BetaCycleAPI.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                Console.WriteLine("errore try modifica modello");
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
 
             return NoContent();
@@ -152,7 +168,8 @@ namespace BetaCycleAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return NoContent();
         }
@@ -180,7 +197,8 @@ namespace BetaCycleAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return NoContent();
         }

@@ -1,4 +1,5 @@
-﻿using BetaCycleAPI.Contexts;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,15 @@ namespace BetaCycleAPI.Controllers
         
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
         {
-            return await _context.ProductCategories.ToListAsync();
+            try
+            {
+                return await _context.ProductCategories.ToListAsync();
+            }catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
+
         }
         // GET: api/Category/categories
         //Get a number of product categories
@@ -37,32 +46,40 @@ namespace BetaCycleAPI.Controllers
         {
             int categoryNumber = 0;
             List<ProductCategory> res = [];
-            switch (@params.Sort)
+            try
             {
-                case "Desc":
-                    if (@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    res = await (from category in _context.ProductCategories
-                                 where category.Name.Contains(@params.Search)
-                                 select category).OrderBy(c => c.Name).ToListAsync();
-                    categoryNumber = res.Count();
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
-                case "Asc":
-                    if (@params.Search == null)
-                    {
-                        @params.Search = "";
-                    }
-                    res = await (from category in _context.ProductCategories
-                                 where category.Name.Contains(@params.Search)
-                                 select category).OrderByDescending(c => c.Name).ToListAsync();
-                    categoryNumber = res.Count();
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                    break;
-                default:
-                    return BadRequest();
+                switch (@params.Sort)
+                {
+                    case "Desc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        res = await (from category in _context.ProductCategories
+                                     where category.Name.Contains(@params.Search)
+                                     select category).OrderBy(c => c.Name).ToListAsync();
+                        categoryNumber = res.Count();
+                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    case "Asc":
+                        if (@params.Search == null)
+                        {
+                            @params.Search = "";
+                        }
+                        res = await (from category in _context.ProductCategories
+                                     where category.Name.Contains(@params.Search)
+                                     select category).OrderByDescending(c => c.Name).ToListAsync();
+                        categoryNumber = res.Count();
+                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return (categoryNumber, res);
         }
@@ -112,9 +129,10 @@ namespace BetaCycleAPI.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
 
             return NoContent();
@@ -148,7 +166,8 @@ namespace BetaCycleAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return NoContent();
         }
@@ -174,7 +193,8 @@ namespace BetaCycleAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
             return NoContent();
         }

@@ -1,6 +1,9 @@
-﻿using BetaCycleAPI.BLogic.Authentication;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.BLogic.Authentication;
+using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.Enums;
+using BetaCycleAPI.Models.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +19,12 @@ namespace BetaCycleAPI.Controllers
     public class LoginJwtController : ControllerBase
     {
         private JwtSettings _jwtSettings;
+        private readonly AdventureWorksLt2019Context _context;
 
-        public LoginJwtController(JwtSettings jwtSettings)
+        public LoginJwtController(JwtSettings jwtSettings, AdventureWorksLt2019Context context)
         {
             _jwtSettings = jwtSettings;
+            _context = context;
         }
 
         /// <summary>
@@ -47,6 +52,7 @@ namespace BetaCycleAPI.Controllers
                     return NotFound();
 
             }
+            await DBErrorLogger.WriteExceptionLog(_context, new LoginException("Exception during the JWT login process: the JWT token couldn't be generated."));
             return BadRequest();
         }
 

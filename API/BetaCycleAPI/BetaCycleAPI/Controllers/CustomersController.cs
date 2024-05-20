@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authorization;
+using BetaCycleAPI.BLogic;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -44,45 +45,52 @@ namespace BetaCycleAPI.Controllers
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             int customerCount = 0;
             List<Customer> res = [];
-            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            try
             {
-                switch (@params.Sort)
+                if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 {
-                    case "Desc":
-                        //ritornare n customer 
-                        res = await (from customer in _awContext.Customers
-                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer != null
-                                     select customer)
-                                     .OrderBy(x => x.FirstName).ToListAsync();
-                        customerCount = res.Count();  
+                    switch (@params.Sort)
+                    {
+                        case "Desc":
+                            //ritornare n customer 
+                            res = await (from customer in _awContext.Customers
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer != null
+                                         select customer)
+                                         .OrderBy(x => x.FirstName).ToListAsync();
+                            customerCount = res.Count();  
                             
-                        break;
-                    case "Asc":
-                        //ritornare n customer 
-                        res = await (from customer in _awContext.Customers
-                                     where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer!=null
-                                     select customer)
-                                     .OrderBy(x => x.FirstName).ToListAsync();
-                        customerCount = res.Count();
-                        break;
-                }             
-                res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                return (customerCount,res);
+                            break;
+                        case "Asc":
+                            //ritornare n customer 
+                            res = await (from customer in _awContext.Customers
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer!=null
+                                         select customer)
+                                         .OrderBy(x => x.FirstName).ToListAsync();
+                            customerCount = res.Count();
+                            break;
+                    }             
+                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                    return (customerCount,res);
                 
+                }
+                else
+                {
+                    var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+                    var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                           _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                           _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+                    res = await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
+                }
+                foreach (var customer in res)
+                {
+                    customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
+                }
             }
-            else
+            catch (Exception e)
             {
-                var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
-                var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
-                                       _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
-                                       _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
-                res = await _awContext.Customers.Where(customer => customer.CustomerId == tokenCustomerId).ToListAsync();
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
-            foreach (var customer in res)
-            {
-                customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ca => ca.CustomerId == customer.CustomerId).ToListAsync();
-            }
-            
             return (customerCount,res);
         }
 
@@ -104,14 +112,21 @@ namespace BetaCycleAPI.Controllers
                 return BadRequest();
             var customer = await _awContext.Customers.FindAsync(id);
             List<CustomerAddress> addresses = [];
-            customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ad => ad.CustomerId == id).ToListAsync();
-            foreach (var item in customer.CustomerAddresses)
+            try
             {
-                item.Address = await _awContext.Addresses.FindAsync(item.AddressId);
+                customer.CustomerAddresses = await _awContext.CustomerAddresses.Where(ad => ad.CustomerId == id).ToListAsync();
+                foreach (var item in customer.CustomerAddresses)
+                {
+                    item.Address = await _awContext.Addresses.FindAsync(item.AddressId);
+                }
+                if (customer == null)
+                    return NotFound();
             }
-            if (customer == null)
-                return NotFound();
-
+            catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
             return customer;
         }
 
@@ -142,7 +157,7 @@ namespace BetaCycleAPI.Controllers
             {
                 await _awContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
                 if (!CustomerExists(id))
                 {
@@ -150,7 +165,8 @@ namespace BetaCycleAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
             }
 
@@ -181,17 +197,26 @@ namespace BetaCycleAPI.Controllers
                 IsMigrated = toInsert.IsMigrated,
                 // CustomerAddresses = toInsert.CustomerAddresses
             };
-            // customer.PasswordHash is NOT supposed to be hashed at this point
-            KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(toInsert.Password);
-            // this is where it gets hashed ^
-            customer.PasswordHash = pwData.Key;
-            Console.WriteLine(pwData.Value);
-            customer.PasswordSalt = pwData.Value;
-            if (!ModelValidator.ValidateCustomer(customer))
-                return BadRequest("Campi non validi");
-            // the changes are only written on _awContext since the data is automatically migrated to the Credentials DB
-            _awContext.Customers.Add(customer);
-            await _awContext.SaveChangesAsync();
+            try
+            {
+                // customer.PasswordHash is NOT supposed to be hashed at this point
+                KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(toInsert.Password);
+                // this is where it gets hashed ^
+                customer.PasswordHash = pwData.Key;
+                Console.WriteLine(pwData.Value);
+                customer.PasswordSalt = pwData.Value;
+                if (!ModelValidator.ValidateCustomer(customer))
+                    return BadRequest("Campi non validi");
+                // the changes are only written on _awContext since the data is automatically migrated to the Credentials DB
+                _awContext.Customers.Add(customer);
+                await _awContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
@@ -219,8 +244,16 @@ namespace BetaCycleAPI.Controllers
                 return NotFound();
             }
 
-            _awContext.Customers.Remove(customer);
-            await _awContext.SaveChangesAsync();
+            try
+            {
+                _awContext.Customers.Remove(customer);
+                await _awContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
 
             return NoContent();
         }

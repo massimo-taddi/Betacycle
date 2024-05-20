@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Versioning;
+using BetaCycleAPI.BLogic;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -48,8 +49,8 @@ namespace BetaCycleAPI.Controllers
                 return await _awContext.ShoppingCartItems.Where(item => item.ShoppingCartId == shoppingCartId).ToListAsync();
             } catch (Exception e)
             {
-                // log on db
-                return BadRequest(e);
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
         }
 
@@ -91,7 +92,7 @@ namespace BetaCycleAPI.Controllers
             {
                 await _awContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!ShoppingCartItemExists(id))
                 {
@@ -99,7 +100,8 @@ namespace BetaCycleAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
             }
 
@@ -121,23 +123,30 @@ namespace BetaCycleAPI.Controllers
                                    (int)_credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
             var customer = await _awContext.Customers.FindAsync(tokenCustomerId);
             ShoppingCart? cart = await _awContext.ShoppingCarts.FindAsync(customer.ShoppingCartId);
-            if (cart == null)
+            try
             {
-                // create new cart
-                cart = new ShoppingCart
+                if (cart == null)
                 {
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                };
-                _awContext.ShoppingCarts.Add(cart);
+                    // create new cart
+                    cart = new ShoppingCart
+                    {
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                    };
+                    _awContext.ShoppingCarts.Add(cart);
+                    await _awContext.SaveChangesAsync();
+                }
+                customer.ShoppingCartId = cart.ShoppingCartId;
                 await _awContext.SaveChangesAsync();
-            }
-            customer.ShoppingCartId = cart.ShoppingCartId;
-            await _awContext.SaveChangesAsync();
-            shoppingCartItem.ShoppingCartId = cart.ShoppingCartId;
+                shoppingCartItem.ShoppingCartId = cart.ShoppingCartId;
 
-            _awContext.ShoppingCartItems.Add(shoppingCartItem);
-            await _awContext.SaveChangesAsync();
+                _awContext.ShoppingCartItems.Add(shoppingCartItem);
+                await _awContext.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
 
             return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
         }
@@ -151,10 +160,16 @@ namespace BetaCycleAPI.Controllers
             {
                 return NotFound();
             }
-
-            _awContext.ShoppingCartItems.Remove(shoppingCartItem);
-            await _awContext.SaveChangesAsync();
-
+            try
+            {
+                _awContext.ShoppingCartItems.Remove(shoppingCartItem);
+                await _awContext.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+            
             return NoContent();
         }
 

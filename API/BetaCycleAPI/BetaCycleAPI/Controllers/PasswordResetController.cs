@@ -1,10 +1,12 @@
-﻿using BetaCycleAPI.Contexts;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.ML;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
@@ -49,24 +51,32 @@ namespace BetaCycleAPI.Controllers
                                    _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
 
-            var dbPwd = (_credentialsContext.Credentials.Find(tokenCustomerId).PasswordHash, _credentialsContext.Credentials.Find(tokenCustomerId).SaltHash);
-            if (EncryptData.CypherData.DecryptSalt(reset.oldPassword, dbPwd.SaltHash) == dbPwd.PasswordHash)
+            try
             {
-                // set new pwd
-                var customer = await _credentialsContext.Credentials.Where(c => c.CustomerId == tokenCustomerId).FirstOrDefaultAsync();
-                var encrypted = EncryptData.CypherData.SaltEncryp(reset.newPassword);
-                customer.PasswordHash = encrypted.Key;
-                customer.SaltHash = encrypted.Value;
-                _credentialsContext.Entry(customer).State = EntityState.Modified;
-                try
+                var dbPwd = (_credentialsContext.Credentials.Find(tokenCustomerId).PasswordHash, _credentialsContext.Credentials.Find(tokenCustomerId).SaltHash);
+                if (EncryptData.CypherData.DecryptSalt(reset.oldPassword, dbPwd.SaltHash) == dbPwd.PasswordHash)
                 {
-                    await _credentialsContext.SaveChangesAsync();
+                    // set new pwd
+                    var customer = await _credentialsContext.Credentials.Where(c => c.CustomerId == tokenCustomerId).FirstOrDefaultAsync();
+                    var encrypted = EncryptData.CypherData.SaltEncryp(reset.newPassword);
+                    customer.PasswordHash = encrypted.Key;
+                    customer.SaltHash = encrypted.Value;
+                    _credentialsContext.Entry(customer).State = EntityState.Modified;
+                    try
+                    {
+                        await _credentialsContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        throw;
+                    }
+                    return true;
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return true;
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
             return false;
         }
@@ -93,9 +103,10 @@ namespace BetaCycleAPI.Controllers
             {
                 await _awContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                throw;
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
             return Ok();
         }
@@ -144,10 +155,16 @@ namespace BetaCycleAPI.Controllers
             smtpClient.Port = 587;
             smtpClient.Credentials = new NetworkCredential("beta89256464@gmail.com", "ooriltjjyrjekmvi");
             smtpClient.EnableSsl = true;
-            smtpClient.Send(mail);
-
+            try
+            {
+                smtpClient.Send(mail);
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
             return true;
-        
         }
 
     }

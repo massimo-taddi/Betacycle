@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using BetaCycleAPI.BLogic;
+using Microsoft.ML;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -41,8 +43,6 @@ namespace BetaCycleAPI.Controllers
                 headers = await _awContext.SalesOrderHeaders.ToListAsync();
             else
             {
-                // TEST VALUES: tokenEmail = "david16@adventure-works.com"; tokenCustomerId = 29847 (o 609);
-                // E' stato testato con dei valori di prova e funziona
                 var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
                 var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
                                        _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
@@ -50,15 +50,23 @@ namespace BetaCycleAPI.Controllers
                 headers = await _awContext.SalesOrderHeaders.Where(order => order.CustomerId == tokenCustomerId).ToListAsync();
             }
 
-            foreach (var header in headers)
+            try
             {
-                header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
-                foreach(var detail in header.SalesOrderDetails)
+                foreach (var header in headers)
                 {
-                    detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
+                    header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
+                    foreach(var detail in header.SalesOrderDetails)
+                    {
+                        detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
+                    }
+                    header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
                 }
-                header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
+            }catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
             }
+            
 
 
             return headers;
@@ -107,7 +115,7 @@ namespace BetaCycleAPI.Controllers
             {
                 await _awContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
                 if (!SalesOrderHeaderExists(id))
                 {
@@ -115,7 +123,8 @@ namespace BetaCycleAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
                 }
             }
 
@@ -139,9 +148,16 @@ namespace BetaCycleAPI.Controllers
                 return NotFound();
             }
 
-            _awContext.SalesOrderHeaders.Remove(salesOrderHeader);
-            await _awContext.SaveChangesAsync();
-
+            try
+            {
+                _awContext.SalesOrderHeaders.Remove(salesOrderHeader);
+                await _awContext.SaveChangesAsync();
+            }catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+            
             return NoContent();
         }
 
