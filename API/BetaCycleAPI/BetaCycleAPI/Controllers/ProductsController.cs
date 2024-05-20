@@ -127,6 +127,10 @@ namespace BetaCycleAPI.Controllers
                 if(product.ProductCategoryId != null) 
                 {
                     product.ProductModel.ProductModelProductDescriptions = await _context.ProductModelProductDescriptions.Where(p => p.ProductModelId == product.ProductModel.ProductModelId).ToListAsync();
+                    foreach(var desc in product.ProductModel.ProductModelProductDescriptions)
+                    {
+                        desc.ProductDescription = await _context.ProductDescriptions.FindAsync(desc.ProductDescriptionId);
+                    }
                     product.ProductCategory = await _context.ProductCategories.FindAsync(product.ProductCategoryId);
                 }
                 else
