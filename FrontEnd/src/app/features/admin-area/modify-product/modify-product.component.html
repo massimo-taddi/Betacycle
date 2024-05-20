@@ -1,7 +1,7 @@
 <div class="d-flex border rounded p-3">
   <form #newAddress="ngForm" (submit)="UpdateProduct(newAddress)" class="row">
     <div class="col-md-6">
-      <label for="inputName" class="form-label">Nome Prodotto*</label>
+      <label for="inputName" class="form-label">Product name*</label>
       <input
         [required]="true"
         type="text"
@@ -12,7 +12,7 @@
       />
     </div>
     <div class="col-md-3">
-      <label for="inputNumber" class="form-label">Numero prodotto*</label>
+      <label for="inputNumber" class="form-label">Product number*</label>
       <input
         [required]="true"
         type="text"
@@ -23,7 +23,7 @@
       />
     </div>
     <div class="col-md-3">
-      <label for="inputColor" class="form-label">Colore prodotto</label>
+      <label for="inputColor" class="form-label">Product color</label>
       <input
         type="text"
         class="form-control"
@@ -33,7 +33,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputStandardCost" class="form-label">Prezzo standard*</label>
+      <label for="inputStandardCost" class="form-label">Standard price*</label>
       <input
         [required]="true"
         type="number"
@@ -45,7 +45,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputListPrice" class="form-label">Prezzo di listino</label>
+      <label for="inputListPrice" class="form-label">List price</label>
       <input
         [required]="true"
         type="number"
@@ -57,7 +57,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputSize" class="form-label">Dimensioni</label>
+      <label for="inputSize" class="form-label">Size</label>
       <input
         type="text"
         size="10"
@@ -68,7 +68,7 @@
       />
     </div>
     <div class="col-md-2">
-      <label for="inputWeight" class="form-label">Peso</label>
+      <label for="inputWeight" class="form-label">Weight</label>
       <input
         type="number"
         class="form-control"
@@ -78,7 +78,7 @@
       />
     </div>
     <div class="col-md-4">
-      <label for="inputCategory" class="form-label">Categoria</label><br />
+      <label for="inputCategory" class="form-label">Category</label><br />
       <p-dropdown
         id="inputCategory"
         [options]="categories"
@@ -93,7 +93,7 @@
       </p-dropdown>
     </div>
     <div class="col-md-3">
-      <label for="inputModel" class="form-label">Modello</label><br />
+      <label for="inputModel" class="form-label">Model</label><br />
       <p-dropdown
         id="inputModel"
         [options]="models"
@@ -109,7 +109,7 @@
     </div>
     <div class="col-md-3">
       <label for="inputSellStartDate" class="form-label"
-        >Data inizio vendite*</label
+        >Selling start date*</label
       >
       <input
         [required]="true"
@@ -121,7 +121,7 @@
       />
     </div>
     <div class="col-md-3">
-      <label for="inputSellEndDate" class="form-label">Data fine vendite</label>
+      <label for="inputSellEndDate" class="form-label">Selling end date</label>
       <input
         type="date"
         class="form-control"
@@ -132,7 +132,7 @@
     </div>
     <div class="col-md-3">
       <label for="inputDiscontinuedDate" class="form-label"
-        >Data discontinued</label
+        >Discontinued Date</label
       >
       <input
         type="date"
@@ -144,7 +144,7 @@
     </div>
     <div class="mx-auto col-10">
       <label for="inputThumbnailPhoto" class="form-label"
-        >Immagine di thumbnail</label
+        >Thumbnail image</label
       >
       <p-fileUpload
         chooseIcon="pi pi-upload"
@@ -159,13 +159,12 @@
       />
     </div>
     <div class="col-2">
-      <label for="inputOnSale" class="form-label"
-        >In vendita:</label
-      ><br>
+      <label for="inputOnSale" class="form-label">In vendita:</label><br />
       <p-inputSwitch
         id="inputOnSale"
         name="onSale"
-        [(ngModel)]="product.onSale"/>
+        [(ngModel)]="product.onSale"
+      />
     </div>
     <div class="col-12">
       <button
@@ -173,23 +172,9 @@
         class="btn btn-primary mt-3"
         routerLink="./product-list"
       >
-        Modifica
+        Modify
       </button>
     </div>
   </form>
 </div>
 <br />
-<span *ngIf="updateProduct != null">
-  <p-card
-    header="{{ updateProduct.name }}"
-    subheader="{{ updateProduct.listPrice }}"
-    [style]="{ width: '360px' }"
-  >
-    <ng-template pTemplate="header">
-      <img
-        alt="Card"
-        src="data:image/gif;base64, {{ updateProduct.thumbNailPhoto }}"
-      />
-    </ng-template>
-  </p-card>
-</span>
