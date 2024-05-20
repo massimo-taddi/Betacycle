@@ -9,10 +9,11 @@
                     <span>${{product.listPrice}}</span>
                 </div>
                 <p class="lead">Modello: {{product.productModel?.name}}<br>
-                                Categoria: {{product.productCategory?.name}}</p>
+                                Categoria: {{product.productCategory?.name}}<br>
+                                Descrizione: {{engDesc}}</p>
                 <div class="d-flex">
                     <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button" (click)="addProductToCart()">
                         <i class="bi-cart-fill me-1"></i>
                         Add to cart
                     </button>
@@ -22,7 +23,7 @@
     </div>
 </section>
 <ng-template #notSale>
-    <h1>Siamo spiacenti, questo articolo non e' in vendita</h1>
+    <h1>Siamo spiacenti, al momento questo articolo non e' in vendita</h1>
 </ng-template>
 <!-- Related items section-->
 <!-- <section class="py-5 bg-light">

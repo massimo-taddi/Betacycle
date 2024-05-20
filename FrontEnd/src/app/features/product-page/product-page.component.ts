@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/Product';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { BasketService } from '../../shared/services/basket.service';
 
 
 @Component({
@@ -15,8 +16,11 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class ProductPageComponent {
   product: Product = new Product();
   productId: number = 0;
+  engDesc: string = '';
+  justAddedProduct: Product | null = null;
 
-  constructor(private http: ProductService, private route: ActivatedRoute,){}
+
+  constructor(private http: ProductService, private route: ActivatedRoute, private basketService: BasketService){}
 
 
   ngOnInit(): void{
@@ -25,12 +29,32 @@ export class ProductPageComponent {
       this.http.getProductById(this.productId).subscribe({
         next: (data: any) =>{
           this.product = data;
-          console.log(data)
+          this.getEngDescription();
         },
         error: (err: Error) =>{
           console.log(err);
         }
       });
     })
+  }
+
+  private getEngDescription(){
+    this.product.productModel?.productModelProductDescriptions!.forEach(desc => {
+      if(desc.culture == 'en    '){
+        this.engDesc = desc.productDescription!.description;
+      }
+    });
+    return "ERROR - CANNOT GET PRODUCT DESCRIPTION";
+  }
+
+  addProductToCart() {
+    this.basketService.postBasketItem(this.product).subscribe({
+      next: (prod: Product) => {
+        this.justAddedProduct = prod;
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      },
+    });
   }
 }
