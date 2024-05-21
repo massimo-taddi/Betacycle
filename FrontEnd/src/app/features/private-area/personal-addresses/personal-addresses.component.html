@@ -2,7 +2,7 @@
     {{address.addressLine1}}
 </li> -->
 <p-toast></p-toast>
-<h1 style="position: fixed;">Indirizzi</h1>
+<h1 style="position: fixed;">Addresses</h1>
 <div class="d-flex justify-content-end">
   <button
     pbutton
@@ -17,7 +17,7 @@
       class="p-button-icon p-button-icon-left pi pi-plus"
       aria-hidden="true"
     ></span>
-    <span class="p-button-label">Aggiungi Indirizzo</span>
+    <span class="p-button-label">Add Address</span>
     <span class="p-ink" aria-hidden="true" role="presentation"></span>
   </button>
   <p-dialog
@@ -33,8 +33,8 @@
       class="row g-3"
     >
       <div class="col-12">
-        <label for="inputAddress" class="form-label">Indirizzo Line 1</label>
-        <input
+        <label for="inputAddress" class="form-label">Address Line 1</label>
+        <input #addrLine1="ngModel" required
           type="text"
           class="form-control"
           id="inputAddress1"
@@ -44,7 +44,7 @@
         />
       </div>
       <div class="col-12">
-        <label for="inputAddress2" class="form-label">Indirizzo Line 2</label>
+        <label for="inputAddress2" class="form-label">Address Line 2</label>
         <input
           type="text"
           class="form-control"
@@ -55,8 +55,8 @@
         />
       </div>
       <div class="col-md-6">
-        <label for="inputCity" class="form-label">Città</label>
-        <input
+        <label for="inputCity" class="form-label">City</label>
+        <input #addrCity="ngModel" required
           type="text"
           class="form-control"
           id="inputCity"
@@ -65,8 +65,8 @@
         />
       </div>
       <div class="col-md-6">
-        <label for="inputRegion" class="form-label">Regione</label>
-        <input
+        <label for="inputRegion" class="form-label">Region</label>
+        <input #addrStateProv="ngModel" required
           type="text"
           class="form-control"
           id="inputRegion"
@@ -75,29 +75,31 @@
         />
       </div>
       <div class="col-md-4">
-        <label for="inputState" class="form-label">Stato</label>
-        <select
+        <label for="inputState" class="form-label">Country</label>
+        <select #addrCountry="ngModel" required
           id="inputState"
           class="form-select"
           name="countryRegion"
           [(ngModel)]="address.countryRegion"
         >
-          <option selected>Seleziona</option>
-          <option>Italia</option>
-          <option>Svizzera</option>
-          <option>Francia</option>
-          <option>Germania</option>
-          <option>Stati Uniti</option>
-          <option>Regno Unito</option>
+          <option selected>Select</option>
+          <option>Italy</option>
+          <option>Switzerland</option>
+          <option>France</option>
+          <option>Germany</option>
+          <option>USA</option>
+          <option>United Kingdom</option>
           <option>Malta</option>
           <option>San Marino</option>
           <option>Città del Vaticano</option>
         </select>
       </div>
       <div class="col-md-3">
-        <label for="inputZip" class="form-label">CAP</label>
-        <input
+        <label for="inputZip" class="form-label">Postal Code</label>
+        <input #addrPostalCode="ngModel"
           type="text"
+          maxlength="5" minlength="5"
+          required
           class="form-control"
           id="inputZip"
           name="postalCode"
@@ -105,8 +107,9 @@
         />
       </div>
       <div class="col-md-6">
-        <label for="inputType" class="form-label">Tipo Indirizzo</label>
-        <input
+        <label for="inputType" class="form-label">Address Type</label>
+        <input #addrCustType="ngModel"
+          required
           type="text"
           class="form-control"
           id="inputType"
@@ -115,8 +118,12 @@
         />
       </div>
       <div class="col-12">
-        <button type="submit" class="btn btn-primary">Aggiungi</button>
+        <button [disabled]="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid" type="submit" class="btn btn-primary">Add</button>
       </div>
+      <div class="col-12" style="margin-top: 10px; color: red;" *ngIf="(addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid)
+        && (addrLine1.touched && addrCity.touched && addrStateProv.touched && addrCountry.touched && addrPostalCode.touched && addrCustType.touched)">
+        *Check the inserted fields
+    </div>
     </form>
   </p-dialog>
 </div>
@@ -124,13 +131,13 @@
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Indirizzo Line 1</th>
-            <th scope="col">Indirizzo Line 2</th>
-            <th scope="col">Citta'</th>
-            <th scope="col">Regione</th>
-            <th scope="col">Stato</th>
-            <th scope="col">CAP</th>
-            <th scope="col">Tipo Indirizzo</th>
+            <th scope="col">Address Line 1</th>
+            <th scope="col">Address Line 2</th>
+            <th scope="col">City</th>
+            <th scope="col">Region</th>
+            <th scope="col">Country</th>
+            <th scope="col">Postal Code</th>
+            <th scope="col">Address Type</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-addr let-rowIndex="rowIndex" let-columns="columns">
@@ -143,53 +150,54 @@
             <td>{{addr.countryRegion}}</td>
             <td>{{addr.postalCode}}</td>
             <td>{{addr.customerAddresses[0].addressType}}</td>
-            <td><p-button label="Modifica" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
+            <td><p-button label="Edit" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
             <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <form #putForm="ngForm" class="row g-3 p-3">
                 <div class="col-md-6">
-                    <label for="inputAddr1" class="form-label">Indirizzo Line 1*</label>
+                    <label for="inputAddr1" class="form-label">Address Line 1*</label>
                     <input #addrLine1="ngModel" type="text" class="form-control" name="addressLine1" value="{{modifyAddress.addressLine1}}" [(ngModel)]="modifyAddress.addressLine1" [ngModelOptions]="{standalone:true}" required >
                 </div>
                 <div class="col-md-6">
-                    <label for="inputAddr2" class="form-label">Indirizzo Line 2</label>
+                    <label for="inputAddr2" class="form-label">Address Line 2</label>
                     <input #addrLine2 type="text" class="form-control" name="addressLine2" value="{{modifyAddress.addressLine2}}" [(ngModel)]="modifyAddress.addressLine2" required [ngModelOptions]="{standalone:true}">
                 </div>
                 <div class="col-md-4">
-                    <label for="inputCity" class="form-label">Citta'*</label>
+                    <label for="inputCity" class="form-label">City*</label>
                     <input #addrCity="ngModel" type="text" class="form-control" name="city" value="{{modifyAddress.city}}" [(ngModel)]="modifyAddress.city" [ngModelOptions]="{standalone:true}" required >
                 </div>
                 <div class="col-md-4">
-                    <label for="inputRegion" class="form-label">Regione*</label>
+                    <label for="inputRegion" class="form-label">Region*</label>
                     <input #addrStateProv="ngModel" type="text" class="form-control" name="stateProvince" value="{{modifyAddress.stateProvince}}" [(ngModel)]="modifyAddress.stateProvince" [ngModelOptions]="{standalone:true}" required >
                 </div>
                 <div class="col-md-4">
-                    <label for="inputCountry" class="form-label">Stato*</label>
+                    <label for="inputCountry" class="form-label">Country*</label>
                     <input #addrCountry="ngModel" type="text" class="form-control" name="countryRegion" value="{{modifyAddress.countryRegion}}" [(ngModel)]="modifyAddress.countryRegion" [ngModelOptions]="{standalone:true}" required >
                 </div>
                 <div class="col-md-2">
-                    <label for="inputCap" class="form-label">CAP*</label>
+                    <label for="inputCap" class="form-label">Postal Code*</label>
                     <input #addrPostalCode="ngModel" type="text" class="form-control" maxlength="5" minlength="5" name="postalCode" value="{{modifyAddress.postalCode}}" [(ngModel)]="modifyAddress.postalCode" [ngModelOptions]="{standalone:true}" required >
                 </div>
                 <div class="col-md-6">
-                    <label for="inputType" class="form-label">Tipo Indirizzo*</label>
+                    <label for="inputType" class="form-label">Address Type*</label>
                     <input #addrCustType="ngModel" type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" [(ngModel)]="typeAddress" [ngModelOptions]="{standalone:true}" required>
                 </div>
                 <div class="col-12" style="margin-top: 30px;">
                     <button [disabled]="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid" (click)="PutModifyAddress(); dialogBoolEdit = false;" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
                 </div>
-                <div class="col-12" style="margin-top: 10px; color: red;" *ngIf="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid">
-                    Ricontrolla i campi inseriti
+                <div class="col-12" style="margin-top: 10px; color: red;" *ngIf="(addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid)
+                && (addrLine1.touched && addrCity.touched && addrStateProv.touched && addrCountry.touched && addrPostalCode.touched && addrCustType.touched)">
+                    *Check the inserted fields
                 </div>
               </form>
             </p-dialog>
-            <td><p-button label="Elimina" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
+            <td><p-button label="Delete" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
             <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-              <h6>Vuoi eliminare definitivamente l'indirizzo?</h6>
+              <h6>Are you sure?</h6>
               <div class="d-flex justify-content-evenly">
-                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Annulla</button>
-                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Conferma</button>
+                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Cancel</button>
+                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Delete</button>
               </div>
             </p-dialog>
         </tr>

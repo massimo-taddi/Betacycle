@@ -1,0 +1,16 @@
+.bc-thumbnail-photo{
+    width: 10vw;
+    border: 1px solid rgb(223, 217, 217);
+}
+
+.bc-btn-product{
+    padding: 10px 15px;
+    border-color: #687995;
+  }
+.bc-productcard-footer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+}

@@ -4,13 +4,16 @@ using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.Enums;
 using BetaCycleAPI.Models.Exceptions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 
 namespace BetaCycleAPI.Controllers
 {
@@ -37,13 +40,16 @@ namespace BetaCycleAPI.Controllers
         public async Task<IActionResult> GenerateToken(LoginCredentials loginCredentials)
         {
             // qui si controlla sul db
+            string clientIp = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
             var dbCheckResult = await CredentialsDBChecker.ValidateLogin(loginCredentials.Username.ToLower(), loginCredentials.Password);
             switch(dbCheckResult)
             {
                 case DBCheckResponse.FoundMigrated:
+                    LogTracer.AddLog(loginCredentials.Username, "LOGIN", clientIp, DateTime.Now);
                     var token = generateJwtToken(loginCredentials.Username, false);
                     return Ok(new { token });
                 case DBCheckResponse.FoundAdmin:
+                    LogTracer.AddLog(loginCredentials.Username, "LOGIN", clientIp, DateTime.Now);
                     token = generateJwtToken(loginCredentials.Username, true);
                     return Ok(new { token });
                 case DBCheckResponse.FoundNotMigrated:
@@ -54,6 +60,28 @@ namespace BetaCycleAPI.Controllers
             }
             await DBErrorLogger.WriteExceptionLog(_context, new LoginException("Exception during the JWT login process: the JWT token couldn't be generated."));
             return BadRequest();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("trace")]
+        public async Task<IActionResult> LogoutTrace()
+        {
+            string clientIp = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            try
+            {
+                LogTracer.AddLog(tokenEmail, "LOGOUT", clientIp, DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, new LoginException("Exception during the JWT logout process: the JWT token couldn't be generated."));
+                return BadRequest();
+            }
+            return Ok();
+
         }
 
         private string generateJwtToken(string username, bool isAdmin)

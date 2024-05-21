@@ -10,6 +10,7 @@ import { HostListener } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { ProductService } from '../../shared/services/product.service';
 import { SearchParams } from '../../shared/models/SearchParams';
+import { HttploginService } from '../../shared/services/httplogin.service';
 
 @Component({
   selector: 'app-navbar',
@@ -36,7 +37,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private logout: HttploginService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +53,14 @@ export class NavbarComponent implements OnInit {
   }
 
   Logout() {
+    this.logout.httpLogoutTrace().subscribe({
+      next: (res: any) => {
+        console.log(res);
+      },
+      error: (err: Error) => {
+        console.log(err);
+      }
+    });
     this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
   }
