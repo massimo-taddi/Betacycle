@@ -13,9 +13,9 @@ namespace BetaCycleAPI.BLogic
             {
                 ErrorTime = DateTime.Now,
                 ErrorNumber = e.HResult,
-                ErrorProcedure = e.TargetSite.ReflectedType.ReflectedType.Name + "." + e.TargetSite.ReflectedType.Name,
+                ErrorProcedure = e.TargetSite != null ? e.TargetSite.Name : null,
                 ErrorMessage = e.Message,
-                ErrorSource = e.Source
+                ErrorSource = "BetaCycleAPI"
             };
             awContext.ErrorLogs.Add(err);
             await awContext.SaveChangesAsync();

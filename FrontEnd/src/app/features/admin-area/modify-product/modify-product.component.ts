@@ -85,10 +85,23 @@ export class ModifyProductComponent {
     });
   }
 
+  async onLargeImgSelect(event: FileSelectEvent) {
+    BlobUtil.blobToBase64String(event.files[0]).then((b64str) => {
+      this.product.largePhoto = b64str;
+      this.product.largePhotoFileName = event.files[0].name;
+    });
+  }
+
   onThumbnailRemove(event: FileRemoveEvent) {
     this.product.thumbNailPhoto = null;
     this.product.thumbnailPhotoFileName = null;
   }
+
+  onLargeImgRemove(event: FileRemoveEvent) {
+    this.product.largePhoto = null;
+    this.product.largePhotoFileName = null;
+  }
+
   //prende tutti i valori del form e li associa a modified product
   UpdateProduct(newForm: NgForm) {
     var modifiedProduct = newForm.value as ProductForm;

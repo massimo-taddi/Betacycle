@@ -37,76 +37,28 @@ namespace BetaCycleAPI.Controllers
             List<ProductDescription> test = [];
             try
             {
+                if (@params.Search == null)
+                {
+                    @params.Search = "";
+                }
+                res = await (from product in _context.Products
+                             from pmpd in product.ProductModel.ProductModelProductDescriptions
+                             where (EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) && product.OnSale)
+                             select product).Distinct().ToListAsync();
+
+                productCount = res.Count();
                 switch (@params.Sort)
                 {
                     case "Desc":
-                        if (@params.Search == null)
-                        {
-                            @params.Search = "";
-                        }
-                        res = await (from product in _context.Products
-                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                     select product).Distinct()
-                                                    .OrderByDescending(p => p.ListPrice)
-                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                    //.Take(@params.PageSize)
-                                                    .ToListAsync();
-                        productCount = res.Count();
-                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                         break;
                     case "Asc":
-                        if (@params.Search == null)
-                        {
-                            @params.Search = "";
-                        }
-                        res = await (from product in _context.Products
-                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                     select product).Distinct()
-                                                    .OrderBy(p => p.ListPrice)
-                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)                          
-                                                    //.Take(@params.PageSize)
-                                                    .ToListAsync();
-                        productCount = res.Count();
-                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = res.OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                         break;
                     //test per prendere la descrizioni dei prodotti
                     case "test":
-                        res = await (from product in _context.Products
-                                     join pmpd in _context.ProductModelProductDescriptions on product.ProductModelId equals pmpd.ProductModelId
-                                     join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                                     where (product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)) && product.OnSale
-                                     select product).Distinct()
-                                                    .OrderByDescending(p => p.ListPrice)
-                                                    //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                                                    //.Take(@params.PageSize)
-                                                    .ToListAsync();
-                        productCount = res.Count();
-                        res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-
-
-
-
-
-
-                        //test = await (from product in _context.ProductDescriptions
-                        //              join pmpd in _context.ProductModelProductDescriptions on product.ProductDescriptionId equals pmpd.ProductModelId
-                        //              join descr in _context.ProductDescriptions on pmpd.ProductDescriptionId equals descr.ProductDescriptionId
-                        //              where product.Name.Contains(@params.Search) || descr.Description.Contains(@params.Search)
-                        //              select product).Distinct()
-                        //                            .OrderByDescending(p => p.ListPrice)
-                        //                            //.Skip((@params.PageIndex - 1) * @params.PageSize)
-                        //                            //.Take(@params.PageSize)
-                        //                            .ToListAsync();
-
-
-
-
+                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                         break;
-
                     default:
                         return BadRequest();
                 }

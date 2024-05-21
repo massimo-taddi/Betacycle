@@ -142,7 +142,7 @@
         [(ngModel)]="product.discontinuedDate"
       />
     </div>
-    <div class="mx-auto col-10">
+    <div class="col-4">
       <label for="inputThumbnailPhoto" class="form-label"
         >Thumbnail image</label
       >
@@ -154,6 +154,22 @@
         [multiple]="false"
         customUpload="true"
         (onSelect)="onThumbnailSelect($event)"
+        (onRemove)="onThumbnailRemove($event)"
+        chooseLabel="Browse"
+      />
+    </div>
+    <div class="col-4">
+      <label for="inputThumbnailPhoto" class="form-label"
+        >Large image</label
+      >
+      <p-fileUpload
+        chooseIcon="pi pi-upload"
+        accept="image/gif"
+        maxFileSize="1000000"
+        [auto]="true"
+        [multiple]="false"
+        customUpload="true"
+        (onSelect)="onLargeImgSelect($event)"
         (onRemove)="onThumbnailRemove($event)"
         chooseLabel="Browse"
       />
