@@ -1,17 +1,5 @@
-<!-- 
-<table>
-  <tr *ngFor="let customer of customers">
-    <td>
-      {{ customer.companyName }}
-      {{ customer.firstName }}
-      {{ customer.lastName }}
-      {{ customer.emailAddress }}
-      {{ customer.customerAddresses }}
-    </td>
-  </tr>
-</table>
-
--->
+<input type="text" [(ngModel)]="searchName" placeholder="search" />
+<button (click)="funzioneCustomer()">Search</button>
 
 <p-table [value]="customers" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template pTemplate="header">

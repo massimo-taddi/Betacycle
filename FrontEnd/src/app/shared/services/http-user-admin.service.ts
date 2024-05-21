@@ -30,6 +30,9 @@ export class HttpUserAdminService {
   ): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    if (params.search == null) {
+      params.search = '';
+    }
     return this.http.get(
       `https://localhost:7287/api/Customers?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}&Search=${params.search}`,
       {
@@ -42,14 +45,14 @@ export class HttpUserAdminService {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.get('https://localhost:7287/api/addresses', {
-      headers: header
+      headers: header,
     });
   }
   setSearchParams(params: SearchParams) {
     this.searchParams.next(params);
   }
 
-  httpDeleteCustomerAddress(id: number){
+  httpDeleteCustomerAddress(id: number) {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.delete(`https://localhost:7287/api/addresses/${id}`, {
@@ -57,12 +60,19 @@ export class HttpUserAdminService {
     });
   }
 
-  httpPutCustomerAddress(newAddress: AddressFormData, id: number): Observable<any> {
+  httpPutCustomerAddress(
+    newAddress: AddressFormData,
+    id: number
+  ): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.put(`https://localhost:7287/api/addresses/${id}`, newAddress, {
-      headers: header
-    });
+    return this.http.put(
+      `https://localhost:7287/api/addresses/${id}`,
+      newAddress,
+      {
+        headers: header,
+      }
+    );
   }
 
   httpPostCustomerAddress(newAddress: AddressFormData): Observable<any> {
