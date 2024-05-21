@@ -77,7 +77,7 @@ namespace BetaCycleAPI.Controllers
             }
             catch (Exception ex)
             {
-                await DBErrorLogger.WriteExceptionLog(_context, new LoginException("Exception during the JWT login process: the JWT token couldn't be generated."));
+                await DBErrorLogger.WriteExceptionLog(_context, new LoginException("Exception during the JWT logout process: the JWT token couldn't be generated."));
                 return BadRequest();
             }
             return Ok();
