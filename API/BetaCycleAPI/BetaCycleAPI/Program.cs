@@ -66,6 +66,7 @@ namespace BetaCycleAPI
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorks")));
             builder.Services.AddDbContext<AdventureWorks2019CredentialsContext>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("Credentials")));
+            builder.Services.AddResponseCaching();
 
             builder.Services.AddCors(opt =>
             {
@@ -94,6 +95,7 @@ namespace BetaCycleAPI
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
+            app.UseResponseCaching();
 
 
             app.UseAuthorization();

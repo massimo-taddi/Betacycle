@@ -84,6 +84,29 @@ namespace BetaCycleAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("hascart")]
+        public async Task<ActionResult<bool>> hasCart()
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+
+            try
+            {
+                return (await _awContext.Customers.FindAsync((int)tokenCustomerId)).ShoppingCartId != null;
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+        }   
+
         // PUT: api/ShoppingCart/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -139,6 +162,7 @@ namespace BetaCycleAPI.Controllers
                                    (int)_credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
             var customer = await _awContext.Customers.FindAsync(tokenCustomerId);
             ShoppingCart? cart = await _awContext.ShoppingCarts.FindAsync(customer.ShoppingCartId);
+
             try
             {
                 if (cart == null)
@@ -151,12 +175,20 @@ namespace BetaCycleAPI.Controllers
                     };
                     _awContext.ShoppingCarts.Add(cart);
                     await _awContext.SaveChangesAsync();
+                    customer.ShoppingCartId = cart.ShoppingCartId;
                 }
-                customer.ShoppingCartId = cart.ShoppingCartId;
-                await _awContext.SaveChangesAsync();
+                var shoppingCartContainsItem = (await isProductAdded(shoppingCartItem.ProductId)).Value;
+                if(shoppingCartContainsItem)
+                {
+                    var item = await _awContext.ShoppingCartItems.Where(item => item.ProductId == shoppingCartItem.ProductId && item.ShoppingCartId == cart.ShoppingCartId).FirstOrDefaultAsync();
+                    item.Quantity += shoppingCartItem.Quantity;
+                    await _awContext.SaveChangesAsync();
+                }else
+                {
+                    _awContext.ShoppingCartItems.Add(shoppingCartItem);
+                }
                 shoppingCartItem.ShoppingCartId = cart.ShoppingCartId;
 
-                _awContext.ShoppingCartItems.Add(shoppingCartItem);
                 await _awContext.SaveChangesAsync();
             }catch(Exception e)
             {

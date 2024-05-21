@@ -21,27 +21,4 @@ export class HttploginService {
       headers: header
     });
   }
-
-  // httpValidateToken(): Observable<any> {
-  //   //da finire
-  //   //modificare a post
-  //   this.newHeader = this.newHeader.set(
-  //     'Authorization',
-  //     'Basic '// + window.btoa(localStorage.getItem('credentials'))
-  //   );
-  //   return this.http.get('');
-  // }
-  /*
-  httpGetAuthrsById(id: number): Observable<any> {
-    this.newHeader = this.newHeader.set(
-      'Authorization',
-      'Basic' + window.btoa('Claudio:orloff')
-    );
-    localStorage.setItem;
-    sessionStorage.getItem;
-    return this.http.get(`https://localhost:7132/api/Authors/${id}`, {
-      headers: this.newHeader,
-    });
-  }
-  */
 }

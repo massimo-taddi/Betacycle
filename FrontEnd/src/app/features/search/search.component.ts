@@ -36,7 +36,7 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService]
 })
 export class SearchComponent implements OnInit {
-  products!: Product[];
+  products: Product[] | null = null;
   searchParams: SearchParams = new SearchParams();
   productCount: number = 0;
   justAddedProduct: Product | null = null;
@@ -59,6 +59,7 @@ export class SearchComponent implements OnInit {
     this.productService.searchParams$.subscribe(
       (par) => (this.searchParams = par)
     );
+    this.products = null;
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
@@ -71,7 +72,7 @@ export class SearchComponent implements OnInit {
   }
   private fillProducts() {
     this.productService.setSearchParams(this.searchParams);
-
+    this.products = null;
     this.productService.getProducts(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
@@ -93,29 +94,15 @@ export class SearchComponent implements OnInit {
   }
 
   addProductToCart(product: Product) {
-    let itemExists = false;
-    this.basketService.isItemInBasket(product.productId).subscribe({
-      next: (res: any) => {
-        itemExists = res;
-        if (itemExists) {
-          this.showError();
-        } else {
-          this.basketService.postBasketItem(product).subscribe({
-            next: (prod: Product) => {
-              this.justAddedProduct = prod;
-            },
-            error: (err: Error) => {
-              console.log(err.message);
-            },
-          });
-          this.showAdded();
-        }
+    this.basketService.postBasketItem(product).subscribe({
+      next: (prod: Product) => {
+        this.justAddedProduct = prod;
       },
       error: (err: Error) => {
         console.log(err.message);
       },
     });
-    
+    this.showAdded();
   }
 
   productDetails(id: number){

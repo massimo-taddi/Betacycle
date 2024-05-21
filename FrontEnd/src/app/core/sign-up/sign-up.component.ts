@@ -7,6 +7,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { PasswordModule } from 'primeng/password'; 
 import { SignUpForm } from '../../shared/models/SignUpForm';
 import { InputTextModule } from 'primeng/inputtext';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,7 +21,7 @@ export class SignUpComponent implements OnInit {
   stayLoggedIn: boolean = false;
   signUpForm: SignUpForm = new SignUpForm();
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit(): void {
     
@@ -40,5 +41,6 @@ export class SignUpComponent implements OnInit {
         console.log(error.message);
       }
       });
+      this.router.navigate(["/home"]);
   }
 }

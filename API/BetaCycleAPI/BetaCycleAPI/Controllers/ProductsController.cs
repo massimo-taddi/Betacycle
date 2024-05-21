@@ -30,6 +30,7 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
         public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];

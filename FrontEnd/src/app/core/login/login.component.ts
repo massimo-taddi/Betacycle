@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { jwtDecode } from 'jwt-decode';
+import { BasketService } from '../../shared/services/basket.service';
+import { ShoppingCartItem } from '../../shared/models/ShoppingCartItem';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +24,7 @@ export class LoginComponent {
   stayLoggedIn: boolean = false;
   failedLogin: boolean = false;
 
-  constructor(private http: HttploginService, private router: Router, private authStatus: AuthenticationService) {}
+  constructor(private http: HttploginService, private router: Router, private authStatus: AuthenticationService, private basketService: BasketService) {}
 
   Login() {
     if (this.loginCredentials.username != '' && this.loginCredentials.password != '') {
@@ -33,6 +35,8 @@ export class LoginComponent {
               this.jwtToken = JSON.parse(response.body).token;
               this.decodedTokenPayload = jwtDecode(this.jwtToken);
               this.authStatus.setLoginStatus(true, this.jwtToken, this.stayLoggedIn, this.decodedTokenPayload.role === 'admin');
+              // aggiungere qui i controlli e le op sul carrello
+              this.pushLocalCart();
               this.router.navigate(["/home"])
               break;
             case HttpStatusCode.NoContent:
@@ -47,6 +51,22 @@ export class LoginComponent {
       });
     } else alert('Username e Password obbligatori!');
   }
+
+  pushLocalCart() {
+    var localBasket = localStorage.getItem('basket');
+    if(localBasket != undefined) {
+      var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
+      this.basketService.userHasBasket().subscribe((response: boolean) => {
+        if(!response) {
+          localBasketFound.forEach((item) => {
+            this.basketService.postBasketItemRemote(item).subscribe();
+          });
+        }
+        localStorage.removeItem('basket');
+      });
+    }
+  }
+
   navToSignup() {
     this.router.navigate(['/signup']);
   }
