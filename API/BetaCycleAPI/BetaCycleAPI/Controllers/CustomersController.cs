@@ -52,24 +52,32 @@ namespace BetaCycleAPI.Controllers
                     switch (@params.Sort)
                     {
                         case "Desc":
+                            if(@params.Search==null)
+                            {
+                                @params.Search = "";
+                            }
                             //ritornare n customer 
                             res = await (from customer in _awContext.Customers
-                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer != null
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) 
+
                                          select customer)
                                          .OrderBy(x => x.FirstName).ToListAsync();
-                            customerCount = res.Count();  
-                            
+                            customerCount = res.Count();
+                            res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+
                             break;
                         case "Asc":
                             //ritornare n customer 
                             res = await (from customer in _awContext.Customers
-                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) || customer!=null
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) 
+
                                          select customer)
                                          .OrderBy(x => x.FirstName).ToListAsync();
                             customerCount = res.Count();
+                            res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                             break;
                     }             
-                    res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                    
                     return (customerCount,res);
                 
                 }
