@@ -9,6 +9,7 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
 import { jwtDecode } from 'jwt-decode';
 import { BasketService } from '../../shared/services/basket.service';
 import { ShoppingCartItem } from '../../shared/models/ShoppingCartItem';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -54,12 +55,21 @@ export class LoginComponent {
 
   pushLocalCart() {
     var localBasket = localStorage.getItem('basket');
-    if(localBasket != undefined) {
+    if(localBasket != undefined) { //user non loggato ha il basket in local
       var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
       this.basketService.userHasBasket().subscribe((response: boolean) => {
-        if(!response) {
-          localBasketFound.forEach((item) => {
-            this.basketService.postBasketItemRemote(item).subscribe();
+        if(!response) { //basket in local presente ma non sul db
+          this.basketService.postBasketItemRemote(localBasketFound[0]!).subscribe({
+            next: (resp: any) =>{
+              if(resp != null && localBasketFound.length > 1){
+                for(var i=1; i< localBasketFound.length; i++){
+                  this.basketService.postBasketItemRemote(localBasketFound[i]).subscribe();
+                }
+              }
+            },
+            error: (err: Error) =>{
+              console.log(err)
+            }
           });
         }
         localStorage.removeItem('basket');
