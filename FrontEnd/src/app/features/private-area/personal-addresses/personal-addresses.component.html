@@ -151,7 +151,7 @@
             <td>{{addr.postalCode}}</td>
             <td>{{addr.customerAddresses[0].addressType}}</td>
             <td><p-button label="Edit" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
-            <p-dialog header="Modifica dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
+            <p-dialog header="Modify address" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <form #putForm="ngForm" class="row g-3 p-3">
                 <div class="col-md-6">

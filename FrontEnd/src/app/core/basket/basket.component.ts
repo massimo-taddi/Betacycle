@@ -8,11 +8,14 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { DialogModule } from 'primeng/dialog';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [CommonModule, DropdownModule, FormsModule, ToastModule],
+  imports: [CommonModule, DropdownModule, FormsModule, ToastModule, DialogModule, RouterModule],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.css',
   providers: [MessageService]
@@ -20,11 +23,19 @@ import { ToastModule } from 'primeng/toast';
 export class BasketComponent implements OnInit {
   basketItemsProductsMap: Map<ShoppingCartItem, Product> = new Map();
   rangeArray = [...Array(10)].map((_, i) => 1 + i * 1);
+  isUserLoggedIn: boolean = false;
+  templateCheckout: boolean = false;
+  noItemsWarning: boolean = false;
 
-  constructor(private shoppingCartService: BasketService, private productService: ProductService, private messageService: MessageService) { }
+
+  constructor(private shoppingCartService: BasketService, private productService: ProductService, private messageService: MessageService,
+              private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
     this.fillBasket();
+    this.authenticationService.isLoggedIn$.subscribe(
+      (res) => (this.isUserLoggedIn = res)
+    );
   }
 
   updateQuantity(item: ShoppingCartItem) {
@@ -78,5 +89,19 @@ export class BasketComponent implements OnInit {
       totalPrice += (product.listPrice * item.quantity);
     });
     return totalPrice;
+  }
+
+
+  CheckoutRoute(){
+    if(this.basketItemsProductsMap.size != 0){
+      if(!this.isUserLoggedIn){
+        this.noItemsWarning = false;
+        this.templateCheckout = true;
+      }else{
+        this.router.navigate(["/checkout"]);
+      }
+    }else{
+      this.noItemsWarning = true;
+    }
   }
 }

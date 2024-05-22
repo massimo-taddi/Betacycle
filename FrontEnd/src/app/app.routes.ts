@@ -25,6 +25,7 @@ import { ModifyCategoryComponent } from './features/admin-area/modify-category/m
 import { ModifyModelComponent } from './features/admin-area/modify-model/modify-model.component';
 import { AddCategoryComponent } from './features/admin-area/add-category/add-category.component';
 import { AddModelComponent } from './features/admin-area/add-model/add-model.component';
+import { CheckoutComponent } from './core/checkout/checkout.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,10 @@ export const routes: Routes = [
   {
     path: 'basket',
     component: BasketComponent,
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent,
   },
   {
     path: 'product-page/:productId',
