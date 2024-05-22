@@ -1,7 +1,6 @@
-<main role="main" style="padding-top: 75px">
-  <div class="card" style="position: unset">
-    <div id="carouselExampleIndicators" class="carousel slide"
-      data-bs-ride="carousel">
+<main role="main">
+  <div class="card" style="height: 100vh; position: unset">
+    <div id="carouselExampleIndicators" class="carousel slide" style="height: 100%;" data-bs-ride="carousel">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -9,7 +8,7 @@
       </div>
 
 
-      <div class="carousel-inner">
+      <div class="carousel-inner" style="height: 100%;">
 
         <div class="carousel-item active align-items-center justify-content-center bg-item" id="bcimg-first" data-bs-interval="5000">
           <div class="bcmain-page-container">
@@ -19,12 +18,12 @@
           </div>
         </div>
 
-        <div class="carousel-item bg-item"  data-bs-interval="5000">
+        <div class="carousel-item bg-item" data-bs-interval="5000">
           <video id="bc-videobg" loop autoplay muted [playsInline]="true">
             <source src="/assets/video/biking_carousel.mp4" type="video/mp4">
             Your browser does not support the video tag
           </video>
-          <div class="carousel-caption phrase">
+          <div class="phrase">
             <h2 style="color: white">"Ride the <span>Difference</span> with our
               Exceptional <span>Bicycles</span>!"</h2>
           </div>
@@ -59,40 +58,136 @@
 
   <div class="container marketing">
     <h1 style="margin-top: 100px;">Discover what they think about us...</h1>
-    <div class="bc-review-row">
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
+    
 
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
+    <!-- START THE FEATURETTES -->
 
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
+    <hr class="featurette-divider" />
+
+    <div class="row featurette">
+      <div class="col-md-7 col-text">
+        <h2 class="featurette-heading">
+          Who are we?
+        </h2>
+        <span class="text-muted"><h3 style="margin-top: 15px;">Discover how and when our adventure began!</h3></span>
+        <p class="lead">
+          Betacycle, founded in 2024, is your go-to destination for high-quality bicycles and accessories. With a carefully curated selection of the best brands in the industry, we are committed to offering safety and exceptional performance. More than just a store, we are a community of cyclists promoting an active and sustainable lifestyle. Whether you are a beginner or an experienced rider, we are here to support you. Join us in our mission to inspire freedom, adventure, and joy through cycling. Explore the world on two wheels with Betacycle, your trusted companion for cycling adventures.
+        </p>
+      </div>
+      <div class="col-md-5 col-text">
+        <img src="/assets/images/Betacycle-Big-logo.svg" class="bc-imgfr" alt="">
       </div>
     </div>
+
+    <hr class="featurette-divider" />
+
+    <div class="row featurette">
+      <h1 *ngIf="isUserLoggedIn; else randomProd">Products for you...</h1>
+      <ng-template #randomProd><h1>Some of our products...</h1></ng-template>
+      <p-carousel 
+        [value]="products" 
+        [numVisible]="3" 
+        [numScroll]="3" 
+        [responsiveOptions]="responsiveOptions"
+        autoplayInterval="3000">
+        <ng-template let-product pTemplate="item">
+                <div class="border-1 surface-border border-round m-2 p-3">
+                    <div class="mb-3">
+                        <div class="relative mx-auto bc-img-container">
+                          <img style="max-width: fit-content;" class="bc-recom-img card-img-top" src="data:image/gif;base64, {{product.largePhoto}}" alt="{{product.largePhotoFileName}}">
+                        </div>
+                    </div>
+                    <div class="mb-3 font-medium">
+                        {{ product.name }}
+                    </div>
+                    <div class="flex justify-content-between align-items-center">
+                    <div class="mt-0 font-semibold text-xl">
+                        {{ '$' + product.listPrice }}
+                    </div>
+                      <div class="bc-productcard-footer">
+                        <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;"></button>
+                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="ProductDetails(product.productId)">Details</button>
+                      </div>
+                    </div>
+                </div>
+        </ng-template>
+</p-carousel>
+
+    </div>
+
+    <hr class="featurette-divider" />
+
+    <div class="row featurette">
+      <div class="col-md-7 col-text">
+        <h2 class="featurette-heading">
+          Where are we?
+        </h2>
+        <span class="text-muted"><h3 style="margin-top: 15px; margin-bottom: 25px;">Come and visit us or get in touch!</h3></span>
+        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-envelope" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
+          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i>
+          <a class="bc-support bc-info" href="mailto:beta89256464@gmail.com">beta89256464&#64;gmail.com</a></h5>
+
+        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-phone" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
+          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i><a class="bc-support bc-info" href="tel:3333333333">333 3333333</a></h5>
+
+        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-map-marker" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
+          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i><a class="bc-support bc-info" href="
+          https://www.google.com/maps/place/Viale+Stelvio,+70,+20159+Milano+MI/@45.4953476,9.1820322,19z/data=!4m6!3m5!1s0x4786c12cbb3059df:0xbd9f9d9852d57101!8m2!3d45.4956099!4d9.1821019!16s%2Fg%2F11c215mtbt?entry=ttu">
+          Viale Stelvio, 70, 20159 Milano MI</a></h5>
+      </div>
+      <div class="col-md-5 col-text">
+        <iframe id="frame-maps" class="bc-imgfr" load="lazy" allowfullscreen="" 
+        src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDGnBX6rn9ZWd4-gmLf3LF2JwxBBmivkQU&center=45.49558730948945,9.18207775730284&zoom=20
+            &maptype=satellite"></iframe>
+      </div>
+    </div>
+
+    <!-- /END THE FEATURETTES -->
+  </div>
+  <!-- /.container -->
+
+  <!-- FOOTER -->
+  <!-- <p-scrollTop class="bc-scolltopbtn"/> -->
+</main>
+
+<!-- <router-outlet></router-outlet> -->
+
+
+
+<!-- <div class="bc-review-row">
+      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
+        <div class="card-body bc-review-card">
+          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
+          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <a class="read-more" href="#">
+            <span class="text">Leggi di più</span>
+            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
+        <div class="card-body bc-review-card">
+          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
+          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <a class="read-more" href="#">
+            <span class="text">Leggi di più</span>
+            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
+        <div class="card-body bc-review-card">
+          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
+          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <a class="read-more" href="#">
+            <span class="text">Leggi di più</span>
+            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
+          </a>
+        </div>
+      </div>
+    </div> -->
     <!-- Three columns of text below the carousel -->
     <!-- <div class="row">
       <div class="col-lg-4">
@@ -154,95 +249,3 @@
       <!-- /.col-lg-4 -->
     <!-- </div> -->
     <!-- /.row -->
-
-    <!-- START THE FEATURETTES -->
-
-    <hr class="featurette-divider" />
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">
-          Who are we?
-        </h2>
-        <span class="text-muted"><h3 style="margin-top: 15px;">Discover how and when our adventure began!</h3></span>
-        <p class="lead">
-          Betacycle, founded in 2024, is your go-to destination for high-quality bicycles and accessories. With a carefully curated selection of the best brands in the industry, we are committed to offering safety and exceptional performance. More than just a store, we are a community of cyclists promoting an active and sustainable lifestyle. Whether you are a beginner or an experienced rider, we are here to support you. Join us in our mission to inspire freedom, adventure, and joy through cycling. Explore the world on two wheels with Betacycle, your trusted companion for cycling adventures.
-        </p>
-      </div>
-      <div class="col-md-5">
-        <img src="/assets/images/Betacycle-Big-logo.svg" class="bc-imgfr" alt="">
-      </div>
-    </div>
-
-    <hr class="featurette-divider" />
-
-    <div class="row featurette">
-      <h1 *ngIf="isUserLoggedIn; else randomProd">Products for you...</h1>
-      <ng-template #randomProd><h1>Some of our products...</h1></ng-template>
-      <p-carousel 
-        [value]="products" 
-        [numVisible]="3" 
-        [numScroll]="3" 
-        [responsiveOptions]="responsiveOptions"
-        autoplayInterval="3000">
-        <ng-template let-product pTemplate="item">
-                <div class="border-1 surface-border border-round m-2 p-3">
-                    <div class="mb-3">
-                        <div class="relative mx-auto bc-img-container">
-                          <img style="max-width: fit-content;" class="bc-recom-img card-img-top" src="data:image/gif;base64, {{product.largePhoto}}" alt="{{product.largePhotoFileName}}">
-                        </div>
-                    </div>
-                    <div class="mb-3 font-medium">
-                        {{ product.name }}
-                    </div>
-                    <div class="flex justify-content-between align-items-center">
-                    <div class="mt-0 font-semibold text-xl">
-                        {{ '$' + product.listPrice }}
-                    </div>
-                      <div class="bc-productcard-footer">
-                        <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;"></button>
-                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="ProductDetails(product.productId)">Details</button>
-                      </div>
-                    </div>
-                </div>
-        </ng-template>
-</p-carousel>
-
-    </div>
-
-    <hr class="featurette-divider" />
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">
-          Where are we?
-        </h2>
-        <span class="text-muted"><h3 style="margin-top: 15px; margin-bottom: 25px;">Come and visit us or get in touch!</h3></span>
-        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-envelope" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
-          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i>
-          <a class="bc-support bc-info" href="mailto:beta89256464@gmail.com">beta89256464&#64;gmail.com</a></h5>
-
-        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-phone" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
-          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i><a class="bc-support bc-info" href="tel:3333333333">333 3333333</a></h5>
-
-        <h5 style="column-gap: 20px; display: flex;"><i class="pi pi-map-marker" style="font-size: clamp(1.25rem, 0.313vw + 1.188rem, 1.563rem);
-          line-height: clamp(1.875rem, 0.156vw + 1.844rem, 2.031rem);"></i><a class="bc-support bc-info" href="
-          https://www.google.com/maps/place/Viale+Stelvio,+70,+20159+Milano+MI/@45.4953476,9.1820322,19z/data=!4m6!3m5!1s0x4786c12cbb3059df:0xbd9f9d9852d57101!8m2!3d45.4956099!4d9.1821019!16s%2Fg%2F11c215mtbt?entry=ttu">
-          Viale Stelvio, 70, 20159 Milano MI</a></h5>
-      </div>
-      <div class="col-md-5">
-        <iframe id="frame-maps" class="bc-imgfr" load="lazy" allowfullscreen="" 
-        src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDGnBX6rn9ZWd4-gmLf3LF2JwxBBmivkQU&center=45.49558730948945,9.18207775730284&zoom=20
-            &maptype=satellite"></iframe>
-      </div>
-    </div>
-
-    <!-- /END THE FEATURETTES -->
-  </div>
-  <!-- /.container -->
-
-  <!-- FOOTER -->
-  <p-scrollTop class="bc-scolltopbtn"/>
-</main>
-
-<!-- <router-outlet></router-outlet> -->

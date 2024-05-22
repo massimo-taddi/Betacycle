@@ -10,10 +10,22 @@ img{height: 50px;}
 
 .f-line{background-color: white; height: 5px; border-radius: 100px; margin: 35px 0px;}
 
-.fci-container{justify-content: space-between; align-items: center; column-gap: 35px; width: 100%; display: flex; flex-direction: row; flex-wrap: wrap;}
+.fci-container{justify-content: space-between; align-items: center; column-gap: 35px; width: 100%; display: flex; flex-direction: row;}
 .f-icons-container{justify-content: center; display: flex; flex-direction: row; column-gap: 35px;}
 .f-icons{font-size: 2.5rem; transition: .25s ease-in-out; padding: 10px; align-items: center; justify-content: center; background-color: bisque; border-radius: 100%;}
 span.f-icons:hover{color: white; background-color: #1e1e1e; transition: .25s ease-in-out;}
 
 
-@media only screen and (max-width: 910px) {.f-col-container {flex-wrap: wrap; align-items: center; row-gap: 25px;} }
+@media only screen and (max-width: 910px) {
+    .f-col-container {row-gap: 35px; flex-wrap: wrap; align-items: center; justify-content: center; row-gap: 25px;} 
+    .f-col{max-width: 350px;}
+    .f-diff{width: fit-content; min-width: fit-content;}
+}
+
+@media only screen and (max-width: 610px) {
+    .fci-container{flex-wrap: wrap; justify-content: center; row-gap: 25px;}
+}
+
+@media only screen and (max-width: 425px) {
+    .f-icons-container{flex-wrap: wrap; justify-content: center; row-gap: 10px;}
+}
