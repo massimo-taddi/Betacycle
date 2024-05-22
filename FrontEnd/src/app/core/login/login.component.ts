@@ -59,11 +59,11 @@ export class LoginComponent {
       var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
       this.basketService.userHasBasket().subscribe((response: boolean) => {
         if(!response) { //basket in local presente ma non sul db
-          this.basketService.postBasketItemRemote(localBasketFound[0]!).subscribe({
+          this.basketService.postBasketItemRemote(localBasketFound[0]!, true).subscribe({
             next: (resp: any) =>{
               if(resp != null && localBasketFound.length > 1){
                 for(var i=1; i< localBasketFound.length; i++){
-                  this.basketService.postBasketItemRemote(localBasketFound[i]).subscribe();
+                  this.basketService.postBasketItemRemote(localBasketFound[i], true).subscribe();
                 }
               }
             },

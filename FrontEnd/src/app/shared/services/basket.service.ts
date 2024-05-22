@@ -78,10 +78,10 @@ export class BasketService {
     return of(product);
    }
 
-   postBasketItemRemote(product: ShoppingCartItem): Observable<any> {
+   postBasketItemRemote(product: ShoppingCartItem, fromLocalBasket: boolean = false): Observable<any> {
     var header = new HttpHeaders();
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.post('https://localhost:7287/api/shoppingcart', product, {headers: header});
+    return this.http.post(`https://localhost:7287/api/shoppingcart${fromLocalBasket ? '?postFromLocal=true' : ''}`, product, {headers: header});
    }
 
    putBasketItem(item: ShoppingCartItem): Observable<any> {

@@ -14,10 +14,11 @@ using Microsoft.IdentityModel.Tokens;
 using NuGet.Versioning;
 using BetaCycleAPI.BLogic;
 using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Components;
 
 namespace BetaCycleAPI.Controllers
 {
-    [Route("api/shoppingcart")]
+    [Microsoft.AspNetCore.Mvc.Route("api/shoppingcart")]
     [ApiController]
     [Authorize]
     public class ShoppingCartItemsController : ControllerBase
@@ -57,7 +58,7 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/ShoppingCart/isproductadded
         [HttpGet]
-        [Route("isproductadded")]
+        [Microsoft.AspNetCore.Mvc.Route("isproductadded")]
         public async Task<ActionResult<bool>> isProductAdded(int productId)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -85,7 +86,7 @@ namespace BetaCycleAPI.Controllers
         }
 
         [HttpGet]
-        [Route("hascart")]
+        [Microsoft.AspNetCore.Mvc.Route("hascart")]
         public async Task<ActionResult<bool>> hasCart()
         {
             var handler = new JwtSecurityTokenHandler();
@@ -98,7 +99,16 @@ namespace BetaCycleAPI.Controllers
 
             try
             {
-                return (await _awContext.Customers.FindAsync((int)tokenCustomerId)).ShoppingCartId != null;
+                var shoppingCartId = (await _awContext.Customers.FindAsync((int)tokenCustomerId)).ShoppingCartId;
+                if(shoppingCartId != null)
+                {
+                    if(await isCartEmpty((int)shoppingCartId))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
             }
             catch (Exception e)
             {
@@ -151,7 +161,8 @@ namespace BetaCycleAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ActionName("PostShoppingCartItemAsync")]
-        public async Task<ActionResult<ShoppingCartItem>> PostShoppingCartItem(ShoppingCartItem shoppingCartItem)
+        [Microsoft.AspNetCore.Mvc.Route("{postFromLocal:int?}")]
+        public async Task<ActionResult<ShoppingCartItem>> PostShoppingCartItem([FromBody]ShoppingCartItem shoppingCartItem, bool postFromLocal = false)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
@@ -177,6 +188,11 @@ namespace BetaCycleAPI.Controllers
                     await _awContext.SaveChangesAsync();
                     customer.ShoppingCartId = cart.ShoppingCartId;
                 }
+                if (!(await isCartEmpty(cart.ShoppingCartId)) && postFromLocal)
+                {
+                    // non aggiungere il prodotto, perche sto mandando dal carrello locale e il carrello su db non e' vuoto
+                    return Ok();
+                }
                 var shoppingCartContainsItem = (await isProductAdded(shoppingCartItem.ProductId)).Value;
                 if(shoppingCartContainsItem)
                 {
@@ -197,6 +213,10 @@ namespace BetaCycleAPI.Controllers
             }
 
             return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
+        }
+
+        private async Task<bool> isCartEmpty(int shoppingCartId) { 
+            return !(await _awContext.ShoppingCarts.FindAsync(shoppingCartId)).ShoppingCartItems.Any(); 
         }
 
         // DELETE: api/ShoppingCart/5
