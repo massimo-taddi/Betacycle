@@ -21,7 +21,7 @@
               <td>{{order.orderDate}}</td>
               <td>{{order.shipDate}}</td>
               <td>{{order.shipToAddress?.addressLine1}}</td>
-              <td><span id="status-box">{{orderStatusString(order.status)}}</span></td>
+              <td><span class="status-box">{{orderStatusString(order.status)}}</span></td>
               <td>{{order.shipMethod}}</td>
               <td>{{order.subTotal | currency:'USD'}}</td>
               <td><p-button label="Details" icon="pi pi-box" (click)="dialogBool=true;" styleClass="p-button-warning"></p-button></td>

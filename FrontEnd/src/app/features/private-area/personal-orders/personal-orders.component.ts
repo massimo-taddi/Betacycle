@@ -27,29 +27,39 @@ export class PersonalOrdersComponent implements OnInit {
   }
 
   /// Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
-  orderStatusString(status: number): string {
-    let box = document.getElementById('status-box');
-    switch (status) {
-      case 1:
-        box?.setAttribute('style','background-color: rgb(240, 204, 152); color: darkorange; padding: 5px; border-radius: 10px;');
-        return 'In process';
-      case 2:
-        box?.setAttribute('style','background-color: lightgreen; color: darkgreen; padding: 5px; border-radius: 10px;');
-        return 'Approved';
-      case 3:
-        box?.setAttribute('style','background-color: rgb(240, 204, 152); color: darkorange; padding: 5px; border-radius: 10px;');
-        return 'Backordered';
-      case 4:
-        box?.setAttribute('style','background-color: rgb(249, 142, 142); color: darkred; padding: 5px; border-radius: 10px;');
-        return 'Rejected';
-      case 5:
-        box?.setAttribute('style','background-color: lightgreen; color: darkgreen; padding: 5px; border-radius: 10px;');
-        return 'Shipped';
-      case 6:
-        box?.setAttribute('style','background-color: rgb(249, 142, 142); color: darkred; padding: 5px; border-radius: 10px;');
-        return 'Cancelled';
-    }
-    return 'ERRORE';
+  orderStatusString(status: number){
+    let box = Array.from(document.getElementsByClassName('status-box'));
+    box.forEach(el => {
+      switch (status) {
+        case 1:
+          el?.setAttribute('style','background-color: rgb(240, 204, 152); color: darkorange; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'In process';
+          break;
+        case 2:
+          el?.setAttribute('style','background-color: lightgreen; color: darkgreen; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'Approved';
+          break;
+        case 3:
+          el?.setAttribute('style','background-color: rgb(240, 204, 152); color: darkorange; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'Backordered';
+          break;
+        case 4:
+          el?.setAttribute('style','background-color: rgb(249, 142, 142); color: darkred; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'Rejected';
+          break;
+        case 5:
+          el?.setAttribute('style','background-color: lightgreen; color: darkgreen; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'Shipped';
+          break;
+        case 6:
+          el?.setAttribute('style','background-color: rgb(249, 142, 142); color: darkred; padding: 5px; border-radius: 10px;');
+          el.innerHTML = 'Cancelled';
+          break;
+        default:
+          el.innerHTML = 'ERRORE'
+          break;
+      }
+    })
   }
 
   private getPersonalItems() {
