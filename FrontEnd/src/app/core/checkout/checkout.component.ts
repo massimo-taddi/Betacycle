@@ -19,7 +19,8 @@ export class CheckoutComponent implements OnInit{
   addresses: Address []=[];
   salesOrderHeader: SalesOrderHeader = new SalesOrderHeader();
   basketItemsProductsMap: Map<ShoppingCartItem, Product> = new Map();
-  totalPrice: number = 0;
+  subTotalPrice: number = 0;
+  taxAmount: number = 0;
 
   constructor(private http: HttpUserAdminService, private shoppingCartService: BasketService, private productService: ProductService){}
 
@@ -39,6 +40,7 @@ export class CheckoutComponent implements OnInit{
           this.productService.getProductById(item.productId).subscribe({
             next: (product: Product) => {
               this.basketItemsProductsMap.set(item, product);
+              this.salesOrderHeader.subTotal += (product.listPrice * item.quantity)
             },
             error: (err: Error) => {
               console.log(err.message);
@@ -59,34 +61,58 @@ export class CheckoutComponent implements OnInit{
   setBillAddress(name: string){
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
     this.salesOrderHeader.billToAddressID = this.addresses[radios[0].value as unknown as number].addressId;
+
   }
 
-  GetSubTotal() { 
-    this.basketItemsProductsMap.forEach((product, item) => {
-      this.totalPrice += (product.listPrice * item.quantity);
-      console.log(this.totalPrice)
-    });
-    this.salesOrderHeader.subTotal = this.totalPrice;
+  // private GetSubTotal(): number { //ok
+  //   console.log(this.basketItemsProductsMap)
+  //   var totalPrice = 0;
+  //   this.basketItemsProductsMap.forEach((product, item) => {
+  //   totalPrice += (product.listPrice * item.quantity);
+  //   });
+  //   this.salesOrderHeader.subTotal = totalPrice;
+  //   this.subTotalPrice = totalPrice;
+  //   return totalPrice;
+  // }
+
+  private CalculateTaxAmount(): number { //ok
+    this.taxAmount = ((this.salesOrderHeader.subTotal * this.salesOrderHeader.taxAmt)/100);
+    return this.taxAmount;
   }
 
-  CalculateTaxAmount(): number {
-    return ((this.GetTaxPercent()/this.totalPrice)*100);
-  }
-
-  GetTaxPercent(): number{
+  private GetTaxPercent(){ //ok
     var taxPercent = 0;
-    var billingAddress = this.addresses.find(add => add.addressId == this.salesOrderHeader.billToAddressID);
+    var billingAddress = this.GetAddressById();
+    console.log(billingAddress?.countryRegion.toLowerCase())
     switch(billingAddress?.countryRegion.toLowerCase()){
-      case 'italy' || 'italia':
-        return 23;
-      case 'usa' || 'united states':
-        return 26;
+      case 'italia':
+      case 'italy':
+        this.salesOrderHeader.taxAmt = 23;
+        break;
+      case 'usa':
+      case 'united states':
+        this.salesOrderHeader.taxAmt = 26;
+        break;
       case 'canada':
-        return 15;
+        this.salesOrderHeader.taxAmt = 15;
+        break;
     }
-    return taxPercent;
   }
-  GetTotalDue(): number{
-    return this.totalPrice + this.CalculateTaxAmount();
+  GetTotalDue(){ //ok
+    if(this.salesOrderHeader.shipToAddressID != 0){
+      this.GetTaxPercent()
+      var totalDue = 0;
+      totalDue = this.salesOrderHeader.subTotal + this.CalculateTaxAmount();
+      this.salesOrderHeader.totalDue = totalDue;
+    }
+  }
+
+  private GetAddressById(){
+    var address = new Address();
+    this.addresses.forEach(add =>{
+      if(add.addressId == this.salesOrderHeader.billToAddressID)
+        address = add;
+    })
+    return address;
   }
 }

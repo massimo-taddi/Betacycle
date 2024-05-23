@@ -33,6 +33,7 @@
                     <label class="radio-container"
                         *ngFor="let add of addresses; index as i">
                         <input type="radio" (click)="setBillAddress('bill-add')"
+                            (change)="GetTotalDue();"
                             name="bill-add" value="{{i}}">
                         <span class="radio-checkmark"></span>
                         {{add.addressLine1}} - {{add.postalCode}} -
@@ -53,10 +54,10 @@
             </div>
         </div>
         <div class="info-checkout">
-            <p><span>SubTotal: </span>{{salesOrderHeader.subTotal}}<br>
-            <span>Tax Amount: </span>{{CalculateTaxAmount()}}<br>
-            <span>- Country Tax: </span>{{GetTaxPercent()}}%<br>
-            <span>Total Due: </span>{{GetTotalDue()}}</p>
+            <p><span><strong>Sub-total: $</strong></span>{{salesOrderHeader.subTotal}}<br>
+            <span><strong>Tax Amount: $</strong></span>{{taxAmount | number: '1.0-2' }}<br>
+            <span><strong>- Country Tax: </strong></span>{{salesOrderHeader.taxAmt}}%<br>
+            <span><strong>Total Due: $</strong></span>{{salesOrderHeader.totalDue | number: '1.0-2' }}</p>
         </div>
     </div>
 </div>
