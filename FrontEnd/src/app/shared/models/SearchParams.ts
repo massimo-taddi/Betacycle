@@ -1,7 +1,8 @@
-export class SearchParams {
-  pageIndex: number = 1;
-  pageSize: number = 20;
+import { PaginatorParams } from './PaginatorParams';
+
+export class SearchParams extends PaginatorParams {
   search: string | null = null;
-  sort: string = 'Desc';
-  constructor() {}
+  constructor() {
+    super();
+  }
 }

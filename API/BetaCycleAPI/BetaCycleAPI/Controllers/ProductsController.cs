@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
 using BetaCycleAPI.BLogic;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
+        
         public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
@@ -44,7 +45,7 @@ namespace BetaCycleAPI.Controllers
                 }
                 res = await (from product in _context.Products
                              from pmpd in product.ProductModel.ProductModelProductDescriptions
-                             where (EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) && product.OnSale)
+                             where ((EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search )|| (product.Name.Contains(@params.Search)|| pmpd.ProductDescription.Description.Contains(@params.Search))) && product.OnSale)
                              select product).Distinct().ToListAsync();
 
                 productCount = res.Count();
@@ -183,6 +184,27 @@ namespace BetaCycleAPI.Controllers
             return res;
         }
 
+
+        [HttpGet]
+        [Route("GetAllProducts")]
+        public async Task<ActionResult<(int, IEnumerable<Product>)>> GetAllProducts([FromQuery] PaginatorParams @params)
+        {
+            List<Product> res = [];
+            int countProducts = 0;
+            res = await _context.Products.ToListAsync();
+            countProducts = res.Count();
+            res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+            switch (@params.Sort)
+            {
+                case "Desc":
+                    res = res.OrderByDescending(el => el.ListPrice).ToList();
+                    break;
+                case "Asc":
+                    res = res.OrderBy(el => el.ListPrice).ToList();
+                    break;
+            }
+            return (countProducts,res);
+        }
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

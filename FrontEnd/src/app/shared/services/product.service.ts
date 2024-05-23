@@ -6,6 +6,7 @@ import { SearchParams } from '../models/SearchParams';
 import { ProductForm } from '../models/ProductForm';
 import { AuthenticationService } from './authentication.service';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { PaginatorParams } from '../models/PaginatorParams';
 @Injectable({
   providedIn: 'root',
 })
@@ -20,11 +21,19 @@ export class ProductService {
   }
 
   getProducts(params: SearchParams): Observable<any> {
+    if (params.search != '') {
+      return this.http.get(
+        `https://localhost:7287/api/Products?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Search=${params.search}&Sort=${params.sort}`
+      );
+    } else {
+      return this.getAllProducts(params);
+    }
+  }
+  getAllProducts(params: PaginatorParams): Observable<any> {
     return this.http.get(
-      `https://localhost:7287/api/products?pageindex=${params.pageIndex}&pagesize=${params.pageSize}&search=${params.search}&sort=${params.sort}`
+      `https://localhost:7287/api/Products/GetAllProducts?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
     );
   }
-
   getProductById(id: number): Observable<any> {
     return this.http.get(`https://localhost:7287/api/Products/${id}`);
   }
@@ -60,9 +69,6 @@ export class ProductService {
   }
 
   getRandomProducts(): Observable<any> {
-    return this.http.get(
-      `https://localhost:7287/api/products/randomproducts`,
-    );
+    return this.http.get(`https://localhost:7287/api/products/randomproducts`);
   }
-  
 }
