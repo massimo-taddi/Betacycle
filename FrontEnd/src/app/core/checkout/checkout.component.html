@@ -1,34 +1,62 @@
 <div class="container">
     <div class="left-checkout">
+        <h1 style="margin-bottom: 30px;">Checkout</h1>
         <div class="sales-info-card">
-            <a class="checkout-info" style="width: 500px;" type="button" data-bs-toggle="collapse"
+            <a class="checkout-info" style="width: 500px;" type="button"
+                data-bs-toggle="collapse"
                 data-bs-target="#addressShipChoiceCollapse">
-                <h4>Select your shipping address <i class="pi pi-angle-down"></i></h4>
+                <h4>Select your shipping address <i
+                        class="pi pi-angle-down"></i></h4>
             </a>
-            <div class="collapse" id="addressShipChoiceCollapse" >
+            <div class="collapse" id="addressShipChoiceCollapse">
                 <div class=" radio-group">
-                    <label class="radio-container" *ngFor="let add of addresses; index as i">
-                        <input type="radio" (click)="setShipAddress('ship-add')" name="ship-add" value="{{i}}">
+                    <label class="radio-container"
+                        *ngFor="let add of addresses; index as i">
+                        <input type="radio" (click)="setShipAddress('ship-add')"
+                            name="ship-add" value="{{i}}">
                         <span class="radio-checkmark"></span>
-                        {{add.addressLine1}} - {{add.postalCode}} - {{add.city}}<br>{{add.customerAddresses[0].addressType}}
+                        {{add.addressLine1}} - {{add.postalCode}} -
+                        {{add.city}}<br>{{add.customerAddresses[0].addressType}}
                     </label>
                 </div>
             </div>
         </div>
         <div class="sales-info-card">
-            <a class="checkout-info" style="width: 500px;" type="button" data-bs-toggle="collapse"
+            <a class="checkout-info" style="width: 500px;" type="button"
+                data-bs-toggle="collapse"
                 data-bs-target="#addressBillChoiceCollapse">
-                <h4>Select your billing address <i class="pi pi-angle-down"></i></h4>
+                <h4>Select your billing address <i
+                        class="pi pi-angle-down"></i></h4>
             </a>
-            <div class="collapse" id="addressBillChoiceCollapse" >
+            <div class="collapse" id="addressBillChoiceCollapse">
                 <div class=" radio-group">
-                    <label class="radio-container" *ngFor="let add of addresses; index as i">
-                        <input type="radio" (click)="setBillAddress('bill-add')" name="bill-add" value="{{i}}">
+                    <label class="radio-container"
+                        *ngFor="let add of addresses; index as i">
+                        <input type="radio" (click)="setBillAddress('bill-add')"
+                            name="bill-add" value="{{i}}">
                         <span class="radio-checkmark"></span>
-                        {{add.addressLine1}} - {{add.postalCode}} - {{add.city}}<br>{{add.customerAddresses[0].addressType}}
+                        {{add.addressLine1}} - {{add.postalCode}} -
+                        {{add.city}}<br>{{add.customerAddresses[0].addressType}}
                     </label>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="right-checkout">
+        <h2 style="margin-bottom: 30px;">Order summary</h2>
+        <div class="basket-item" *ngFor="let item of basketItemsProductsMap | keyvalue">
+            <img style="width: 100px;" src="data:image/gif;base64, {{item.value.thumbNailPhoto}}" alt="...">
+            <div class="lg:ml-3 footer-item">
+                <span style="display: block;"><strong>{{item.value.name}}</strong></span>
+                <span class="text-900 font-bold">x{{item.key.quantity}}</span>
+                <span>  -  ${{item.value.listPrice}}</span>
+            </div>
+        </div>
+        <div class="info-checkout">
+            <p><span>SubTotal: </span>{{salesOrderHeader.subTotal}}<br>
+            <span>Tax Amount: </span>{{CalculateTaxAmount()}}<br>
+            <span>- Country Tax: </span>{{GetTaxPercent()}}%<br>
+            <span>Total Due: </span>{{GetTotalDue()}}</p>
         </div>
     </div>
 </div>
