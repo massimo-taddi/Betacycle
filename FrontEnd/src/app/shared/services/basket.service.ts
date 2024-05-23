@@ -107,4 +107,28 @@ export class BasketService {
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.delete(`https://localhost:7287/api/shoppingcart/${itemId}`, {headers: header});
    }
+
+   pushLocalCart() {
+    var localBasket = localStorage.getItem('basket');
+    if(localBasket != undefined) { //user non loggato ha il basket in local
+      var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
+      this.userHasBasket().subscribe((response: boolean) => {
+        if(!response) { //basket in local presente ma non sul db
+          this.postBasketItemRemote(localBasketFound[0]!, true).subscribe({
+            next: (resp: any) =>{
+              if(resp != null && localBasketFound.length > 1){
+                for(var i=1; i< localBasketFound.length; i++){
+                  this.postBasketItemRemote(localBasketFound[i], true).subscribe();
+                }
+              }
+            },
+            error: (err: Error) =>{
+              console.log(err)
+            }
+          });
+        }
+        localStorage.removeItem('basket');
+      });
+    }
+  }
 }

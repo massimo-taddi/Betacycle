@@ -8,6 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { SignUpForm } from '../../shared/models/SignUpForm';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
+import { BasketService } from '../../shared/services/basket.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,7 +22,7 @@ export class SignUpComponent implements OnInit {
   stayLoggedIn: boolean = false;
   signUpForm: SignUpForm = new SignUpForm();
 
-  constructor(private customerService: CustomerService, private router: Router) { }
+  constructor(private customerService: CustomerService, private router: Router, private basketService: BasketService) { }
 
   ngOnInit(): void {
     
@@ -41,6 +42,7 @@ export class SignUpComponent implements OnInit {
         console.log(error.message);
       }
       });
+      this.basketService.pushLocalCart();
       this.router.navigate(["/home"]);
   }
 }

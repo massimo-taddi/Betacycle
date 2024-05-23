@@ -37,7 +37,7 @@ export class LoginComponent {
               this.decodedTokenPayload = jwtDecode(this.jwtToken);
               this.authStatus.setLoginStatus(true, this.jwtToken, this.stayLoggedIn, this.decodedTokenPayload.role === 'admin');
               // aggiungere qui i controlli e le op sul carrello
-              this.pushLocalCart();
+              this.basketService.pushLocalCart();
               this.router.navigate(["/home"])
               break;
             case HttpStatusCode.NoContent:
@@ -51,30 +51,6 @@ export class LoginComponent {
         },
       });
     } else alert('Username e Password obbligatori!');
-  }
-
-  pushLocalCart() {
-    var localBasket = localStorage.getItem('basket');
-    if(localBasket != undefined) { //user non loggato ha il basket in local
-      var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
-      this.basketService.userHasBasket().subscribe((response: boolean) => {
-        if(!response) { //basket in local presente ma non sul db
-          this.basketService.postBasketItemRemote(localBasketFound[0]!, true).subscribe({
-            next: (resp: any) =>{
-              if(resp != null && localBasketFound.length > 1){
-                for(var i=1; i< localBasketFound.length; i++){
-                  this.basketService.postBasketItemRemote(localBasketFound[i], true).subscribe();
-                }
-              }
-            },
-            error: (err: Error) =>{
-              console.log(err)
-            }
-          });
-        }
-        localStorage.removeItem('basket');
-      });
-    }
   }
 
   navToSignup() {
