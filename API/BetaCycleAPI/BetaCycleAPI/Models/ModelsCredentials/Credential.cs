@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BetaCycleAPI.Models.ModelsCredentials;
+﻿namespace BetaCycleAPI.Models.ModelsCredentials;
 
 public partial class Credential
 {

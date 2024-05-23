@@ -1,9 +1,5 @@
-﻿using BetaCycleAPI.Controllers;
-using BetaCycleAPI.Models;
+﻿using BetaCycleAPI.Models;
 using Microsoft.Data.SqlClient;
-using Microsoft.SqlServer;
-using System.Net;
-using System;
 
 
 
@@ -12,14 +8,14 @@ namespace BetaCycleAPI.BLogic
 {
     public static class LogTracer
     {
-        
+
         public static void AddLog(string userName, string typeTrace, string ipAddress, DateTime dateTime)
         {
             using (SqlConnection connection = new SqlConnection(Connectionstrings.AdventureWorks))
             {
                 try
                 {
-                    
+
                     connection.Open();
                     string sql = "INSERT INTO [dbo].[LogTrace] ([UserID],[TypeTrace],[IPAddress],[LogDateTime])VALUES" +
                         " (@UserID, @TyperTrace, @IPAddress, @DateTime)";

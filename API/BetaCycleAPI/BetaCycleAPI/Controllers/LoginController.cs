@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using BetaCycleAPI.Models;
-using BetaCycleAPI.BLogic.Authentication.Basic;
+﻿using BetaCycleAPI.BLogic;
 using BetaCycleAPI.BLogic.Authentication;
-using BetaCycleAPI.Models.Enums;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using BetaCycleAPI.BLogic;
 using BetaCycleAPI.Contexts;
-namespace BetaCycleAPI.Controllers {
+using BetaCycleAPI.Models;
+using BetaCycleAPI.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
+namespace BetaCycleAPI.Controllers
+{
 
     [ApiController]
     [Route("app/[controller]")]
@@ -26,7 +25,7 @@ namespace BetaCycleAPI.Controllers {
             {
                 // Check if passed credentials are valid in the DB's stored credentials
                 var result = await CredentialsDBChecker.ValidateLogin(credentials.Username, credentials.Password);
-                switch(result)
+                switch (result)
                 {
                     case DBCheckResponse.NotFound:
                         return NotFound();

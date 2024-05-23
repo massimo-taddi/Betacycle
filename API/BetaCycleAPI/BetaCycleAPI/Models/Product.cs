@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BetaCycleAPI.Models;
 
@@ -66,14 +64,14 @@ public partial class Product
     /// Product is a member of this product category. Foreign key to ProductCategory.ProductCategoryID. 
     /// </summary>
     /// 
-   
+
     public int? ProductCategoryId { get; set; }
 
     /// <summary>
     /// Product is a member of this product model. Foreign key to ProductModel.ProductModelID.
     /// </summary>
     /// 
-    
+
     public int? ProductModelId { get; set; }
 
     /// <summary>

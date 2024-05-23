@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BetaCycleAPI.Models;
+﻿namespace BetaCycleAPI.Models;
 
 /// <summary>
 /// Individual products associated with a specific sales order. See SalesOrderHeader.

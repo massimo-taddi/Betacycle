@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BetaCycleAPI.BLogic;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Versioning;
-using BetaCycleAPI.BLogic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -49,7 +42,8 @@ namespace BetaCycleAPI.Controllers
             {
                 var shoppingCartId = _awContext.Customers.Find((int)tokenCustomerId).ShoppingCartId;
                 return await _awContext.ShoppingCartItems.Where(item => item.ShoppingCartId == shoppingCartId).ToListAsync();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
@@ -78,7 +72,8 @@ namespace BetaCycleAPI.Controllers
             try
             {
                 return await _awContext.ShoppingCartItems.Where(item => item.ProductId == productId && item.ShoppingCartId == cartId).AnyAsync();
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
@@ -100,9 +95,9 @@ namespace BetaCycleAPI.Controllers
             try
             {
                 var shoppingCartId = (await _awContext.Customers.FindAsync((int)tokenCustomerId)).ShoppingCartId;
-                if(shoppingCartId != null)
+                if (shoppingCartId != null)
                 {
-                    if(await isCartEmpty((int)shoppingCartId))
+                    if (await isCartEmpty((int)shoppingCartId))
                     {
                         return false;
                     }
@@ -115,7 +110,7 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-        }   
+        }
 
         // PUT: api/ShoppingCart/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -162,7 +157,7 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         [ActionName("PostShoppingCartItemAsync")]
         [Microsoft.AspNetCore.Mvc.Route("{postFromLocal:int?}")]
-        public async Task<ActionResult<ShoppingCartItem>> PostShoppingCartItem([FromBody]ShoppingCartItem shoppingCartItem, bool postFromLocal = false)
+        public async Task<ActionResult<ShoppingCartItem>> PostShoppingCartItem([FromBody] ShoppingCartItem shoppingCartItem, bool postFromLocal = false)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
@@ -194,19 +189,21 @@ namespace BetaCycleAPI.Controllers
                     return Ok();
                 }
                 var shoppingCartContainsItem = (await isProductAdded(shoppingCartItem.ProductId)).Value;
-                if(shoppingCartContainsItem)
+                if (shoppingCartContainsItem)
                 {
                     var item = await _awContext.ShoppingCartItems.Where(item => item.ProductId == shoppingCartItem.ProductId && item.ShoppingCartId == cart.ShoppingCartId).FirstOrDefaultAsync();
                     item.Quantity += shoppingCartItem.Quantity;
                     await _awContext.SaveChangesAsync();
-                }else
+                }
+                else
                 {
                     _awContext.ShoppingCartItems.Add(shoppingCartItem);
                 }
                 shoppingCartItem.ShoppingCartId = cart.ShoppingCartId;
 
                 await _awContext.SaveChangesAsync();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
@@ -215,8 +212,9 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
         }
 
-        private async Task<bool> isCartEmpty(int shoppingCartId) { 
-            return !(await _awContext.ShoppingCarts.FindAsync(shoppingCartId)).ShoppingCartItems.Any(); 
+        private async Task<bool> isCartEmpty(int shoppingCartId)
+        {
+            return !(await _awContext.ShoppingCarts.FindAsync(shoppingCartId)).ShoppingCartItems.Any();
         }
 
         // DELETE: api/ShoppingCart/5
@@ -234,17 +232,18 @@ namespace BetaCycleAPI.Controllers
             try
             {
                 var productsToRemove = await _awContext.ShoppingCartItems.Where(item => item.ProductId == productId && item.ShoppingCartId == customer.ShoppingCartId).ToListAsync();
-                foreach(var prod in productsToRemove)
+                foreach (var prod in productsToRemove)
                 {
                     _awContext.ShoppingCartItems.Remove(prod);
                 }
                 await _awContext.SaveChangesAsync();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-            
+
             return NoContent();
         }
 

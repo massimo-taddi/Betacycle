@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BetaCycleAPI.Models;
+﻿namespace BetaCycleAPI.Models;
 
 /// <summary>
 /// General sales order information.
@@ -46,7 +43,7 @@ public partial class SalesOrderHeader
     /// <summary>
     /// Unique sales order identification number.
     /// </summary>
-    public string SalesOrderNumber { get; set; } = null!;
+    public string? SalesOrderNumber { get; set; } = null!;
 
     /// <summary>
     /// Customer purchase order number reference. 

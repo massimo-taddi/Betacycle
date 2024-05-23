@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using BetaCycleAPI.Models.ModelsCredentials;
-using BetaCycleAPI.BLogic.ObjectValidator;
-using EncryptData;
 using Microsoft.AspNetCore.Authentication;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authorization;
-using BetaCycleAPI.BLogic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -52,13 +44,13 @@ namespace BetaCycleAPI.Controllers
                     switch (@params.Sort)
                     {
                         case "Desc":
-                            if(@params.Search==null)
+                            if (@params.Search == null)
                             {
                                 @params.Search = "";
                             }
                             //ritornare n customer 
                             res = await (from customer in _awContext.Customers
-                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) 
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
 
                                          select customer)
                                          .OrderBy(x => x.FirstName).ToListAsync();
@@ -69,17 +61,17 @@ namespace BetaCycleAPI.Controllers
                         case "Asc":
                             //ritornare n customer 
                             res = await (from customer in _awContext.Customers
-                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search) 
+                                         where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
 
                                          select customer)
                                          .OrderBy(x => x.FirstName).ToListAsync();
                             customerCount = res.Count();
                             res = res.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                             break;
-                    }             
-                    
-                    return (customerCount,res);
-                
+                    }
+
+                    return (customerCount, res);
+
                 }
                 else
                 {
@@ -99,9 +91,9 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-            return (customerCount,res);
+            return (customerCount, res);
         }
-     
+
         // GET: api/Customers/5
         /// <summary>
         /// Get a <c>Customer</c> object with the specified id
@@ -129,7 +121,7 @@ namespace BetaCycleAPI.Controllers
                 if (customer == null)
                     return NotFound();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
@@ -149,7 +141,7 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            
+
 
             if (id != customer.CustomerId)
             {

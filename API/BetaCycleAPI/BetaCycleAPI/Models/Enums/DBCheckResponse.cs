@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-
-namespace BetaCycleAPI.Models.Enums
+﻿namespace BetaCycleAPI.Models.Enums
 {
     public enum DBCheckResponse
     {

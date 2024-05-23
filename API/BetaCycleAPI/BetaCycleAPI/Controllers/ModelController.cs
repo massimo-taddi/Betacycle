@@ -1,5 +1,4 @@
 ﻿using BetaCycleAPI.BLogic;
-using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -22,14 +21,15 @@ namespace BetaCycleAPI.Controllers
         }
         // GET: api/Model/models
 
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
         {
             try
             {
                 return await _context.ProductModels.ToListAsync();
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
@@ -100,7 +100,7 @@ namespace BetaCycleAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> ModifyModel(int id,string name,bool discontinued)
+        public async Task<IActionResult> ModifyModel(int id, string name, bool discontinued)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
@@ -109,7 +109,7 @@ namespace BetaCycleAPI.Controllers
             {
                 return BadRequest();
             }
-            
+
             ProductModel getRowguidProductModel = await _context.ProductModels.FindAsync(id);
             _context.ProductModels.Entry(getRowguidProductModel).State = EntityState.Detached;
 
@@ -120,7 +120,7 @@ namespace BetaCycleAPI.Controllers
                 ModifiedDate = DateTime.Now,
                 Rowguid = getRowguidProductModel.Rowguid,
                 Discontinued = discontinued,
-                
+
             };
             _context.Entry(res).State = EntityState.Modified;
 
@@ -142,7 +142,7 @@ namespace BetaCycleAPI.Controllers
         //it insert a record in the productModel Table
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult>PostAModel( string name, bool discontinued)
+        public async Task<IActionResult> PostAModel(string name, bool discontinued)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
@@ -153,7 +153,7 @@ namespace BetaCycleAPI.Controllers
             }
             ProductModel res = new ProductModel()
             {
-                
+
                 Name = name,
                 ModifiedDate = DateTime.Now,
                 Discontinued = discontinued,
@@ -164,7 +164,7 @@ namespace BetaCycleAPI.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                
+
             }
             catch (Exception e)
             {
@@ -186,7 +186,7 @@ namespace BetaCycleAPI.Controllers
             {
                 return BadRequest();
             }
-            var res= await _context.ProductModels.FindAsync(id);
+            var res = await _context.ProductModels.FindAsync(id);
 
 
             _context.ProductModels.Remove(res);

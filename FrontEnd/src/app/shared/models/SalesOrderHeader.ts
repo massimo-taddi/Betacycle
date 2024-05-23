@@ -15,7 +15,7 @@ export class SalesOrderHeader {
   billToAddressID: number = 0;
   shipMethod: string = ''; // UPS - DHL - GLS
   subTotal: number = 0; //backend
-  taxAmt: number = 0; //backend
+  taxAmt: number = 0; // passato in percentuale
   freight: number = 0; //backend
   totalDue: number = 0; //backend
   comment: string | null = null; //

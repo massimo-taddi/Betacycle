@@ -1,14 +1,10 @@
-﻿using BetaCycleAPI.Contexts;
+﻿using BetaCycleAPI.Models.Enums;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
-using BetaCycleAPI.BLogic.Authentication;
-using BetaCycleAPI.Models.Enums;
-using BetaCycleAPI.Models;
 
 
 
@@ -68,7 +64,7 @@ namespace BetaCycleAPI.BLogic.Authentication.Basic
                         return Task.FromResult(AuthenticateResult.Fail("Account pre-migrazione, da ricreare"));
                         break;
                 }
-                
+
             }
 
             var authenticatedUser = new AuthenticatedUser("BasicAuthentication", true, authArraySplit[0].ToString());

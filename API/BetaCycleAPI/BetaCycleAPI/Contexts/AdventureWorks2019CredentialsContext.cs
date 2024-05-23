@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BetaCycleAPI.Models.ModelsCredentials;
+﻿using BetaCycleAPI.Models.ModelsCredentials;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCycleAPI.Contexts;

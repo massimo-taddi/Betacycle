@@ -1,11 +1,6 @@
-﻿using BetaCycleAPI.Contexts;
-using Microsoft.EntityFrameworkCore;
-using EncryptData;
+﻿using BetaCycleAPI.Models;
 using BetaCycleAPI.Models.Enums;
 using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
-using BetaCycleAPI.Models;
-using Microsoft.CodeAnalysis.Options;
 
 namespace BetaCycleAPI.BLogic.Authentication
 {
@@ -28,9 +23,10 @@ namespace BetaCycleAPI.BLogic.Authentication
                 sqlCmd.Parameters.AddWithValue("@Email", user);
                 sqlCmd.CommandText = "SELECT TOP 1 Email, PasswordHash, SaltHash, AdminPermission FROM [dbo].[Credentials] WHERE Email = @Email";
                 sqlCmd.Connection = sqlConn;
-                using(SqlDataReader reader = await sqlCmd.ExecuteReaderAsync())
+                using (SqlDataReader reader = await sqlCmd.ExecuteReaderAsync())
                 {
-                    if(reader.Read()) {
+                    if (reader.Read())
+                    {
                         if (EncryptData.CypherData.DecryptSalt(pwd, reader["SaltHash"].ToString()).Equals(reader["PasswordHash"].ToString()))
                         {
                             response = reader["AdminPermission"].ToString() == "True" ? DBCheckResponse.FoundAdmin : DBCheckResponse.FoundMigrated;
@@ -59,7 +55,7 @@ namespace BetaCycleAPI.BLogic.Authentication
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }

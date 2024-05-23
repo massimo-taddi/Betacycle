@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BetaCycleAPI.BLogic;
+using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Net;
-using Humanizer;
-using Microsoft.SqlServer.Server;
-using System.Net.Sockets;
-using BetaCycleAPI.BLogic.ObjectValidator;
-using BetaCycleAPI.BLogic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -42,7 +33,7 @@ namespace BetaCycleAPI.Controllers
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             List<Address> res = [];
-          
+
 
             var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
             var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
@@ -62,7 +53,8 @@ namespace BetaCycleAPI.Controllers
                     List<CustomerAddress> custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == address.AddressId && ca.CustomerId == tokenCustomerId).ToListAsync();
                     address.CustomerAddresses = custAdd;
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
@@ -228,7 +220,8 @@ namespace BetaCycleAPI.Controllers
                     await _awContext.SaveChangesAsync();
                     _awContext.Addresses.Remove(addr);
                     await _awContext.SaveChangesAsync();
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     await DBErrorLogger.WriteExceptionLog(_awContext, e);
                     return BadRequest();

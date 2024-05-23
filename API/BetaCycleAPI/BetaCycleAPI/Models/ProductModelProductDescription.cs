@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BetaCycleAPI.Models;
+﻿namespace BetaCycleAPI.Models;
 
 /// <summary>
 /// Cross-reference table mapping product descriptions and the language the description is written in.

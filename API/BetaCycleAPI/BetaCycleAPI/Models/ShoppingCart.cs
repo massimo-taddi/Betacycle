@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BetaCycleAPI.Models;
+﻿namespace BetaCycleAPI.Models;
 
 public partial class ShoppingCart
 {

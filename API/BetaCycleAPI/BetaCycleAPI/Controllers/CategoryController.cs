@@ -3,7 +3,6 @@ using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,15 +22,16 @@ namespace BetaCycleAPI.Controllers
         }
         // GET: api/Category/categories
         //Get all categories
-        
+
         [HttpGet]
-        
+
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
         {
             try
             {
                 return await _context.ProductCategories.ToListAsync();
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
@@ -86,7 +86,7 @@ namespace BetaCycleAPI.Controllers
 
         //GET: api/Category/SingleCategory
         //get single category
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductCategory>> GetSingleProductCategory(int id)
         {
@@ -105,7 +105,7 @@ namespace BetaCycleAPI.Controllers
         [HttpPut("{id}")]
         [Authorize]
 
-        public async Task<IActionResult> ModifyCategory(int id,string name,bool discontinued,int? parentCategory)
+        public async Task<IActionResult> ModifyCategory(int id, string name, bool discontinued, int? parentCategory)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
@@ -121,7 +121,7 @@ namespace BetaCycleAPI.Controllers
                 Name = name,
                 Discontinued = discontinued,
                 ModifiedDate = DateTime.Now,
-                Rowguid=getRowguidProductModel.Rowguid,
+                Rowguid = getRowguidProductModel.Rowguid,
                 ParentProductCategoryId = parentCategory,
             };
             _context.Entry(res).State = EntityState.Modified;
@@ -143,17 +143,17 @@ namespace BetaCycleAPI.Controllers
         //it post a new record in productCategory table
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostCategory(int? parentProductCategory,string name)
+        public async Task<IActionResult> PostCategory(int? parentProductCategory, string name)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
 
-            ProductCategory res = new ProductCategory() 
+            ProductCategory res = new ProductCategory()
             {
-            
-                ParentProductCategoryId=parentProductCategory,
-                Discontinued=false,
+
+                ParentProductCategoryId = parentProductCategory,
+                Discontinued = false,
                 ModifiedDate = DateTime.Now,
                 Name = name,
             };

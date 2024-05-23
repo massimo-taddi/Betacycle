@@ -1,6 +1,6 @@
 ﻿namespace BetaCycleAPI.Models
 {
-    public class ProductSpecParams:PaginatorParams
+    public class ProductSpecParams : PaginatorParams
     {
         private string search;
 

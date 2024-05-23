@@ -1,13 +1,10 @@
-
-using BetaCycleAPI.BLogic.Authentication.Basic;
-using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using BetaCycleAPI.Contexts;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace BetaCycleAPI
 {
@@ -59,9 +56,36 @@ namespace BetaCycleAPI
             Connectionstrings.AdventureWorks = builder.Configuration.GetConnectionString("AdventureWorks");
             Connectionstrings.Credentials = builder.Configuration.GetConnectionString("Credentials");
 
-            builder.Services.AddSwaggerGen(
-                    
-                );
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "BetaCycleAPI",
+                    Version = "v1"
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+            });
+
             builder.Services.AddDbContext<AdventureWorksLt2019Context>(opt =>
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("AdventureWorks")));
             builder.Services.AddDbContext<AdventureWorks2019CredentialsContext>(opt =>
@@ -83,7 +107,7 @@ namespace BetaCycleAPI
             );
 
 
-            var app = builder.Build();
+    var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -92,18 +116,18 @@ namespace BetaCycleAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-            app.UseCors("CorsPolicy");
-            app.UseAuthentication();
-            app.UseResponseCaching();
+app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
+app.UseAuthentication();
+app.UseResponseCaching();
 
 
-            app.UseAuthorization();
+app.UseAuthorization();
 
 
-            app.MapControllers();
+app.MapControllers();
 
-            app.Run();
+app.Run();
         }
     }
 }

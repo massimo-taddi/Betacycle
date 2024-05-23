@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BetaCycleAPI.BLogic;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using BetaCycleAPI.BLogic;
-using Microsoft.ML;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -39,7 +33,7 @@ namespace BetaCycleAPI.Controllers
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
             List<SalesOrderHeader> headers = new();
-            if(token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 headers = await _awContext.SalesOrderHeaders.ToListAsync();
             else
             {
@@ -55,18 +49,19 @@ namespace BetaCycleAPI.Controllers
                 foreach (var header in headers)
                 {
                     header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
-                    foreach(var detail in header.SalesOrderDetails)
+                    foreach (var detail in header.SalesOrderDetails)
                     {
                         detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
                     }
                     header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-            
+
 
 
             return headers;
@@ -131,6 +126,79 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
+        // POST: api/orders
+        [HttpPost]
+        public async Task<ActionResult<SalesOrderHeader>> PostSalesOrderHeader(SalesOrderHeader salesOrderHeader)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            salesOrderHeader.CustomerId = (int)tokenCustomerId;
+            salesOrderHeader.OrderDate = DateTime.Now;
+            salesOrderHeader.DueDate = DateTime.Now.AddDays(7);
+            salesOrderHeader.Status = 1;
+            salesOrderHeader.OnlineOrderFlag = true;
+            salesOrderHeader.Rowguid = Guid.NewGuid();
+            salesOrderHeader.ModifiedDate = DateTime.Now;
+
+            salesOrderHeader.SubTotal = salesOrderHeader.SalesOrderDetails.Sum(detail => detail.LineTotal);
+            salesOrderHeader.Freight = await calculateFreightCost(salesOrderHeader.SalesOrderDetails, salesOrderHeader.ShipMethod);
+            if (salesOrderHeader.Freight == 0.0m) return BadRequest(); // if freight cost calculation fails, return 400
+            // TaxAmt is passed in percentage, so it has to be converted to an absolute value first
+            salesOrderHeader.TaxAmt = salesOrderHeader.SubTotal * salesOrderHeader.TaxAmt / 100;
+            salesOrderHeader.TotalDue = salesOrderHeader.SubTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt;
+
+            _awContext.SalesOrderHeaders.Add(salesOrderHeader);
+            try
+            {
+                await _awContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+
+            return CreatedAtAction("GetSalesOrderHeader", new { id = salesOrderHeader.SalesOrderId }, salesOrderHeader);
+        }
+
+        private async Task<decimal> calculateFreightCost(ICollection<SalesOrderDetail> details, string shipMethod)
+        {
+            decimal res = 0;
+            decimal costPerKg = 0.0m;
+            try
+            {
+                using (StreamReader r = new StreamReader(Path.GetFullPath("Data\\ShippingCostsPerKg.json")))
+                {
+                    string json = r.ReadToEnd();
+                    var costsPerKg = JsonConvert.DeserializeObject<List<KeyValuePair<string, decimal>>>(json);
+                    costPerKg = costsPerKg.First(pair => pair.Key == shipMethod).Value;
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return 0.0m;
+            }
+
+            foreach (var detail in details)
+            {
+                if (detail.Product.Weight != null)
+                {
+                    res += (decimal)detail.Product.Weight * costPerKg;
+                } // if the product has no weight, the weight of the parcel is fixed at 1kg
+                else
+                {
+                    res += costPerKg;
+                }
+
+            }
+            return res;
+        }
+
         // DELETE: api/orders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSalesOrderHeader(int id)
@@ -152,12 +220,13 @@ namespace BetaCycleAPI.Controllers
             {
                 _awContext.SalesOrderHeaders.Remove(salesOrderHeader);
                 await _awContext.SaveChangesAsync();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-            
+
             return NoContent();
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BetaCycleAPI.Models;
 
@@ -23,7 +21,7 @@ public partial class Customer
     /// <summary>
     /// A courtesy title. For example, Mr. or Ms.
     /// </summary>
-    
+
     public string? Title { get; set; }
 
     /// <summary>

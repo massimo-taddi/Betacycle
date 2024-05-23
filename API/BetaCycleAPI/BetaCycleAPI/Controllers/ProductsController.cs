@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BetaCycleAPI.BLogic;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using BetaCycleAPI.BLogic;
-using Microsoft.AspNetCore.JsonPatch.Internal;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -31,8 +24,8 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        
-        public async Task<ActionResult<(int,IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
+
+        public async Task<ActionResult<(int, IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
             int productCount = 0;
@@ -45,7 +38,7 @@ namespace BetaCycleAPI.Controllers
                 }
                 res = await (from product in _context.Products
                              from pmpd in product.ProductModel.ProductModelProductDescriptions
-                             where ((EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search )|| (product.Name.Contains(@params.Search)|| pmpd.ProductDescription.Description.Contains(@params.Search))) && product.OnSale)
+                             where ((EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || (product.Name.Contains(@params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search))) && product.OnSale)
                              select product).Distinct().ToListAsync();
 
                 productCount = res.Count();
@@ -83,14 +76,14 @@ namespace BetaCycleAPI.Controllers
             {
                 return NotFound();
             }
-            if(product.ProductModelId !=null) 
+            if (product.ProductModelId != null)
             {
 
                 product.ProductModel = await _context.ProductModels.FindAsync(product.ProductModelId);
-                if(product.ProductCategoryId != null) 
+                if (product.ProductCategoryId != null)
                 {
                     product.ProductModel.ProductModelProductDescriptions = await _context.ProductModelProductDescriptions.Where(p => p.ProductModelId == product.ProductModel.ProductModelId).ToListAsync();
-                    foreach(var desc in product.ProductModel.ProductModelProductDescriptions)
+                    foreach (var desc in product.ProductModel.ProductModelProductDescriptions)
                     {
                         desc.ProductDescription = await _context.ProductDescriptions.FindAsync(desc.ProductDescriptionId);
                     }
@@ -101,7 +94,8 @@ namespace BetaCycleAPI.Controllers
                     product.ProductModel.ProductModelProductDescriptions = null;
                     product.ProductCategory = null;
                 }
-            }else
+            }
+            else
             {
                 product.ProductModel = null;
             }
@@ -111,9 +105,9 @@ namespace BetaCycleAPI.Controllers
         }
 
 
-      
+
         //GET:api/products/Recommendations
-       //get recommended products
+        //get recommended products
 
         [HttpGet]
         [Route("Recommendations")]
@@ -133,12 +127,13 @@ namespace BetaCycleAPI.Controllers
             var evaluationScoresMaxHeap = new PriorityQueue<int, float>(new FloatMaxCompare());
             try
             {
-                foreach(var prod in await _context.Products.ToListAsync())
+                foreach (var prod in await _context.Products.ToListAsync())
                 {
-                    if(prod.OnSale)
+                    if (prod.OnSale)
                     {
                         var prediction = RecommendProduct.Predict(new RecommendProduct.ModelInput() { CustomerID = tokenCustomerId, ProductID = prod.ProductId });
-                        if(prediction.ProductID != 0F) {
+                        if (prediction.ProductID != 0F)
+                        {
                             evaluationScoresMaxHeap.Enqueue(prod.ProductId, prediction.Score);
                         }
                         else
@@ -151,7 +146,8 @@ namespace BetaCycleAPI.Controllers
                 {
                     res.Add(await _context.Products.FindAsync(evaluationScoresMaxHeap.Dequeue()));
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
@@ -203,19 +199,19 @@ namespace BetaCycleAPI.Controllers
                     res = res.OrderBy(el => el.ListPrice).ToList();
                     break;
             }
-            return (countProducts,res);
+            return (countProducts, res);
         }
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPut("{id}")]
-        
+
         public async Task<IActionResult> PutProduct(int id, ProductForm productForm)
         {
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            
+
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
             {
                 return BadRequest();
@@ -226,7 +222,7 @@ namespace BetaCycleAPI.Controllers
 
             var product = new Product()
             {
-                ProductId=id,
+                ProductId = id,
                 Name = productForm.Name,
                 ProductNumber = productForm.ProductNumber,
                 Color = productForm.Color,
@@ -235,7 +231,7 @@ namespace BetaCycleAPI.Controllers
                 Size = productForm.Size,
                 Weight = productForm.Weight,
                 ProductCategoryId = productForm.ProductCategoryId,
-                ProductModelId = productForm.ProductModelId,    
+                ProductModelId = productForm.ProductModelId,
                 SellStartDate = productForm.SellStartDate,
                 SellEndDate = productForm.SellEndDate,
                 DiscontinuedDate = productForm.DiscontinuedDate,
@@ -299,18 +295,19 @@ namespace BetaCycleAPI.Controllers
             };
 
 
-          _context.Products.Add(product);
+            _context.Products.Add(product);
             try
             {
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
             }
 
-            
+
         }
 
         // DELETE: api/Products/5
@@ -331,7 +328,8 @@ namespace BetaCycleAPI.Controllers
             {
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();

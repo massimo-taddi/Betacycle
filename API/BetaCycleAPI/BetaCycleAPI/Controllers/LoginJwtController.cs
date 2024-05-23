@@ -6,10 +6,8 @@ using BetaCycleAPI.Models.Enums;
 using BetaCycleAPI.Models.Exceptions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -42,7 +40,7 @@ namespace BetaCycleAPI.Controllers
             // qui si controlla sul db
             string clientIp = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
             var dbCheckResult = await CredentialsDBChecker.ValidateLogin(loginCredentials.Username.ToLower(), loginCredentials.Password);
-            switch(dbCheckResult)
+            switch (dbCheckResult)
             {
                 case DBCheckResponse.FoundMigrated:
                     LogTracer.AddLog(loginCredentials.Username, "LOGIN", clientIp, DateTime.Now);
