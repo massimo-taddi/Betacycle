@@ -13,7 +13,8 @@ export class SalesOrderHeader {
   purchaseOrderNumber: string = ''; //no
   shipToAddressID: number = 0;
   billToAddressID: number = 0;
-  shipMethod: string = ''; // UPS - DHL - GLS
+  shipMethod: string = ''; // UPS - FedEx - USPS - DHL
+  
   subTotal: number = 0; //backend
   taxAmt: number = 0; // passato in percentuale
   freight: number = 0; //backend
