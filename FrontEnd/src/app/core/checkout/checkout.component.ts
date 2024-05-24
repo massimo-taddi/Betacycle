@@ -7,6 +7,9 @@ import { BasketService } from '../../shared/services/basket.service';
 import { ShoppingCartItem } from '../../shared/models/ShoppingCartItem';
 import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
+import { concat } from 'rxjs';
+import { CheckoutService } from '../../shared/services/checkout.service';
+import { SalesOrderDetail } from '../../shared/models/SalesOrderDetail';
 
 @Component({
   selector: 'app-checkout',
@@ -21,8 +24,11 @@ export class CheckoutComponent implements OnInit{
   basketItemsProductsMap: Map<ShoppingCartItem, Product> = new Map();
   subTotalPrice: number = 0;
   taxAmount: number = 0;
+  dateArrival: Date = new Date(Date.now()) //getDay = mese, getDate = giorno, getFullYear = anno
+  expectedTime: string = '';
 
-  constructor(private http: HttpUserAdminService, private shoppingCartService: BasketService, private productService: ProductService){}
+  constructor(private http: HttpUserAdminService, private shoppingCartService: BasketService, private productService: ProductService,
+              private order: CheckoutService){}
 
   ngOnInit(): void {
     this.http.httpGetCustomerAddresses().subscribe({
@@ -61,19 +67,29 @@ export class CheckoutComponent implements OnInit{
   setBillAddress(name: string){
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
     this.salesOrderHeader.billToAddressID = this.addresses[radios[0].value as unknown as number].addressId;
-
   }
-
-  // private GetSubTotal(): number { //ok
-  //   console.log(this.basketItemsProductsMap)
-  //   var totalPrice = 0;
-  //   this.basketItemsProductsMap.forEach((product, item) => {
-  //   totalPrice += (product.listPrice * item.quantity);
-  //   });
-  //   this.salesOrderHeader.subTotal = totalPrice;
-  //   this.subTotalPrice = totalPrice;
-  //   return totalPrice;
-  // }
+  setShipMethod(name: string){
+    const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
+    this.dateArrival = new Date(Date.now())
+    switch(radios[0].value as unknown as string){
+      case "1": //UPS - 7
+        this.salesOrderHeader.shipMethod = "UPS";
+        this.dateArrival.setDate(this.dateArrival.getDate()+7);
+        break;
+      case "2": //FedEx - 10
+        this.salesOrderHeader.shipMethod = 'FedEx';
+        this.dateArrival.setDate(this.dateArrival.getDate()+10);
+        break;
+      case "3": //USPS - 12
+        this.salesOrderHeader.shipMethod = 'USPS';
+        this.dateArrival.setDate(this.dateArrival.getDate()+12);
+        break;
+      case "4": //DHL - 5
+        this.salesOrderHeader.shipMethod = 'DHL';
+        this.dateArrival.setDate(this.dateArrival.getDate()+5);
+        break;
+    }
+  }
 
   private CalculateTaxAmount(): number { //ok
     this.taxAmount = ((this.salesOrderHeader.subTotal * this.salesOrderHeader.taxAmt)/100);
@@ -96,6 +112,10 @@ export class CheckoutComponent implements OnInit{
       case 'canada':
         this.salesOrderHeader.taxAmt = 15;
         break;
+      case 'united kingdom':
+      case 'regno unito':
+        this.salesOrderHeader.taxAmt = 20;
+        break;
     }
   }
   GetTotalDue(){ //ok
@@ -115,4 +135,25 @@ export class CheckoutComponent implements OnInit{
     })
     return address;
   }
+
+  sendOrder(){
+    this.basketItemsProductsMap.forEach((prod, item) =>{
+      var detail = {
+        salesOrderid: 0,
+        salesOrderDetailId: 0,
+        orderQty: item.quantity,
+        productId: prod.productId,
+        unitPrice: prod.listPrice,
+        unitPriceDiscount: 0,
+        lineTotal: (prod.listPrice * item.quantity),
+        rowguid: '',
+        modifiedDate: new Date(Date.now()),
+        product: null
+      } as SalesOrderDetail;
+      this.salesOrderHeader.salesOrderDetails.push(detail)
+    })
+    console.log(this.salesOrderHeader);
+  }
+
+
 }

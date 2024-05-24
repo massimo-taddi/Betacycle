@@ -2,8 +2,8 @@
     padding-top: 100px;
     /* margin-left: 1vw;
     margin-right: 1vw; */
-    border: 1px solid #dd1111;
-    height: 100%; width: 100vw;
+    min-height: fit-content;
+    height: 100vh; width: 100vw;
     display: flex;
     flex-direction: row;
 }
@@ -56,12 +56,16 @@
 
 .left-checkout{
     width: 65%;
-    border: 1px solid red;
+    padding-right: 30px;
 }
 .right-checkout{
     width: 35%;
-    border: 1px solid red;
+    border: 1px solid rgb(194, 190, 190);
     text-align: center;
+    border-radius: 15px;
+    padding: 15px;
+    min-height: fit-content;
+    height: 100%;
 }
 
 .basket-item{
@@ -76,5 +80,36 @@
 }
 
 .info-checkout{
-    border: 1px solid red;
+    border-top: 1px solid rgb(194, 190, 190);
+    padding-top: 15px;
+    border-bottom: 1px solid rgb(194, 190, 190);
+    margin-bottom: 30px;
+}
+.ship-method-choice{
+    display: flex;
+    flex-direction: row;
+}
+
+.choice{
+    margin: 15px;
+}
+.sales-info-card{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.checkout-btn{
+    padding: 15px 25px;
+    color: white;
+    background-color: #687995;
+    border: 1px solid #687995;
+    border-radius: 10px;
+    transition: 0.25s ease-in-out;
+}
+.checkout-btn:hover{
+    color: #687995;
+    border: 1px solid #687995;
+    background-color: white;
+    transition: 0.25s ease-in-out;
+
 }

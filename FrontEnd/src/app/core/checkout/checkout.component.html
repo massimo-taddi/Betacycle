@@ -21,6 +21,7 @@
                 </div>
             </div>
         </div>
+        <hr color="rgb(194, 190, 190);">
         <div class="sales-info-card">
             <a class="checkout-info" style="width: 500px;" type="button"
                 data-bs-toggle="collapse"
@@ -42,22 +43,60 @@
                 </div>
             </div>
         </div>
+        <hr color="rgb(194, 190, 190);">
+        <div class="shipping-choice sales-info-card">
+            <h4>Select you shipping method:</h4>
+            <div class="radio-group ship-method-choice">
+                <label class="radio-container choice">
+                    <input type="radio" (click)="setShipMethod('ship-method')"
+                        name="ship-method" value="1">
+                    <span class="radio-checkmark"></span>
+                    UPS
+                </label>
+                <label class="radio-container choice">
+                    <input type="radio" (click)="setShipMethod('ship-method')"
+                        name="ship-method" value="2">
+                    <span class="radio-checkmark"></span>
+                    FedEx
+                </label>
+                <label class="radio-container choice">
+                    <input type="radio" (click)="setShipMethod('ship-method')"
+                        name="ship-method" value="3">
+                    <span class="radio-checkmark"></span>
+                    USPS
+                </label>
+                <label class="radio-container choice">
+                    <input type="radio" (click)="setShipMethod('ship-method')"
+                        name="ship-method" value="4">
+                    <span class="radio-checkmark"></span>
+                    DHL
+                </label>
+            </div>
+        </div>
+        <hr color="rgb(194, 190, 190);">
+        <div class="expected-time">
+            <h4>Estimated time of arrival:</h4>
+            <span *ngIf="salesOrderHeader.shipMethod != ''" style="color: green; margin-left: 20px;">{{ dateArrival | date }}</span>
+        </div>
     </div>
     <div class="right-checkout">
         <h2 style="margin-bottom: 30px;">Order summary</h2>
-        <div class="basket-item" *ngFor="let item of basketItemsProductsMap | keyvalue">
-            <img style="width: 100px;" src="data:image/gif;base64, {{item.value.thumbNailPhoto}}" alt="...">
-            <div class="lg:ml-3 footer-item">
-                <span style="display: block;"><strong>{{item.value.name}}</strong></span>
-                <span class="text-900 font-bold">x{{item.key.quantity}}</span>
-                <span>  -  ${{item.value.listPrice}}</span>
+        <div style="overflow-y:scroll; height: 300px;">
+            <div class="basket-item" *ngFor="let item of basketItemsProductsMap | keyvalue">
+                <img style="width: 100px;" src="data:image/gif;base64, {{item.value.thumbNailPhoto}}" alt="...">
+                <div class="lg:ml-3 footer-item">
+                    <span style="display: block;"><strong>{{item.value.name}}</strong></span>
+                    <span class="text-900 font-bold">x{{item.key.quantity}}</span>
+                    <span>  -  ${{item.value.listPrice}}</span>
+                </div>
             </div>
         </div>
-        <div class="info-checkout">
-            <p><span><strong>Sub-total: $</strong></span>{{salesOrderHeader.subTotal}}<br>
+        <div class="info-checkout" style="text-align: start;">
+            <p><span><strong>Sub-total: $</strong></span>{{salesOrderHeader.subTotal | number: '1.0-2'}}<br>
             <span><strong>Tax Amount: $</strong></span>{{taxAmount | number: '1.0-2' }}<br>
             <span><strong>- Country Tax: </strong></span>{{salesOrderHeader.taxAmt}}%<br>
             <span><strong>Total Due: $</strong></span>{{salesOrderHeader.totalDue | number: '1.0-2' }}</p>
         </div>
+        <button class="checkout-btn" (click)="sendOrder()">Confirm Order</button>
     </div>
 </div>
