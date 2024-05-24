@@ -23,7 +23,7 @@ public partial class SalesOrderHeader
     /// <summary>
     /// Date the order is due to the customer.
     /// </summary>
-    public DateTime DueDate { get; set; }
+    public DateTime? DueDate { get; set; }
 
     /// <summary>
     /// Date the order was shipped to the customer.
