@@ -1,6 +1,18 @@
 [
-  {"UPS":"0.5"},
-  {"FedEx":"0.6"},
-  {"USPS":"0.7"},
-  {"DHL":"0.8"}
+  {
+    "key": "UPS",
+    "value": 0.5
+  },
+  {
+    "key": "FedEx",
+    "value": 0.6
+  },
+  {
+    "key": "USPS",
+    "value": 0.7
+  },
+  {
+    "key": "DHL",
+    "value": 0.8
+  }
 ]

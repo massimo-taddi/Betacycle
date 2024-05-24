@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -145,8 +146,9 @@ namespace BetaCycleAPI.Controllers
             salesOrderHeader.ModifiedDate = DateTime.Now;
 
             salesOrderHeader.SubTotal = salesOrderHeader.SalesOrderDetails.Sum(detail => detail.LineTotal);
-            salesOrderHeader.Freight = await calculateFreightCost(salesOrderHeader.SalesOrderDetails, salesOrderHeader.ShipMethod);
-            if (salesOrderHeader.Freight == 0.0m) return BadRequest(); // if freight cost calculation fails, return 400
+            var freightCostAction = await calculateFreightCost(weightsFromDetails(salesOrderHeader.SalesOrderDetails), salesOrderHeader.ShipMethod);
+            salesOrderHeader.Freight = freightCostAction.Value;
+            if ((freightCostAction.Result as ObjectResult)?.StatusCode == (int)HttpStatusCode.BadRequest) return BadRequest(); // if freight cost calculation fails, return 400
             // TaxAmt is passed in percentage, so it has to be converted to an absolute value first
             salesOrderHeader.TaxAmt = salesOrderHeader.SubTotal * salesOrderHeader.TaxAmt / 100;
             salesOrderHeader.TotalDue = salesOrderHeader.SubTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt;
@@ -165,7 +167,19 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("GetSalesOrderHeader", new { id = salesOrderHeader.SalesOrderId }, salesOrderHeader);
         }
 
-        private async Task<decimal> calculateFreightCost(ICollection<SalesOrderDetail> details, string shipMethod)
+        private IEnumerable<KeyValuePair<decimal?, int>> weightsFromDetails(IEnumerable<SalesOrderDetail> details)
+        {
+            IEnumerable<KeyValuePair<decimal?, int>> weights = [];
+            foreach(var detail in details)
+            {
+                weights.Append(new KeyValuePair<decimal?, int>(detail.Product.Weight, detail.OrderQty));
+            }
+            return weights;
+        }
+
+        [HttpPost]
+        [Route("freightcost/{shipMethod}")]
+        public async Task<ActionResult<decimal>> calculateFreightCost([FromBody]IEnumerable<KeyValuePair<decimal?, int>> weights, string shipMethod)
         {
             decimal res = 0;
             decimal costPerKg = 0.0m;
@@ -175,24 +189,24 @@ namespace BetaCycleAPI.Controllers
                 {
                     string json = r.ReadToEnd();
                     var costsPerKg = JsonConvert.DeserializeObject<List<KeyValuePair<string, decimal>>>(json);
-                    costPerKg = costsPerKg.First(pair => pair.Key == shipMethod).Value;
+                    costPerKg = costsPerKg.First(pair => pair.Key.ToLower() == shipMethod.ToLower()).Value;
                 }
             }
             catch (Exception e)
             {
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
-                return 0.0m;
+                return BadRequest();
             }
 
-            foreach (var detail in details)
+            foreach (var weight in weights)
             {
-                if (detail.Product.Weight != null)
+                if (weight.Key != null)
                 {
-                    res += (decimal)detail.Product.Weight * costPerKg;
+                    res += (decimal)weight.Key * weight.Value * costPerKg;
                 } // if the product has no weight, the weight of the parcel is fixed at 1kg
                 else
                 {
-                    res += costPerKg;
+                    res += costPerKg * weight.Value;
                 }
 
             }
