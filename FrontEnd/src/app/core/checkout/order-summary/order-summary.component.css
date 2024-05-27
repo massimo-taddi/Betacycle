@@ -1,7 +1,24 @@
-.container {
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
+
+@media only screen and (min-width: 768px){
+    .container{
+        padding-top: 100px;
+        min-height: fit-content;
+        width: 100vw;
+    }
+}
+@media only screen and (max-width: 767px){
+    .container{
+        padding-top: 100px;
+        min-height: fit-content;
+        width: 100vw;
+    }
+    .expected-time{
+        margin-bottom: 20px;
+    }
+    .col-3{
+        min-width: fit-content;
+    }
+
 }
 
 .maxscrollable {
@@ -11,4 +28,20 @@
 
 .col {
     height: 100%;
+}
+
+.checkout-btn{
+    margin-top: 20px;
+    padding: 15px 25px;
+    color: white;
+    background-color: #687995;
+    border: 1px solid #687995;
+    border-radius: 10px;
+    transition: 0.25s ease-in-out;
+}
+.checkout-btn:hover{
+    color: #687995;
+    border: 1px solid #687995;
+    background-color: white;
+    transition: 0.25s ease-in-out;
 }
