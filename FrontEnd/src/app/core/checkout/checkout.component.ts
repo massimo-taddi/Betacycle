@@ -7,7 +7,7 @@ import { BasketService } from '../../shared/services/basket.service';
 import { ShoppingCartItem } from '../../shared/models/ShoppingCartItem';
 import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
-import { concat } from 'rxjs';
+import { concat, lastValueFrom } from 'rxjs';
 import { CheckoutService } from '../../shared/services/checkout.service';
 import { SalesOrderDetail } from '../../shared/models/SalesOrderDetail';
 import { Route, Router } from '@angular/router';
@@ -167,16 +167,18 @@ export class CheckoutComponent implements OnInit{
     console.log(this.salesOrderHeader);
   }
 
-  sendOrder() {
+  async sendOrder() {
     this.salesOrderHeader.orderDate = new Date(Date.now());
-    this.checkoutService.postSalesOrder(this.salesOrderHeader).subscribe({
-      next: (data: any) => {
-        console.log(data);
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      }
-    });
+    var postResponse = await lastValueFrom(this.checkoutService.postSalesOrder(this.salesOrderHeader))
+    // this.checkoutService.postSalesOrder(this.salesOrderHeader).subscribe({
+    //   next: (data: any) => {
+    //     console.log(data);
+    //   },
+    //   error: (err: Error) => {
+    //     console.log(err.message);
+    //   }
+    // });
+    console.log(postResponse);
     this.router.navigate(['/order-summary']);
     this.shoppingCartService.clearBasket();
   }
