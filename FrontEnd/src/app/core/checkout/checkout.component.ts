@@ -10,6 +10,7 @@ import { ProductService } from '../../shared/services/product.service';
 import { concat } from 'rxjs';
 import { CheckoutService } from '../../shared/services/checkout.service';
 import { SalesOrderDetail } from '../../shared/models/SalesOrderDetail';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +29,7 @@ export class CheckoutComponent implements OnInit{
   expectedTime: string = '';
 
   constructor(private http: HttpUserAdminService, private shoppingCartService: BasketService, private productService: ProductService,
-              private order: CheckoutService){}
+              private checkoutService: CheckoutService, private router: Router){}
 
   ngOnInit(): void {
     this.http.httpGetCustomerAddresses().subscribe({
@@ -68,6 +69,7 @@ export class CheckoutComponent implements OnInit{
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
     this.salesOrderHeader.billToAddressID = this.addresses[radios[0].value as unknown as number].addressId;
   }
+  
   setShipMethod(name: string){
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
     this.dateArrival = new Date(Date.now())
@@ -89,6 +91,17 @@ export class CheckoutComponent implements OnInit{
         this.dateArrival.setDate(this.dateArrival.getDate()+5);
         break;
     }
+    this.fillDetails();
+    this.checkoutService.getOrderFreightCost(this.salesOrderHeader, this.salesOrderHeader.shipMethod).then(
+      (data: any) => {
+        console.log(data);
+        this.salesOrderHeader.freight = data;
+        this.GetTotalDue();
+      }
+    ).catch((err: Error) => {
+      console.log(err.message);
+    });
+    this.GetTotalDue();
   }
 
   private CalculateTaxAmount(): number { //ok
@@ -119,10 +132,10 @@ export class CheckoutComponent implements OnInit{
     }
   }
   GetTotalDue(){ //ok
-    if(this.salesOrderHeader.shipToAddressID != 0){
+    if(this.salesOrderHeader.shipToAddressID != 0 && this.salesOrderHeader.billToAddressID != 0 && this.salesOrderHeader.shipMethod != ''){
       this.GetTaxPercent()
       var totalDue = 0;
-      totalDue = this.salesOrderHeader.subTotal + this.CalculateTaxAmount();
+      totalDue = this.salesOrderHeader.subTotal + this.CalculateTaxAmount() + this.salesOrderHeader.freight;
       this.salesOrderHeader.totalDue = totalDue;
     }
   }
@@ -136,7 +149,7 @@ export class CheckoutComponent implements OnInit{
     return address;
   }
 
-  sendOrder(){
+  fillDetails(){
     this.basketItemsProductsMap.forEach((prod, item) =>{
       var detail = {
         salesOrderid: 0,
@@ -146,14 +159,25 @@ export class CheckoutComponent implements OnInit{
         unitPrice: prod.listPrice,
         unitPriceDiscount: 0,
         lineTotal: (prod.listPrice * item.quantity),
-        rowguid: '',
         modifiedDate: new Date(Date.now()),
         product: null
       } as SalesOrderDetail;
       this.salesOrderHeader.salesOrderDetails.push(detail)
-    })
+    });
     console.log(this.salesOrderHeader);
   }
 
-
+  sendOrder() {
+    this.salesOrderHeader.orderDate = new Date(Date.now());
+    this.checkoutService.postSalesOrder(this.salesOrderHeader).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
+    this.router.navigate(['/order-summary']);
+    this.shoppingCartService.clearBasket();
+  }
 }

@@ -131,4 +131,10 @@ export class BasketService {
       });
     }
   }
+
+  clearBasket(): Observable<any> {
+    var header = new HttpHeaders();
+    this.authService.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.delete(`https://localhost:7287/api/shoppingcart/deletecart`, {headers: header});
+  }
 }

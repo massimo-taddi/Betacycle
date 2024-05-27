@@ -1,0 +1,36 @@
+<div class="container px-4" style="padding-top: 80px;">
+    <h1>Thank you for your order!</h1>
+    <h3>Order Summary</h3>
+    <br>
+    <div class="row gx-3">
+        <div class="col">
+            <div class="p-2 maxscrollable border rounded">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price per unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let detail of postedOrder.salesOrderDetails">
+                            <td>{{ detail.product?.name }}</td>
+                            <td>{{ detail.orderQty }}</td>
+                            <td>{{ detail.unitPrice }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="p-2 border rounded">
+                <b>Order Details:</b><br>
+                <b>Sub-total: $</b>{{ postedOrder.subTotal  | number: '1.0-2' }}<br>
+                <b>Shipping: $</b>{{ postedOrder.freight  | number: '1.0-2' }}<br>
+                <b>Tax: $</b>{{ postedOrder.taxAmt | number: '1.0-2'}}<br>
+                <b>Total due: $</b>{{ postedOrder.totalDue | number: '1.0-2' }}
+            </div>
+        </div>
+    </div>
+</div>

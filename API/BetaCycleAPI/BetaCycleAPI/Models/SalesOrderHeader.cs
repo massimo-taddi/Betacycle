@@ -117,7 +117,7 @@ public partial class SalesOrderHeader
 
     public virtual Address? BillToAddress { get; set; }
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer? Customer { get; set; } = null!;
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
 

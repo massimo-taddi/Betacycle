@@ -95,6 +95,7 @@
             <p><span><strong>Sub-total: $</strong></span>{{salesOrderHeader.subTotal | number: '1.0-2'}}<br>
             <span><strong>Tax Amount: $</strong></span>{{taxAmount | number: '1.0-2' }}<br>
             <span><strong>- Country Tax: </strong></span>{{salesOrderHeader.taxAmt}}%<br>
+            <span><strong>Shipping Costs: $</strong></span>{{salesOrderHeader.freight | number: '1.0-2' }}<br>
             <span><strong>Total Due: $</strong></span>{{salesOrderHeader.totalDue | number: '1.0-2' }}</p>
         </div>
         <button class="checkout-btn" (click)="sendOrder()">Confirm Order</button>

@@ -139,11 +139,25 @@ namespace BetaCycleAPI.Controllers
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
             salesOrderHeader.CustomerId = (int)tokenCustomerId;
             salesOrderHeader.OrderDate = DateTime.Now;
-            salesOrderHeader.DueDate = DateTime.Now.AddDays(7);
             salesOrderHeader.Status = 1;
             salesOrderHeader.OnlineOrderFlag = true;
             salesOrderHeader.Rowguid = Guid.NewGuid();
             salesOrderHeader.ModifiedDate = DateTime.Now;
+            switch(salesOrderHeader.ShipMethod)
+            {
+                case "UPS":
+                    salesOrderHeader.DueDate = (salesOrderHeader.OrderDate.AddDays(7));
+                    break;
+                case "FedEx":
+                    salesOrderHeader.DueDate = (salesOrderHeader.OrderDate.AddDays(10));
+                    break;
+                case "USPS":
+                    salesOrderHeader.DueDate = (salesOrderHeader.OrderDate.AddDays(12));
+                    break;
+                case "DHL":
+                    salesOrderHeader.DueDate = (salesOrderHeader.OrderDate.AddDays(5));
+                    break;
+            }
 
             salesOrderHeader.SubTotal = salesOrderHeader.SalesOrderDetails.Sum(detail => detail.LineTotal);
             var freightCostAction = await calculateFreightCost(weightsFromDetails(salesOrderHeader.SalesOrderDetails), salesOrderHeader.ShipMethod);
@@ -167,12 +181,15 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("GetSalesOrderHeader", new { id = salesOrderHeader.SalesOrderId }, salesOrderHeader);
         }
 
-        private IEnumerable<KeyValuePair<decimal?, int>> weightsFromDetails(IEnumerable<SalesOrderDetail> details)
+        [HttpPost]
+        [Route("weightsfromdetails")]
+        public ICollection<KeyValuePair<decimal?, int>> weightsFromDetails(ICollection<SalesOrderDetail> details)
         {
-            IEnumerable<KeyValuePair<decimal?, int>> weights = [];
+            ICollection<KeyValuePair<decimal?, int>> weights = [];
             foreach(var detail in details)
             {
-                weights.Append(new KeyValuePair<decimal?, int>(detail.Product.Weight, detail.OrderQty));
+                var prod = _awContext.Products.Find(detail.ProductId);
+                weights.Add(new KeyValuePair<decimal?, int>(prod == null ? null : prod.Weight, detail.OrderQty));
             }
             return weights;
         }
@@ -202,7 +219,7 @@ namespace BetaCycleAPI.Controllers
             {
                 if (weight.Key != null)
                 {
-                    res += (decimal)weight.Key * weight.Value * costPerKg;
+                    res += (decimal)weight.Key * weight.Value * (costPerKg / 1000);
                 } // if the product has no weight, the weight of the parcel is fixed at 1kg
                 else
                 {

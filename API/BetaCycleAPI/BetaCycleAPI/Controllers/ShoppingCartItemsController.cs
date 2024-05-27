@@ -247,6 +247,46 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete]
+        [Microsoft.AspNetCore.Mvc.Route("deletecart")]
+        public async Task<IActionResult> DeleteShoppingCart()
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   (int)_credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            var customer = await _awContext.Customers.FindAsync(tokenCustomerId);
+            try
+            {
+                var cart = await _awContext.ShoppingCarts.FindAsync(customer?.ShoppingCartId);
+                if (cart == null)
+                {
+                    return NotFound();
+                }
+                foreach (var detail in await _awContext.ShoppingCartItems.Where(det => det.ShoppingCartId == customer.ShoppingCartId).ToListAsync())
+                {
+                    _awContext.ShoppingCartItems.Remove(detail);
+                }
+                await _awContext.SaveChangesAsync();
+                var cartId = cart.ShoppingCartId;
+                _awContext.ShoppingCarts.Remove(cart);
+                await _awContext.SaveChangesAsync();
+                customer.ShoppingCart = null;
+                customer.ShoppingCartId = null;
+                await _awContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+
         private bool ShoppingCartItemExists(int id)
         {
             return _awContext.ShoppingCartItems.Any(e => e.ShoppingCartItemId == id);

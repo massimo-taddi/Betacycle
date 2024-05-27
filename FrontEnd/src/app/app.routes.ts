@@ -26,6 +26,7 @@ import { ModifyModelComponent } from './features/admin-area/modify-model/modify-
 import { AddCategoryComponent } from './features/admin-area/add-category/add-category.component';
 import { AddModelComponent } from './features/admin-area/add-model/add-model.component';
 import { CheckoutComponent } from './core/checkout/checkout.component';
+import { OrderSummaryComponent } from './core/checkout/order-summary/order-summary.component';
 
 export const routes: Routes = [
   {
@@ -56,6 +57,10 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutComponent,
+  },
+  {
+    path: 'order-summary',
+    component: OrderSummaryComponent,
   },
   {
     path: 'product-page/:productId',

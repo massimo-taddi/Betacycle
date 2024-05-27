@@ -9,8 +9,8 @@ export class SalesOrderHeader {
   shipDate: Date | null = null; //no
   status: number = 0; //1 deafult
   onlineOrderFlag: boolean = true; //true
-  salesOrderNumber: string = ''; //no
-  purchaseOrderNumber: string = ''; //no
+  salesOrderNumber: string | null = null; //no
+  purchaseOrderNumber: string | null = null; //no
   shipToAddressID: number = 0;
   billToAddressID: number = 0;
   shipMethod: string = ''; // UPS - FedEx - USPS - DHL

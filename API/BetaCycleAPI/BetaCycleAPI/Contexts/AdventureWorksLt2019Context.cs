@@ -510,6 +510,7 @@ public partial class AdventureWorksLt2019Context : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.PurchaseOrderNumber)
                 .HasMaxLength(25)
+                .HasComputedColumnSql("(isnull((N'PO'+CONVERT([nvarchar](23),[SalesOrderID]))+CONVERT([nvarchar](23),[CustomerID]),N'*** ERROR ***'))", false)
                 .HasComment("Customer purchase order number reference. ");
             entity.Property(e => e.RevisionNumber).HasComment("Incremental number to track changes to the sales order over time.");
             entity.Property(e => e.Rowguid)
