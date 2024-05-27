@@ -1,8 +1,8 @@
 <div class="container">
-    <div class="left-checkout">
+    <div class="col-md-8 col-xs-12">
         <h1 style="margin-bottom: 30px;">Checkout</h1>
         <div class="sales-info-card">
-            <a class="checkout-info" style="width: 500px;" type="button"
+            <a class="checkout-info" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#addressShipChoiceCollapse">
                 <h4>Select your shipping address <i
@@ -23,7 +23,7 @@
         </div>
         <hr color="rgb(194, 190, 190);">
         <div class="sales-info-card">
-            <a class="checkout-info" style="width: 500px;" type="button"
+            <a class="checkout-info" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#addressBillChoiceCollapse">
                 <h4>Select your billing address <i
@@ -79,7 +79,7 @@
             <span *ngIf="salesOrderHeader.shipMethod != ''" style="color: green; margin-left: 20px;">{{ dateArrival | date }}</span>
         </div>
     </div>
-    <div class="right-checkout">
+    <div class="col-md-4 col-xs-6">
         <h2 style="margin-bottom: 30px;">Order summary</h2>
         <div style="overflow-y:scroll; height: 300px;">
             <div class="basket-item" *ngFor="let item of basketItemsProductsMap | keyvalue">
