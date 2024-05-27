@@ -18,6 +18,11 @@ export class CategoryService {
   getProductCategories(): Observable<any> {
     return this.http.get('https://localhost:7287/api/Category');
   }
+  getParentProductCategories(): Observable<any> {
+    return this.http.get(
+      'https://localhost:7287/api/Category/ParentCategories'
+    );
+  }
   getNProductCategories(searchParams: SearchParams): Observable<any> {
     return this.http.get(
       `https://localhost:7287/api/Category/Ncategories?PageIndex=${searchParams.pageIndex}&PageSize=${searchParams.pageSize}&Sort=${searchParams.sort}&Search=${searchParams.search}`
@@ -29,7 +34,7 @@ export class CategoryService {
   ): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    if (parentCategory != null) {
+    if (parentCategory != 0) {
       return this.http.post(
         `https://localhost:7287/api/Category?parentProductCategory=${parentCategory}&name=${categoryName}`,
         {},

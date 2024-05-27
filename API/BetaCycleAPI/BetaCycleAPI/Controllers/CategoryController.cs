@@ -100,6 +100,18 @@ namespace BetaCycleAPI.Controllers
             return Ok(category);
         }
 
+        //GET
+        //It gets all the parent product category for add-category & modify-category
+        [HttpGet]
+        [Route("ParentCategories")]
+        public async Task<ActionResult<List<ProductCategory>>> GetAllParentProductCategory ()
+        {
+            List<ProductCategory> res = [];
+
+            res = await _context.ProductCategories.Where(el => el.ParentProductCategoryId == null).ToListAsync();
+            return res;
+        }
+
         //PUT
         //It modifies a category or a macroCategory
         [HttpPut("{id}")]

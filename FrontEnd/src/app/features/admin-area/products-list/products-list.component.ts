@@ -38,9 +38,10 @@ export class ProductsListComponent {
     this.searchParams.search = '';
     this.searchParams.sort = 'Desc';
     this.productService.getProducts(this.searchParams).subscribe({
-      next: (products: any) => {
-        this.products = products.item2;
-        this.productCount = products.item1;
+      next: (prod: any) => {
+        console.log(prod);
+        this.products = prod.item2;
+        this.productCount = prod.item1;
       },
       error: (err: Error) => {
         console.log(err.message);

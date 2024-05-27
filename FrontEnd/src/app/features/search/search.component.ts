@@ -29,11 +29,11 @@ import { MessageService } from 'primeng/api';
     PaginatorModule,
     ProgressSpinnerModule,
     RouterModule,
-    ToastModule
+    ToastModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class SearchComponent implements OnInit {
   products: Product[] | null = null;
@@ -105,21 +105,21 @@ export class SearchComponent implements OnInit {
     this.showAdded();
   }
 
-  productDetails(id: number){
+  productDetails(id: number) {
     this.router.navigate(['/product-page', id]);
   }
 
   showAdded() {
     this.messageService.add({
       severity: 'success',
-      detail: 'Added product to cart'
+      detail: 'Added product to cart',
     });
   }
 
   showError() {
     this.messageService.add({
       severity: 'error',
-      detail: 'This product is already in your cart'
+      detail: 'This product is already in your cart',
     });
   }
 }

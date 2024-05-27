@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputSwitch, InputSwitchModule } from 'primeng/inputswitch';
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,8 @@ import { ModelService } from '../../../shared/services/model.service';
 import { Router } from '@angular/router';
 import { CategoryComponent } from '../category/category.component';
 import { CategoryService } from '../../../shared/services/category.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { ProductCategory } from '../../../shared/models/ProductCategory';
 @Component({
   selector: 'app-add-category',
   standalone: true,
@@ -20,14 +22,22 @@ import { CategoryService } from '../../../shared/services/category.service';
     InputNumberModule,
     CardModule,
     FormsModule,
+    DropdownModule,
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.css',
 })
 export class AddCategoryComponent {
   category: ProductCategoryForm = new ProductCategoryForm();
-
+  categories: ProductCategory[] = [];
   constructor(private service: CategoryService, private router: Router) {}
+
+  ngOnInit() {
+    this.service.getParentProductCategories().subscribe({
+      next: (categories: ProductCategory[]) => (this.categories = categories),
+      error: (err: Error) => console.log(err.message),
+    });
+  }
 
   Post() {
     this.service
