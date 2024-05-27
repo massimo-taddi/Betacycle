@@ -49,12 +49,9 @@ namespace BetaCycleAPI.Controllers
             {
                 foreach (var header in headers)
                 {
-                    header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
-                    foreach (var detail in header.SalesOrderDetails)
-                    {
-                        detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
-                    }
-                    header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
+                    //header.SalesOrderDetails = await _awContext.SalesOrderDetails.Where(detail => detail.SalesOrderId == header.SalesOrderId).ToListAsync();
+                    //header.ShipToAddress = await _awContext.Addresses.Where(address => address.AddressId == header.ShipToAddressId).FirstAsync();
+
                 }
             }
             catch (Exception e)
@@ -62,10 +59,32 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-
-
-
             return headers;
+        }
+        
+
+
+        [HttpGet]
+        [Route("details/{headerId}")]
+        public async Task<ActionResult<IEnumerable<SalesOrderDetail>>> GetSalesOrderDetails(int headerId)
+        {
+            List<SalesOrderDetail> results = [];
+            try
+            {
+                //prendo tutti i details del mio header
+                var myDetails = await _awContext.SalesOrderDetails.Where(det => det.SalesOrderId == headerId).ToListAsync();
+                foreach (var detail in myDetails)
+                {
+                    detail.Product = await _awContext.Products.FindAsync(detail.ProductId);
+                }
+                results = myDetails;
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+            return results;
         }
 
         // GET: api/orders/5

@@ -41,6 +41,13 @@ export class HttpUserAdminService {
     );
   }
 
+  httpGetSingleAddress(id: number): Observable<any>{
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get(`https://localhost:7287/api/Addresses/${id}`, {headers: header});
+  }
+
+
   httpGetCustomerAddresses(): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));

@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../shared/models/Product';
 import { ProductService } from '../../../shared/services/product.service';
 import { SalesOrderDetail } from '../../../shared/models/SalesOrderDetail';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
@@ -62,13 +63,18 @@ export class PersonalOrdersComponent implements OnInit {
     })
   }
 
-  private getPersonalItems() {
+  private getPersonalItems() { //ottengo salesorderheaders con soli id senza oggetti annessi
     this.httpOrders.httpGetUserOrders().subscribe({
-      next: (orders: SalesOrderHeader[]) => {
-        for (let order of orders) {
-          console.log(order)
-          this.orders.push(order);
-        }
+      next: async (orders: SalesOrderHeader[]) => {
+        this.orders = orders;
+        // this.orders.forEach(async ord =>{
+        //   console.log(ord)
+        //   ord.shipToAddress = await lastValueFrom(this.httpOrders.httpGetSingleAddress(ord.shipToAddressID));
+        // })
+        // for(SalesOrderHeader order in this.orders){
+        //   console.log(orders)
+        //   orders = await lastValueFrom(this.httpOrders.httpGetSingleAddress(orders.));
+        // }
       },
       error: (err: Error) => {
         console.log(err.message);
