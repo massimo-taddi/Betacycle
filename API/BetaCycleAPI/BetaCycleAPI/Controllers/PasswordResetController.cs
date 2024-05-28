@@ -124,7 +124,7 @@ namespace BetaCycleAPI.Controllers
 
             mail.From = new MailAddress("beta89256464@gmail.com");
             mail.To.Add(email);
-            mail.Subject = "Reset della password del tuo account Betacycle";
+            mail.Subject = "Password Reset For Your Betacycle Account";
 
             // genera il token
             var tokenHandler = new JwtSecurityTokenHandler();

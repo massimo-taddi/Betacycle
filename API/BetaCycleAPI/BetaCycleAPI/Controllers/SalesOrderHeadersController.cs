@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -210,11 +211,22 @@ namespace BetaCycleAPI.Controllers
 
             mail.From = new MailAddress("beta89256464@gmail.com");
             mail.To.Add(email);
-            mail.Subject = "Reset della password del tuo account Betacycle";
-
+            mail.Subject = "Your Betacycle Order Confirmation";
             mail.IsBodyHtml = true;
 
-            mail.Body = "<!doctypehtml><meta charset=UTF-8><title>Order Confirmation</title><style>body{font-family:Arial,sans-serif;background-color:#f2f2f2;margin:0;padding:20px}h1{color:#333}table{width:100%;border-collapse:collapse;margin-bottom:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #ccc}th{font-weight:700}ul{list-style-type:none;padding:0}li{margin-bottom:5px}p{margin-bottom:10px}</style><h1>Order Confirmation</h1><p>Thank you for your order! Here are the details:<table><tr><th>Order Number:<td>"+ header.SalesOrderNumber +"<tr><th>Order Date:<td>"+ header.OrderDate + "<tr><th>Products:<td><table><thead><tr><th>Image<th>Name<th>Quantity<th>Total<th></thead>" + this.detailsHtmlTbody(header.SalesOrderDetails) + "</table></table><b>Order Total: $"+ header.TotalDue +"</b><p>If you have any questions, please contact our customer support.</p><p>Thank you for shopping with us!</p></body></html>";
+            string tBody = "<tbody>";
+            foreach (var detail in header.SalesOrderDetails)
+            {
+                var attachment = new Attachment(new MemoryStream(detail.Product?.ThumbNailPhoto), detail.Product.ThumbnailPhotoFileName, "image/gif");
+                mail.Attachments.Add(attachment);
+                attachment.ContentId = detail.Product?.ProductId.ToString();
+                attachment.ContentDisposition.Inline = true;
+                string prodImg = "<img style=\"width: 60px;\" src=\"cid:" + attachment.ContentId + "\" alt=\"...\">";
+                tBody += "<tr><td>" + prodImg + "</td><td>" + detail.Product?.Name + "</td><td>" + detail.OrderQty + "</td><td>$" + Math.Round(detail.LineTotal, 2) + "</td>" + "</tr>";
+            }
+            tBody += "</tbody>";
+
+            mail.Body = "<!doctypehtml><meta charset=UTF-8><title>Order Confirmation</title><style>body{font-family:Arial,sans-serif;background-color:#f2f2f2;margin:0;padding:20px}h1{color:#333}table{text-align:left;width:100%;border-collapse:collapse;margin-bottom:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #ccc}th{font-weight:700}ul{list-style-type:none;padding:0}li{margin-bottom:5px}p{margin-bottom:10px}</style><h1>Order Confirmation</h1><p>Thank you for your order! Here are the details:<table><tr><th>Order Number:<td>"+ header.SalesOrderNumber +"<tr><th>Order Date:<td>"+ header.OrderDate + "<tr><th>Products:<td><table><thead><tr><th>Image<th>Name<th>Quantity<th>Total<th></thead>" + tBody + "</table></table><b>Order Total: $"+ Math.Round(header.TotalDue, 2) +"</b><p>If you have any questions, please contact our customer support.</p><p>Thank you for shopping with us!</p></body></html>";
 
             smtpClient.Port = 587;
             smtpClient.Credentials = new NetworkCredential("beta89256464@gmail.com", "ooriltjjyrjekmvi");
@@ -230,18 +242,6 @@ namespace BetaCycleAPI.Controllers
                 return BadRequest();
             }
             return true;
-        }
-
-        private string detailsHtmlTbody(ICollection<SalesOrderDetail> details)
-        {
-            string res = "<tbody>";
-            foreach (var detail in details)
-            {
-                string prodImg = "<img style=\"width: 100px;\" src=\"data:image/gif;base64, "+ Convert.ToBase64String(detail.Product?.ThumbNailPhoto) +"\" alt=\"...\">";
-                res += "<tr><td>" + prodImg + "</td><td>" + detail.Product?.Name + "</td><td>" + detail.OrderQty + "</td><td>$" + detail.LineTotal + "</td>" + "</tr>";
-            }
-            res += "</tbody>";
-            return res;
         }
 
         [HttpPost]
