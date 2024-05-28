@@ -63,11 +63,11 @@ export class CheckoutComponent implements OnInit{
 
   setShipAddress(name: string){
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
-    this.salesOrderHeader.shipToAddressID = this.addresses[radios[0].value as unknown as number].addressId;
+    this.salesOrderHeader.shipToAddressId = this.addresses[radios[0].value as unknown as number].addressId;
   }
   setBillAddress(name: string){
     const radios = document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`);
-    this.salesOrderHeader.billToAddressID = this.addresses[radios[0].value as unknown as number].addressId;
+    this.salesOrderHeader.billToAddressId = this.addresses[radios[0].value as unknown as number].addressId;
   }
   
   setShipMethod(name: string){
@@ -132,7 +132,7 @@ export class CheckoutComponent implements OnInit{
     }
   }
   GetTotalDue(){ //ok
-    if(this.salesOrderHeader.shipToAddressID != 0 && this.salesOrderHeader.billToAddressID != 0 && this.salesOrderHeader.shipMethod != ''){
+    if(this.salesOrderHeader.shipToAddressId != 0 && this.salesOrderHeader.billToAddressId != 0 && this.salesOrderHeader.shipMethod != ''){
       this.GetTaxPercent()
       var totalDue = 0;
       totalDue = this.salesOrderHeader.subTotal + this.CalculateTaxAmount() + this.salesOrderHeader.freight;
@@ -143,7 +143,7 @@ export class CheckoutComponent implements OnInit{
   private GetAddressById(){
     var address = new Address();
     this.addresses.forEach(add =>{
-      if(add.addressId == this.salesOrderHeader.billToAddressID)
+      if(add.addressId == this.salesOrderHeader.billToAddressId)
         address = add;
     })
     return address;
@@ -170,15 +170,6 @@ export class CheckoutComponent implements OnInit{
   async sendOrder() {
     this.salesOrderHeader.orderDate = new Date(Date.now());
     var postResponse = await lastValueFrom(this.checkoutService.postSalesOrder(this.salesOrderHeader))
-    // this.checkoutService.postSalesOrder(this.salesOrderHeader).subscribe({
-    //   next: (data: any) => {
-    //     console.log(data);
-    //   },
-    //   error: (err: Error) => {
-    //     console.log(err.message);
-    //   }
-    // });
-    console.log(postResponse);
     this.router.navigate(['/order-summary']);
     this.shoppingCartService.clearBasket();
   }

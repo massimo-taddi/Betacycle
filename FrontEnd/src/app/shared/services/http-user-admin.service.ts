@@ -67,6 +67,14 @@ export class HttpUserAdminService {
     });
   }
 
+  httpGetDetailsFromHeader(id: number){
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.get(`https://localhost:7287/api/orders/details/${id}`, {
+      headers: header,
+    });
+  }
+
   httpPutCustomerAddress(
     newAddress: AddressFormData,
     id: number

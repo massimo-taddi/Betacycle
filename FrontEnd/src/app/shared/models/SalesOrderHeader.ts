@@ -2,7 +2,7 @@ import { Address } from "./Address";
 import { SalesOrderDetail } from "./SalesOrderDetail";
 
 export class SalesOrderHeader {
-  salesOrderID: number = 0; //no
+  salesOrderId: number = 0; //no
   revisionNumber: number = 0; 
   orderDate: Date | null = null;
   dueDate: Date | null = null; //no
@@ -11,8 +11,8 @@ export class SalesOrderHeader {
   onlineOrderFlag: boolean = true; //true
   salesOrderNumber: string | null = null; //no
   purchaseOrderNumber: string | null = null; //no
-  shipToAddressID: number = 0;
-  billToAddressID: number = 0;
+  shipToAddressId: number = 0;
+  billToAddressId: number = 0;
   shipMethod: string = ''; // UPS - FedEx - USPS - DHL
   
   subTotal: number = 0; //backend
