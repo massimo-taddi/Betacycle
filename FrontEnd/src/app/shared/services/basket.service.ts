@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, lastValueFrom, of } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ShoppingCartItem } from '../models/ShoppingCartItem';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -132,9 +132,17 @@ export class BasketService {
     }
   }
 
-  clearBasket(): Observable<any> {
+  async clearBasket() {
     var header = new HttpHeaders();
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
-    return this.http.delete(`https://localhost:7287/api/shoppingcart/deletecart`, {headers: header});
+    var id: number | null = null;
+    id = (await lastValueFrom(this.http.get('https://localhost:7287/api/shoppingcart/getcartid', {headers: header}))) as number | null;
+    if(id != null) {
+      // delete basket from server
+      this.http.delete(`https://localhost:7287/api/shoppingcart/deletecart/${id}`, {headers: header}).subscribe();
+    } else {
+      // if id is null, the user has no basket and therefore nothing is to be deleted
+      throw new Error('Error: no basket found to delete!');
+    }
   }
 }
