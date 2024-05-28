@@ -21,7 +21,6 @@ import { last, lastValueFrom } from 'rxjs';
 })
 export class PersonalOrdersComponent implements OnInit {
   orders: SalesOrderHeader[] = [];
-  dialogBool: boolean = false;
   dialogBools: boolean[] = [];
 
   constructor(private httpOrders: HttpUserAdminService, private httpProducts: ProductService) { }

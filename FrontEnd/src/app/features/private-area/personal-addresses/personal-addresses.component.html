@@ -1,6 +1,3 @@
-<!-- <li *ngFor="let address of addresses">
-    {{address.addressLine1}}
-</li> -->
 <p-toast></p-toast>
 <h1 style="position: fixed;">Addresses</h1>
 <div class="d-flex justify-content-end">
@@ -150,8 +147,8 @@
             <td>{{addr.countryRegion}}</td>
             <td>{{addr.postalCode}}</td>
             <td>{{addr.customerAddresses[0].addressType}}</td>
-            <td><p-button label="Edit" icon="pi pi-pencil" (click)="dialogBoolEdit=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
-            <p-dialog header="Modify address" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolEdit" [style]="{ width: '70rem' }" 
+            <td><p-button label="Edit" icon="pi pi-pencil" (click)="dialogBoolsEdit[rowIndex]=true; modifyAddress = addr; typeAddress = modifyAddress.customerAddresses[0].addressType" styleClass="p-button-info"></p-button></td>
+            <p-dialog header="Modify address" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolsEdit[rowIndex]" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <form #putForm="ngForm" class="row g-3 p-3">
                 <div class="col-md-6">
@@ -183,7 +180,7 @@
                     <input #addrCustType="ngModel" type="text" class="form-control" name="addressType" value="{{modifyAddress.customerAddresses[0]?.addressType}}" [(ngModel)]="typeAddress" [ngModelOptions]="{standalone:true}" required>
                 </div>
                 <div class="col-12" style="margin-top: 30px;">
-                    <button [disabled]="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid" (click)="PutModifyAddress(); dialogBoolEdit = false;" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
+                    <button [disabled]="addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid" (click)="PutModifyAddress(rowIndex); dialogBoolsEdit[rowIndex] = false;" type="submit" style="padding: 10px;" class="btn btn-primary">Modifica indirizzo</button>
                 </div>
                 <div class="col-12" style="margin-top: 10px; color: red;" *ngIf="(addrLine1.invalid || addrCity.invalid || addrStateProv.invalid || addrCountry.invalid || addrPostalCode.invalid || addrCustType.invalid)
                 && (addrLine1.touched && addrCity.touched && addrStateProv.touched && addrCountry.touched && addrPostalCode.touched && addrCustType.touched)">
@@ -191,13 +188,13 @@
                 </div>
               </form>
             </p-dialog>
-            <td><p-button label="Delete" icon="pi pi-trash" (click)="dialogBoolDelete =true;" styleClass="p-button-danger"></p-button></td>
-            <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }" 
+            <td><p-button label="Delete" icon="pi pi-trash" (click)="dialogBoolsDelete[rowIndex] =true;" styleClass="p-button-danger"></p-button></td>
+            <p-dialog header="Eliminazione dell'indirizzo" [modal]="true" blockScroll="true" draggable="false" [(visible)]="dialogBoolsDelete[rowIndex]" [style]="{ width: '40rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <h6>Are you sure?</h6>
               <div class="d-flex justify-content-evenly">
-                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;" class="btn btn-outline-secondary">Cancel</button>
-                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolDelete = false;" style="padding: 10px;"  class="btn btn-danger">Delete</button>
+                <button type="button" (click)="dialogBoolsDelete[rowIndex] = false;" style="padding: 10px;" class="btn btn-outline-secondary">Cancel</button>
+                <button type="button" (click)="DeleteAddress(addr.addressId); dialogBoolsDelete[rowIndex] = false;" style="padding: 10px;"  class="btn btn-danger">Delete</button>
               </div>
             </p-dialog>
         </tr>

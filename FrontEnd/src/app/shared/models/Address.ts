@@ -10,9 +10,11 @@ export class Address {
   postalCode: string = '';
   rowguid: string = '';
   modifiedDate: Date;
+  isDeleted: boolean = false;
   customerAddresses: CustomerAddress[] = [];
 
   constructor() {
     this.modifiedDate = new Date(Date.now());
+    this.isDeleted = false;
   }
 }

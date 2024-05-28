@@ -67,6 +67,8 @@ public partial class Address
     /// </summary>
     public DateTime ModifiedDate { get; set; }
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaderBillToAddresses { get; set; } = new List<SalesOrderHeader>();

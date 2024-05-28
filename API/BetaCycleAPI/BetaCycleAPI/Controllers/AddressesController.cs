@@ -2,12 +2,15 @@
 using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.Contexts;
 using BetaCycleAPI.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.SqlServer.Server;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -46,7 +49,7 @@ namespace BetaCycleAPI.Controllers
                     res = await _awContext.Addresses.ToListAsync();
                 else
                 {
-                    res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId).First().CustomerId == tokenCustomerId).ToListAsync();
+                    res = await _awContext.Addresses.Where(add => _awContext.CustomerAddresses.Where(ca => ca.AddressId == add.AddressId && add.IsDeleted == false).First().CustomerId == tokenCustomerId).ToListAsync();
                 }
                 foreach (var address in res)
                 {
@@ -113,7 +116,8 @@ namespace BetaCycleAPI.Controllers
                         CountryRegion = formData.CountryRegion,
                         PostalCode = formData.PostalCode,
                         Rowguid = getAddressForGuid.Rowguid,
-                        ModifiedDate = modDate
+                        ModifiedDate = modDate,
+                        IsDeleted = false
                     };
                     if (!ModelValidator.ValidateAddress(putAddress))
                         return BadRequest("Campi non validi");
@@ -169,7 +173,8 @@ namespace BetaCycleAPI.Controllers
                         StateProvince = formData.StateProvince,
                         CountryRegion = formData.CountryRegion,
                         PostalCode = formData.PostalCode,
-                        ModifiedDate = modDate
+                        ModifiedDate = modDate,
+                        IsDeleted = false
                     };
                     if (!ModelValidator.ValidateAddress(address))
                         return BadRequest("Campi non validi");
@@ -209,17 +214,42 @@ namespace BetaCycleAPI.Controllers
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
             CustomerAddress custAdd = await _awContext.CustomerAddresses.Where(ca => ca.AddressId == id && ca.CustomerId == tokenCustomerId).FirstAsync();
             _awContext.Entry(custAdd).State = EntityState.Detached;
-            Address addr = new Address() { AddressId = id };
+            Address addrDelete = new Address() { AddressId = id };
+            Address myAddress = await _awContext.Addresses.FindAsync(id);
+            _awContext.Entry(myAddress).State = EntityState.Detached;
+
             if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
                 return BadRequest("Account admin rilevato");
             else
             {
                 try
                 {
-                    _awContext.CustomerAddresses.Remove(custAdd);
-                    await _awContext.SaveChangesAsync();
-                    _awContext.Addresses.Remove(addr);
-                    await _awContext.SaveChangesAsync();
+                    var getOrders = await _awContext.SalesOrderHeaders.Where(h => h.BillToAddressId == myAddress.AddressId || h.ShipToAddressId == myAddress.AddressId).ToListAsync();
+                    if (getOrders.Any())
+                    {
+                        putAddress = new Address()
+                        {
+                            AddressId = id,
+                            AddressLine1 = myAddress!.AddressLine1,
+                            AddressLine2 = myAddress.AddressLine2,
+                            City = myAddress.City,
+                            StateProvince = myAddress.StateProvince,
+                            CountryRegion = myAddress.CountryRegion,
+                            PostalCode = myAddress.PostalCode,
+                            Rowguid = myAddress.Rowguid,
+                            ModifiedDate = DateTime.Now,
+                            IsDeleted = false
+                        };
+                        _awContext.Entry(putAddress).State = EntityState.Modified;
+                        await _awContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        _awContext.CustomerAddresses.Remove(custAdd);
+                        await _awContext.SaveChangesAsync();
+                        _awContext.Addresses.Remove(addrDelete);
+                        await _awContext.SaveChangesAsync();
+                    }
                 }
                 catch (Exception e)
                 {

@@ -25,13 +25,13 @@ import { ToastModule } from 'primeng/toast';
 export class PersonalAddressesComponent implements OnInit {
   addresses: Address[] = [];
   dialogBoolAdd: boolean = false;
-  dialogBoolEdit: boolean = false;
-  dialogBoolDelete: boolean = false;
   address: Address = new Address();
   customerAddress: CustomerAddress = new CustomerAddress('');
   newAddress: AddressFormData | null = null;
   modifyAddress: Address = new Address();
   typeAddress: string = '';
+  dialogBoolsEdit: boolean[]=[];
+  dialogBoolsDelete: boolean[]=[];
 
 
   constructor(private httpAddresses: HttpUserAdminService, private messageService: MessageService, private primengConfig: PrimeNGConfig) {}
@@ -39,6 +39,10 @@ export class PersonalAddressesComponent implements OnInit {
   ngOnInit(): void {
     this.getUserAddresses();
     this.primengConfig.ripple = true;
+    for(var i=0; i< this.addresses.length;i++){
+      this.dialogBoolsEdit.push(false);
+      this.dialogBoolsDelete.push(false);
+    }
   }
 
   private getUserAddresses() {
@@ -62,10 +66,13 @@ export class PersonalAddressesComponent implements OnInit {
 
   SubmitAddress(newForm: NgForm){
     this.newAddress = newForm.value as AddressFormData;
+    this.newAddress.isDeleted = false;
     this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe({
       next: (response: any) => {
-        if(HttpStatusCode.Ok)
+        if(HttpStatusCode.Ok){
           this.showSuccess('Indirizzo aggiunto con successo')
+          this.dialogBoolAdd = false;
+        }
       },
       error: (err: Error) => {
         this.showError("Errore nell'aggiunta")
@@ -74,16 +81,17 @@ export class PersonalAddressesComponent implements OnInit {
     });
   }
 
-  PutModifyAddress(){
+  PutModifyAddress(rowIndex: number){
     //DA COMPLETARE
     this.newAddress = new AddressFormData(this.modifyAddress.addressLine1, this.modifyAddress.addressLine2,
                      this.modifyAddress.city, this.modifyAddress.stateProvince, this.modifyAddress.countryRegion,
-                    this.modifyAddress.postalCode, this.typeAddress);
-                    console.log(this.newAddress);
+                    this.modifyAddress.postalCode, this.typeAddress, false);
     this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId).subscribe({
       next: (response: any) => {
-        if(HttpStatusCode.Ok)
+        if(HttpStatusCode.Ok){
           this.showSuccess('Modifica avvenuta con successo')
+          this.dialogBoolsEdit[rowIndex] = false;
+        }
       },
       error: (err: Error) => {
         this.showError('Errore nella modifica')
