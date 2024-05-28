@@ -29,17 +29,17 @@ export class ProductsListComponent {
   first: number = 0;
   rows: number = 10;
   productCount: number = 0;
-
+  searchProduct: string = '';
   constructor(private productService: ProductService) {}
   ngOnInit() {
     this.funzioneProdotti();
   }
   funzioneProdotti() {
-    this.searchParams.search = '';
+    this.searchParams.search = this.searchProduct;
     this.searchParams.sort = 'Desc';
-    this.productService.getProducts(this.searchParams).subscribe({
+    console.log(this.searchParams);
+    this.productService.getProductsAdmin(this.searchParams).subscribe({
       next: (prod: any) => {
-        console.log(prod);
         this.products = prod.item2;
         this.productCount = prod.item1;
       },
@@ -59,7 +59,7 @@ export class ProductsListComponent {
       behavior: 'auto',
     });
 
-    this.productService.getProducts(this.searchParams).subscribe({
+    this.productService.getProductsAdmin(this.searchParams).subscribe({
       next: (products: any) => {
         this.products = products.item2;
         this.productCount = products.item1;
