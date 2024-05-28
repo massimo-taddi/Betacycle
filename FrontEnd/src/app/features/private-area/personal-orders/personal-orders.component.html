@@ -15,7 +15,7 @@
             <th scope="col">Subtotal</th>
           </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-order let-columns="columns">
+      <ng-template pTemplate="body" let-order let-index="rowIndex" let-columns="columns">
           <tr style="border-bottom: 1px solid grey;">
               <td>{{order.salesOrderNumber}}</td>
               <td>{{order.orderDate}}</td>
@@ -24,9 +24,9 @@
               <td><span class="status-box">{{orderStatusString(order.status)}}</span></td>
               <td>{{order.shipMethod}}</td>
               <td>{{order.subTotal | currency:'USD'}}</td>
-              <td><p-button label="Details" icon="pi pi-box" (click)="dialogBool=true; getDetails(order.salesOrderId);" styleClass="p-button-warning"></p-button></td>
+              <td><p-button label="Details" icon="pi pi-box" (click)="dialogBools[index] = true; getDetails(order.salesOrderId);" styleClass="p-button-warning"></p-button></td>
               
-              <p-dialog header="Order N. {{order.salesOrderNumber}}" draggable="false" [modal]="true" [(visible)]="dialogBool" [style]="{ width: '70rem' }" 
+              <p-dialog header="Order N. {{order.salesOrderNumber}}" draggable="false" [modal]="true" [(visible)]="dialogBools[index]" [style]="{ width: '70rem' }" 
               [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
               <p-table [value]="order.salesOrderDetails">
                 <ng-template pTemplate="header" let-columns>

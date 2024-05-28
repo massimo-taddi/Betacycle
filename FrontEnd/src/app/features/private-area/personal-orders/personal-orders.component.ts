@@ -22,9 +22,14 @@ import { last, lastValueFrom } from 'rxjs';
 export class PersonalOrdersComponent implements OnInit {
   orders: SalesOrderHeader[] = [];
   dialogBool: boolean = false;
+  dialogBools: boolean[] = [];
+
   constructor(private httpOrders: HttpUserAdminService, private httpProducts: ProductService) { }
+
   ngOnInit(): void {
     this.getPersonalItems();
+    for(var i=0; i< this.orders.length;i++)
+      this.dialogBools.push(false);
   }
 
   /// Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
@@ -78,6 +83,7 @@ export class PersonalOrdersComponent implements OnInit {
   public async getDetails(headerId: number){
     var myOrder: SalesOrderHeader| undefined = this.orders.find(ord=> ord.salesOrderId == headerId)
     myOrder!.salesOrderDetails = (await lastValueFrom(this.httpOrders.httpGetDetailsFromHeader(headerId))) as SalesOrderDetail[];
+    console.log(this.orders)
   }
 
 }
