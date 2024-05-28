@@ -74,4 +74,21 @@ export class ProductService {
   getRandomProducts(): Observable<any> {
     return this.http.get(`https://localhost:7287/api/products/randomproducts`);
   }
+
+  getProductsAdmin(params: SearchParams): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+
+    if (params.search == '') {
+      return this.http.get(
+        `https://localhost:7287/api/Products/GetProductsAdmin?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
+        { headers: header }
+      );
+    }
+
+    return this.http.get(
+      `https://localhost:7287/api/Products/GetProductsAdmin?Search=${params.search}&PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
+      { headers: header }
+    );
+  }
 }

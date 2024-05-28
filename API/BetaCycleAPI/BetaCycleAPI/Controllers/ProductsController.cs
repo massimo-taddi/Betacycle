@@ -50,10 +50,6 @@ namespace BetaCycleAPI.Controllers
                     case "Asc":
                         res = res.OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
                         break;
-                    //test per prendere la descrizioni dei prodotti
-                    case "test":
-                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
-                        break;
                     default:
                         return BadRequest();
                 }
@@ -65,6 +61,68 @@ namespace BetaCycleAPI.Controllers
             }
             return (productCount, res);
         }
+
+
+        //GET: api/Products/Admin
+        //it gets all the products even the ones that are not on sale
+        [HttpGet]
+        [Route("GetProductsAdmin")]
+        [Authorize]
+
+        public async Task<ActionResult<(int, IEnumerable<Product>)>> GetAllProductsAdmin([FromQuery] ProductSpecParams @params)
+        {
+            List<Product> res = [];
+            int productCount = 0;
+            List<ProductDescription> test = [];
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                if (@params.Search == null)
+                {
+                    res=await _context.Products.ToListAsync();
+                }else
+                {
+
+                
+                res = await (from product in _context.Products
+                             from pmpd in product.ProductModel.ProductModelProductDescriptions
+                             where (EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || (product.Name.Contains(@params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))
+                             select product).Distinct().ToListAsync();
+                }
+                productCount = res.Count();
+                switch (@params.Sort)
+                {
+                    case "Desc":
+                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+                    case "Asc":
+                        res = res.OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        break;
+
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
+            return (productCount, res);
+        }
+
+
+        
+
+
 
         // GET: api/Products/5
         [HttpGet("{id}")]
