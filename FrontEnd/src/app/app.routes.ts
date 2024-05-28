@@ -27,6 +27,7 @@ import { AddCategoryComponent } from './features/admin-area/add-category/add-cat
 import { AddModelComponent } from './features/admin-area/add-model/add-model.component';
 import { CheckoutComponent } from './core/checkout/checkout.component';
 import { OrderSummaryComponent } from './core/checkout/order-summary/order-summary.component';
+import { SiteReviewComponent } from './features/site-review/site-review.component';
 
 export const routes: Routes = [
   {
@@ -99,6 +100,11 @@ export const routes: Routes = [
     path: 'resetforgot',
     component: PasswordForgotResetComponent,
   },
+  {
+    path: 'sitereview',
+    component: SiteReviewComponent,
+  },
+
   {
     path: 'admin',
     component: AdminAreaComponent,

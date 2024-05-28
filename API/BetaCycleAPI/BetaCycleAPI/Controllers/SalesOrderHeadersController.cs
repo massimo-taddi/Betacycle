@@ -21,11 +21,13 @@ namespace BetaCycleAPI.Controllers
     {
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
+        private readonly string _siteUrl;
 
-        public SalesOrderHeadersController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext)
+        public SalesOrderHeadersController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext, string siteUrl)
         {
             _awContext = context;
             _credentialsContext = credentialsContext;
+            _siteUrl = siteUrl;
         }
 
         // GET: api/orders
@@ -225,8 +227,8 @@ namespace BetaCycleAPI.Controllers
                 tBody += "<tr><td>" + prodImg + "</td><td>" + detail.Product?.Name + "</td><td>" + detail.OrderQty + "</td><td>$" + Math.Round(detail.LineTotal, 2) + "</td>" + "</tr>";
             }
             tBody += "</tbody>";
-
-            mail.Body = "<!doctypehtml><meta charset=UTF-8><title>Order Confirmation</title><style>body{font-family:Arial,sans-serif;background-color:#f2f2f2;margin:0;padding:20px}h1{color:#333}table{width:100%;border-collapse:collapse;margin-bottom:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #ccc}th{font-weight:700}ul{list-style-type:none;padding:0}li{margin-bottom:5px}p{margin-bottom:10px}</style><h1>Order Confirmation</h1><p>Thank you for your order! Here are the details:<table><tr><th>Order Number:<td>"+ header.SalesOrderNumber +"<tr><th>Order Date:<td>"+ header.OrderDate + "<tr><th>Products:<td><table><thead><tr><th>Image<th>Name<th>Quantity<th>Total<th></thead>" + tBody + "</table></table><b>Order Total: $"+ Math.Round(header.TotalDue, 2) +"</b><p>If you have any questions, please contact our customer support.</p><p>Thank you for shopping with us!</p></body></html>";
+            //sitereview => new component name
+            mail.Body = "<!doctypehtml><meta charset=UTF-8><title>Order Confirmation</title><style>body{font-family:Arial,sans-serif;background-color:#f2f2f2;margin:0;padding:20px}h1{color:#333}table{width:100%;border-collapse:collapse;margin-bottom:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #ccc}th{font-weight:700}ul{list-style-type:none;padding:0}li{margin-bottom:5px}p{margin-bottom:10px}</style><h1>Order Confirmation</h1><p>Thank you for your order! Here are the details:<table><tr><th>Order Number:<td>"+ header.SalesOrderNumber +"<tr><th>Order Date:<td>"+ header.OrderDate + "<tr><th>Products:<td><table><thead><tr><th>Image<th>Name<th>Quantity<th>Total<th></thead>" + tBody + "</table></table><b>Order Total: $"+ Math.Round(header.TotalDue, 2) + "</b><p>If you have any questions, please contact our customer support.</p><p>Thank you for shopping with us!</p><button style=\"margin-top:20px;padding: 15px 25px;color: white;background-color: #687995;border: 1px solid #687995;border-radius: 10px;\"><a href=\"http://"+_siteUrl+":4200/sitereview\">Review your experience with us!</a></button></body></html>";
 
             smtpClient.Port = 587;
             smtpClient.Credentials = new NetworkCredential("beta89256464@gmail.com", "ooriltjjyrjekmvi");
