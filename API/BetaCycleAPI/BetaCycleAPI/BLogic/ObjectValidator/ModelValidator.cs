@@ -13,6 +13,13 @@ namespace BetaCycleAPI.BLogic.ObjectValidator
             return Validator.TryValidateObject(customer, context, results, true);
         }
 
+        public static bool ValidateCustomerReview(CustomerReview customerReview)
+        {
+            var context = new ValidationContext(customerReview, serviceProvider: null, items: null);
+            var results = new List<ValidationResult>();
+            return Validator.TryValidateObject(customerReview, context, results, true);
+        }
+
         public static bool ValidateAddress(Address address)
         {
             var context = new ValidationContext(address, serviceProvider: null, items: null);

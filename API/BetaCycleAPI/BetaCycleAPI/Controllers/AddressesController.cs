@@ -238,7 +238,7 @@ namespace BetaCycleAPI.Controllers
                             PostalCode = myAddress.PostalCode,
                             Rowguid = myAddress.Rowguid,
                             ModifiedDate = DateTime.Now,
-                            IsDeleted = false
+                            IsDeleted = true
                         };
                         _awContext.Entry(putAddress).State = EntityState.Modified;
                         await _awContext.SaveChangesAsync();

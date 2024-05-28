@@ -20,6 +20,8 @@ public partial class AdventureWorksLt2019Context : DbContext
 
     public virtual DbSet<CustomerAddress> CustomerAddresses { get; set; }
 
+    public virtual DbSet<CustomerReview> CustomerReviews { get; set; }
+
     public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -150,6 +152,7 @@ public partial class AdventureWorksLt2019Context : DbContext
                 .HasMaxLength(256)
                 .HasComment("The customer's sales person, an employee of AdventureWorks Cycles.");
             entity.Property(e => e.ShoppingCartId).HasColumnName("ShoppingCartID");
+            entity.Property(e => e.CustomerReviewId).HasColumnName("CustomerReviewID");
             entity.Property(e => e.Suffix)
                 .HasMaxLength(10)
                 .HasComment("Surname suffix. For example, Sr. or Jr.");
@@ -192,6 +195,21 @@ public partial class AdventureWorksLt2019Context : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerAddresses)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<CustomerReview>(entity =>
+        {
+            entity.HasKey(e => e.ReviewId).HasName("ReviewID");
+
+            entity.ToTable("CustomerReview");
+
+            entity.Property(e => e.ReviewId)
+                .HasColumnName("ReviewID");
+            entity.Property(e => e.BodyDescription)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.ReviewDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<ErrorLog>(entity =>

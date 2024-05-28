@@ -101,9 +101,14 @@ public partial class Customer
 
     public int? ShoppingCartId { get; set; }
 
+    public int? CustomerReviewId { get; set; }
+
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaders { get; set; } = new List<SalesOrderHeader>();
 
     public virtual ShoppingCart? ShoppingCart { get; set; }
+
+    public virtual CustomerReview? CustomerReview { get; set; }
+
 }
