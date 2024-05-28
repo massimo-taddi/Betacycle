@@ -116,7 +116,7 @@ namespace BetaCycleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> SendEmail(string email)
         {
-            // invia la mail, che deve contenere un link a pwforgot con un token valido tipo 10 minuti con unique_name=mail
+            // invia la mail, che deve contenere un link a pwforgot con un token valido 10 minuti con unique_name=mail
             // in pwforgot ho quindi il token, e avro' un singolo form che chiede la nuova pwd. a questo punto facciamo una nuova PUT 
             // in cui aggiorniamo il record dell'utente verificando il token
             MailMessage mail = new MailMessage();

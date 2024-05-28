@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Mail;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -197,7 +198,50 @@ namespace BetaCycleAPI.Controllers
                 return BadRequest();
             }
 
+            var isMailSent = this.SendConfirmationEmail(salesOrderHeader, tokenEmail);
+
             return CreatedAtAction("GetSalesOrderHeader", new { id = salesOrderHeader.SalesOrderId }, salesOrderHeader);
+        }
+
+        private async Task<ActionResult<bool>> SendConfirmationEmail(SalesOrderHeader header, string email)
+        {
+            MailMessage mail = new();
+            SmtpClient smtpClient = new("smtp.gmail.com");
+
+            mail.From = new MailAddress("beta89256464@gmail.com");
+            mail.To.Add(email);
+            mail.Subject = "Reset della password del tuo account Betacycle";
+
+            mail.IsBodyHtml = true;
+
+            mail.Body = "<!doctypehtml><meta charset=UTF-8><title>Order Confirmation</title><style>body{font-family:Arial,sans-serif;background-color:#f2f2f2;margin:0;padding:20px}h1{color:#333}table{width:100%;border-collapse:collapse;margin-bottom:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #ccc}th{font-weight:700}ul{list-style-type:none;padding:0}li{margin-bottom:5px}p{margin-bottom:10px}</style><h1>Order Confirmation</h1><p>Thank you for your order! Here are the details:<table><tr><th>Order Number:<td>"+ header.SalesOrderNumber +"<tr><th>Order Date:<td>"+ header.OrderDate + "<tr><th>Products:<td><table><thead><tr><th>Image<th>Name<th>Quantity<th>Total<th></thead>" + this.detailsHtmlTbody(header.SalesOrderDetails) + "</table></table><b>Order Total: $"+ header.TotalDue +"</b><p>If you have any questions, please contact our customer support.</p><p>Thank you for shopping with us!</p></body></html>";
+
+            smtpClient.Port = 587;
+            smtpClient.Credentials = new NetworkCredential("beta89256464@gmail.com", "ooriltjjyrjekmvi");
+            smtpClient.EnableSsl = true;
+
+            try
+            {
+                smtpClient.Send(mail);
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+            return true;
+        }
+
+        private string detailsHtmlTbody(ICollection<SalesOrderDetail> details)
+        {
+            string res = "<tbody>";
+            foreach (var detail in details)
+            {
+                string prodImg = "<img style=\"width: 100px;\" src=\"data:image/gif;base64, "+ Convert.ToBase64String(detail.Product?.ThumbNailPhoto) +"\" alt=\"...\">";
+                res += "<tr><td>" + prodImg + "</td><td>" + detail.Product?.Name + "</td><td>" + detail.OrderQty + "</td><td>$" + detail.LineTotal + "</td>" + "</tr>";
+            }
+            res += "</tbody>";
+            return res;
         }
 
         [HttpPost]

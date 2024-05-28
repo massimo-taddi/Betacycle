@@ -169,7 +169,7 @@ export class CheckoutComponent implements OnInit{
 
   async sendOrder() {
     this.salesOrderHeader.orderDate = new Date(Date.now());
-    var postResponse = await lastValueFrom(this.checkoutService.postSalesOrder(this.salesOrderHeader))
+    var postResponse = await this.checkoutService.postSalesOrder(this.salesOrderHeader);
     try {
       await this.shoppingCartService.clearBasket();
     } catch (error) {

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SalesOrderHeader } from '../models/SalesOrderHeader';
-import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, of } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { KeyValuePair } from '../models/KeyValuePair';
 import { ProductService } from './product.service';
@@ -15,10 +15,12 @@ export class CheckoutService {
 
   constructor(private http: HttpClient, private authService: AuthenticationService, private productService: ProductService) { }
 
-  postSalesOrder(salesOrder: SalesOrderHeader): Observable<any> {
+  async postSalesOrder(salesOrder: SalesOrderHeader) {
     var header = new HttpHeaders();
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
-    this.postResultOrderHeader$ = this.http.post('https://localhost:7287/api/orders', salesOrder, {headers: header});
+    console.log('sending');
+    var postResultOrderHeader = await lastValueFrom(this.http.post('https://localhost:7287/api/orders', salesOrder, {headers: header}));
+    this.postResultOrderHeader$ = of(postResultOrderHeader);
     return this.postResultOrderHeader$;
   }
 
