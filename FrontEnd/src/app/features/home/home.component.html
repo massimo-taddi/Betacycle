@@ -57,10 +57,18 @@
   
 
   <div class="container marketing">
-    <!-- <h1 style="margin-top: 100px;">Discover what they think about us...</h1>
+    <h1 style="margin-top: 100px;">Discover what they think about us...</h1>
     
     <div class="bc-review-row">
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
+      <div class="card-wrapper bc-card-wrapper card-space col-md-4" *ngFor="let review of reviews">
+        <div class="card-body bc-review-card">
+          <h3 class="card-title h5 ">{{review.customerName}}, says...</h3>
+          <p-rating stars="5" readonly="true" [cancel]="false"  [(ngModel)]="review.rating"></p-rating>
+          <p class="card-text font-serif">{{review.bodyDescription}}</p>
+        </div>
+      </div>
+
+      <!--<div class="card-wrapper bc-card-wrapper card-space col-md-4">
         <div class="card-body bc-review-card">
           <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
           <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -80,19 +88,8 @@
             <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
           </a>
         </div>
-      </div>
-
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
 
     <!-- START THE FEATURETTES -->
 

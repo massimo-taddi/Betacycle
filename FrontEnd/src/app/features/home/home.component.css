@@ -111,8 +111,14 @@
     margin-top: 25px;
     /* margin-bottom: 100px; */
     column-gap: 25px;
-    overflow: hidden;
+    overflow-x: auto;
+    
 }
+.marketing{
+    overflow-x: hidden;
+}
+
+
 .bc-review-card{
     max-width: 350px;
     max-height: 300px;
@@ -121,7 +127,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: max-content;
+    height: 250px;
     padding: 25px 15px;
     border: 1px solid #e5e7eb;
     border-radius: 10px;

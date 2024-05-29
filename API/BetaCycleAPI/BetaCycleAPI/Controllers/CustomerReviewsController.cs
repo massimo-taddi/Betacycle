@@ -19,7 +19,6 @@ namespace BetaCycleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CustomerReviewsController : ControllerBase
     {
         private readonly AdventureWorksLt2019Context _awContext;
@@ -40,7 +39,7 @@ namespace BetaCycleAPI.Controllers
             {
                 var myReviews = await _awContext.CustomerReviews.ToListAsync();
                 Random num = new Random();
-                for (int i = 0; i < 3; i++) //sarebbe 5 ma 3 per comodita di testing
+                for (int i = 0; i < 5; i++) //sarebbe 5 ma 3 per comodita di testing
                 {
                     var rev = myReviews[(int)num.Next(myReviews.Count)];
                     if (rev.Rating >= 0) //da impostare il rating a 3
@@ -68,7 +67,9 @@ namespace BetaCycleAPI.Controllers
         }
 
         // GET: api/CustomerReviews/5
+
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CustomerReview>> GetCustomerReview(int id)
         {
             var customerReview = await _awContext.CustomerReviews.FindAsync(id);
@@ -84,6 +85,7 @@ namespace BetaCycleAPI.Controllers
         // PUT: api/CustomerReviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCustomerReview(int id, CustomerReview customerReview)
         {
             if (id != customerReview.ReviewId)
@@ -115,6 +117,7 @@ namespace BetaCycleAPI.Controllers
         // POST: api/CustomerReviews
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CustomerReview>> PostCustomerReview(CustomerReview customerReview)
         {
             var handler = new JwtSecurityTokenHandler();

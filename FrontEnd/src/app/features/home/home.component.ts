@@ -9,6 +9,10 @@ import { ScrollTopModule } from 'primeng/scrolltop';import { ProductService } fr
 import { Product } from '../../shared/models/Product';
 import { LoginComponent } from '../../core/login/login.component';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { ReviewService } from '../../shared/services/review.service';
+import { ReviewDataForm } from '../../shared/models/ReviewDataForm';
+import { lastValueFrom } from 'rxjs';
+import {RatingModule} from 'primeng/rating';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +25,8 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
     ButtonModule,
     RouterModule,
     ScrollTopModule,
-    LoginComponent
+    LoginComponent,
+    RatingModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -29,8 +34,11 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
 export class HomeComponent implements OnInit{
   isUserLoggedIn: boolean = false;
   isUserAdmin: boolean = false;
+  products: Product[] =[];
+  reviews: ReviewDataForm [] = [];
 
-  constructor(private http: ProductService, private router: Router, private authenticationService: AuthenticationService){
+
+  constructor(private http: ProductService, private router: Router, private authenticationService: AuthenticationService, private reviewSvc: ReviewService){
   }
   responsiveOptions : any[]=[
     {
@@ -48,7 +56,7 @@ export class HomeComponent implements OnInit{
       numScroll: 1
   }
   ]
-    products: Product[] =[];
+    
 
     ngOnInit(): void{
       this.authenticationService.isLoggedIn$.subscribe(
@@ -63,6 +71,12 @@ export class HomeComponent implements OnInit{
         this.FillRecommendProducts();
       else
         this.FillRandProducts();
+      this.getRandomReviews();
+    }
+
+    private async getRandomReviews(){
+      this.reviews = await lastValueFrom(this.reviewSvc.httpGetReviews());
+      console.log(this.reviews)
     }
 
     FillRecommendProducts(){
