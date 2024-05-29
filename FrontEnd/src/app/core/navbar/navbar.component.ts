@@ -59,7 +59,7 @@ export class NavbarComponent implements OnInit {
       },
       error: (err: Error) => {
         console.log(err);
-      }
+      },
     });
     this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
@@ -74,6 +74,9 @@ export class NavbarComponent implements OnInit {
     var params = new SearchParams();
     params.search = searchString.value;
     this.productService.setSearchParams(params);
+    if (searchString.value == '') {
+      searchString.value = 'all';
+    }
     this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
   }
 }

@@ -24,7 +24,6 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-
         public async Task<ActionResult<(int, IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];

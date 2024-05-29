@@ -73,15 +73,29 @@ export class SearchComponent implements OnInit {
   private fillProducts() {
     this.productService.setSearchParams(this.searchParams);
     this.products = null;
-    this.productService.getProducts(this.searchParams).subscribe({
-      next: (products: any) => {
-        this.products = products.item2;
-        this.productCount = products.item1;
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      },
-    });
+    console.log(this.searchParams);
+    if (this.searchParams.search == 'all') {
+      this.searchParams.search = '';
+      this.productService.getProducts(this.searchParams).subscribe({
+        next: (products: any) => {
+          this.products = products.item2;
+          this.productCount = products.item1;
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        },
+      });
+    } else {
+      this.productService.getProducts(this.searchParams).subscribe({
+        next: (products: any) => {
+          this.products = products.item2;
+          this.productCount = products.item1;
+        },
+        error: (err: Error) => {
+          console.log(err.message);
+        },
+      });
+    }
   }
   private getParamsFromUrl() {
     this.route.paramMap.subscribe((params: ParamMap) => {
