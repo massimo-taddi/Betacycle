@@ -13,13 +13,13 @@
 .n-icon:hover{cursor: pointer;}
 .n-icon:hover span{background-color: rgba(30, 30, 30, .7); transition: .2s ease-in-out;}
 .n-icon span{transition: .2s ease-in-out; width: 30px; height: 3px; border-radius: 100px; background-color: white;}
-.nav-link{color: white; font-size: 1.5rem;}
+.nav-link{color: #1e1e1e; font-size: 1.5rem; transition: .2s ease-in-out;}
+.cart-btn{color: white; font-size: 1.5rem; text-decoration: none; transition: .2s ease-in-out;}
+.cart-btn:hover{transition: .2s ease-in-out; color: #1e1e1e;}
 .ms-auto:hover .nav-link{color: rgba(30, 30, 30, .7);}
+.bc-nav-item:hover{background-color: #687995; transition: .2s ease-in-out;}
+.bc-nav-item:hover .nav-link{color: white; transition: .2s ease-in-out;}
 
-.bc-nav-item:hover{
-    background-color: #687995;
-    color: white;
-}
 ul{
     list-style-type: none;
     padding-left: 0;
