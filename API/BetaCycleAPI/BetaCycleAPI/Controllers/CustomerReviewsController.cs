@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.BLogic;
+using Microsoft.ML;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -32,9 +33,38 @@ namespace BetaCycleAPI.Controllers
 
         // GET: api/CustomerReviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerReview>>> GetCustomerReviews()
+        public async Task<ActionResult<IEnumerable<ReviewDataForm>>> GetCustomerReviews()
         {
-            return await _awContext.CustomerReviews.ToListAsync();
+            List<ReviewDataForm> res = [];
+            try
+            {
+                var myReviews = await _awContext.CustomerReviews.ToListAsync();
+                Random num = new Random();
+                for (int i = 0; i < 3; i++) //sarebbe 5 ma 3 per comodita di testing
+                {
+                    var rev = myReviews[(int)num.Next(myReviews.Count)];
+                    if (rev.Rating >= 0) //da impostare il rating a 3
+                    {
+                        var cust = await _awContext.Customers.Where(c => c.CustomerReviewId == rev.ReviewId).FirstAsync();
+                        res.Add(new ReviewDataForm()
+                        {
+                            ReviewId = rev.ReviewId,
+                            BodyDescription = rev.BodyDescription,
+                            Rating = rev.Rating,
+                            ReviewDate = rev.ReviewDate,
+                            ModifiedDate = rev.ModifiedDate,
+                            CustomerName = cust.FirstName
+                        }) ;
+                    }
+                    else i--;
+                }
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                return BadRequest();
+            }
+            return res;
         }
 
         // GET: api/CustomerReviews/5
@@ -94,26 +124,41 @@ namespace BetaCycleAPI.Controllers
             var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
                                    _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
                                    _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
-            try
-            {
-                //Creo la recensione
-                if (!ModelValidator.ValidateCustomerReview(customerReview))
-                    return BadRequest("Campi non corretti");
-                _awContext.CustomerReviews.Add(customerReview);
-                await _awContext.SaveChangesAsync();
-                //Aggiungo al customer l'id della review
-                var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
-                customer.CustomerReviewId = customerReview.ReviewId;
-                _awContext.Entry(customer).State = EntityState.Modified;
-                await _awContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                await DBErrorLogger.WriteExceptionLog(_awContext, e);
-                return BadRequest();
-            }
 
-            return CreatedAtAction("GetCustomerReview", new { id = customerReview.ReviewId }, customerReview);
+            var customerCheck = await _awContext.Customers.FindAsync((int)tokenCustomerId);
+            _awContext.Entry(customerCheck).State = EntityState.Detached;
+
+            if (customerCheck.CustomerReviewId != null)
+            {
+                var id = customerCheck!.CustomerReviewId;
+                var oldReview = await _awContext.CustomerReviews.FindAsync((int)id);
+
+                customerReview.ReviewDate = oldReview.ReviewDate;
+                customerReview.ReviewId = (int)id;
+                await PutCustomerReview((int)id, customerReview);
+            }
+            else
+            {
+                try
+                {
+                    //Creo la recensione
+                    if (!ModelValidator.ValidateCustomerReview(customerReview))
+                        return BadRequest("Campi non corretti");
+                    _awContext.CustomerReviews.Add(customerReview);
+                    await _awContext.SaveChangesAsync();
+                    //Aggiungo al customer l'id della review
+                    var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
+                    customer.CustomerReviewId = customerReview.ReviewId;
+                    _awContext.Entry(customer).State = EntityState.Modified;
+                    await _awContext.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    await DBErrorLogger.WriteExceptionLog(_awContext, e);
+                    return BadRequest();
+                }
+            }
+                return CreatedAtAction("GetCustomerReview", new { id = customerReview.ReviewId }, customerReview);
         }
 
         // DELETE: api/CustomerReviews/5

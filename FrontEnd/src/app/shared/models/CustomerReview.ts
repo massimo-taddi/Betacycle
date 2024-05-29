@@ -1,7 +1,6 @@
 
 export class CustomerReview{
     reviewId: number = 0;
-    customerId: number = 0;
     bodyDescription: string = '';
     rating: string = '';
     reviewDate: Date | null = null;

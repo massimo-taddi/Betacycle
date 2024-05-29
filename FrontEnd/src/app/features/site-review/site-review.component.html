@@ -1,1 +1,10 @@
-<p>site-review works!</p>
+<div class="container">
+    <h1>Leave a review:</h1>
+    <br>
+    <h3>What do you think about out services? Tell us!</h3>
+    <textarea #data class="form-control" id="review" rows="3"></textarea>
+    <button type="submit" (click)="postReview(data)" class="btn btn-primary">Submit</button>
+    <div style="color: green" *ngIf="showThanks">
+     <h3>Thank you for your precious feedback!<br></h3><h4>You can return to <a routerLink="/home">home</a></h4>
+    </div>
+</div>
