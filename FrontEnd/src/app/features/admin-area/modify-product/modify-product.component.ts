@@ -111,6 +111,8 @@ export class ModifyProductComponent {
     this.product.modifiedDate = new Date(Date.now());
 
     //inviamo modifiedProduct con l'id associato
+
+    console.log(modifiedProduct);
     this.prodService.putProduct(modifiedProduct, this.modifyId).subscribe({
       next: (prod: Product) => (this.updateProduct = prod),
       error: (err: Error) => console.log(err.message),

@@ -1,0 +1,56 @@
+.container{
+    padding-top: 80px;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    font-weight: bold;
+    color: #6C6262;
+    background-color: #fff;
+    background-image: none;
+    -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    margin-bottom: 50px;
+  }
+  
+  .form-control::-ms-expand {
+    background-color: transparent;
+    border: 0;
+  }
+  
+  .form-control:focus {
+    color: #696060;
+    background-color: #fff;
+    border-color: #5cb3fd;
+    outline: none;
+  }
+  
+  .form-control::-webkit-input-placeholder {
+    color: #F34949;
+    opacity: 1;
+  }
+  
+  .form-control::-moz-placeholder {
+    color: brown;
+    opacity: 1;
+  }
+  
+  .form-control:-ms-input-placeholder {
+    color: blue;
+    opacity: 1;
+  }
+  
+  .form-control::placeholder {
+    color: white;
+    opacity: 1;
+  }

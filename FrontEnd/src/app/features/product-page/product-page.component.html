@@ -1,53 +1,93 @@
 <!-- Product section-->
-<section *ngIf="product.onSale; else notSale" class="py-5" style="padding-top: 100px;">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6">
-                <img class="card-img-top" style="margin-bottom: 30px; max-width: 500px; min-width: none;" src="data:image/gif;base64, {{product.largePhoto}}" alt="...">
-                <img class="card-img-top bc-thumbnail-photo" src="data:image/gif;base64, {{product.thumbNailPhoto}}" alt="...">
-            </div>
-            <div class="col-md-6">
-                <h1 class="display-5 fw-bolder">{{product.name}}</h1>
-                <div class="fs-5 mb-5">
-                    <span>${{product.listPrice}}</span>
-                </div>
-                <p class="lead"><strong>MODEL</strong>: {{product.productModel?.name}}<br>
-                    <strong>CATEGORY</strong>: {{product.productCategory?.name}}<br>
-                    <strong>DESCRIPTION</strong>: {{engDesc}}</p>
-                <div class="d-flex">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                    <button class="btn btn-outline-dark flex-shrink-0" style="padding: 10px 15px;" type="button" (click)="addProductToCart()">
-                        <i class="pi pi-cart-arrow-down" style="font-size: 1.5 rem;"></i>
-                        Add to cart
-                    </button>
-                </div>
-            </div>
+<section
+  *ngIf="product.onSale; else notSale"
+  class="py-5"
+  style="padding-top: 100px"
+>
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="col-md-6">
+        <img
+          class="card-img-top"
+          style="margin-bottom: 30px; max-width: 500px; min-width: none"
+          src="data:image/gif;base64, {{ product.largePhoto }}"
+          alt="..."
+        />
+        <img
+          class="card-img-top bc-thumbnail-photo"
+          src="data:image/gif;base64, {{ product.thumbNailPhoto }}"
+          alt="..."
+        />
+      </div>
+      <div class="col-md-6">
+        <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
+        <div class="fs-5 mb-5">
+          <span>${{ product.listPrice }}</span>
         </div>
+        <p class="lead">
+          <strong>MODEL</strong>: {{ product.productModel?.name }}<br />
+          <strong>CATEGORY</strong>: {{ product.productCategory?.name }}<br />
+          <strong>DESCRIPTION</strong>: {{ engDesc }}
+        </p>
+        <div class="d-flex">
+          <input
+            class="form-control text-center me-3"
+            id="inputQuantity"
+            type="num"
+            value="1"
+            style="max-width: 3rem"
+          />
+          <button
+            class="btn btn-outline-dark flex-shrink-0"
+            style="padding: 10px 15px"
+            type="button"
+            (click)="addProductToCart()"
+          >
+            <i class="pi pi-cart-arrow-down" style="font-size: 1.5 rem"></i>
+            Add to cart
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 <ng-template #notSale>
-    <h1>We are sorry, this item is not for sale at the moment.</h1>
+  <h1>We are sorry, this item is not for sale at the moment.</h1>
 </ng-template>
 <section class="py-5 bg-light">
-    <div class="container px-4 px-lg-5 mt-5">
-        <h2 class="fw-bolder mb-4">Other products for you...</h2>
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            <div class="col mb-5" *ngFor="let prod of products">
-                <div class="card h-100">
-                    <img class="card-img-top" style="height: 200px;" src="data:image/gif;base64, {{prod.largePhoto}}" alt="...">
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">{{prod.name}}</h5>
-                            {{prod.listPrice}}
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent bc-productcard-footer">
-                        <div class="text-center">
-                            <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(prod.productId)">View details</button>
-                        </div>
-                    </div>
-                </div>
+  <div class="container px-4 px-lg-5 mt-5">
+    <h2 class="fw-bolder mb-4">Other products for you...</h2>
+    <div
+      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+    >
+      <div class="col mb-5" *ngFor="let prod of products">
+        <div class="card h-100">
+          <img
+            class="card-img-top"
+            style="height: 200px"
+            src="data:image/gif;base64, {{ prod.largePhoto }}"
+            alt="..."
+          />
+          <div class="card-body p-4">
+            <div class="text-center">
+              <h5 class="fw-bolder">{{ prod.name }}</h5>
+              {{ prod.listPrice }}
             </div>
+          </div>
+          <div
+            class="card-footer p-4 pt-0 border-top-0 bg-transparent bc-productcard-footer"
+          >
+            <div class="text-center">
+              <button
+                class="btn btn-outline-dark mt-auto bc-btn-product"
+                (click)="productDetails(prod.productId)"
+              >
+                View details
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
