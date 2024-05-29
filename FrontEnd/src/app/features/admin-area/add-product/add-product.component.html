@@ -159,9 +159,7 @@
       />
     </div>
     <div class="col-4">
-      <label for="inputThumbnailPhoto" class="form-label"
-        >Large image</label
-      >
+      <label for="inputThumbnailPhoto" class="form-label">Large image</label>
       <p-fileUpload
         chooseIcon="pi pi-upload"
         accept="image/gif"
@@ -179,7 +177,7 @@
       <p-inputSwitch
         id="inputOnSale"
         name="onSale"
-        [(ngModel)]="product.onSale"
+        [(ngModel)]="product.OnSale"
       />
     </div>
     <div class="col-12">
@@ -210,7 +208,12 @@
           class="w-full"
           styleClass="w-full"
         />
-        <p-button label="Save" class="w-full" styleClass="w-full" />
+        <p-button
+          label="Save"
+          class="w-full"
+          styleClass="w-full"
+          routerLink="../products-list"
+        />
       </div>
     </ng-template>
   </p-card>

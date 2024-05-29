@@ -18,7 +18,7 @@ import * as BlobUtil from 'blob-util';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CategoryService } from '../../../shared/services/category.service';
 import { ModelService } from '../../../shared/services/model.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-product',
   standalone: true,
@@ -41,7 +41,8 @@ export class AddProductComponent implements OnInit {
   constructor(
     private prodService: ProductService,
     private categoryService: CategoryService,
-    private modelService: ModelService
+    private modelService: ModelService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +64,7 @@ export class AddProductComponent implements OnInit {
       this.product.thumbnailPhotoFileName = event.files[0].name;
     });
   }
-  
+
   async onLargeImgSelect(event: FileSelectEvent) {
     BlobUtil.blobToBase64String(event.files[0]).then((b64str) => {
       this.product.largePhoto = b64str;

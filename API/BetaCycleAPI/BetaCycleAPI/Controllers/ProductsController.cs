@@ -297,7 +297,7 @@ namespace BetaCycleAPI.Controllers
                 ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
                 ModifiedDate = DateTime.Now,
                 Rowguid = getRowGuidProduct.Rowguid,
-
+                OnSale= productForm.OnSale,
             };
             _context.Entry(product).State = EntityState.Modified;
 
