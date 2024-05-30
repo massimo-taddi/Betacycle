@@ -34,4 +34,9 @@
       <HintPath>..\..\..\Libraries\EncryptData.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup Label="ProductReviewRating">
+    <None Include="ProductReviewRating.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
