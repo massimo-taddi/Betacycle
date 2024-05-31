@@ -1,40 +1,40 @@
 <div class="w-50 mx-auto" style="margin-right: 10%; padding-top: 100px;">
     <form class="p-fluid" #signUp="ngForm" (submit)="SignUp(signUp)">
-        <h1 class="p-mb-3">Registrati</h1>
+        <h1 class="p-mb-3">Sign Up</h1>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="inputTitle">Titolo</label>
+                    <label for="inputTitle">Title</label>
                     <input type="text" pInputText class="form-control" placeholder="Titolo" [(ngModel)]="signUpForm.title" maxlength="8" name="title">
                 </div>
                 <div class="form-group">
-                    <label for="inputFirstName">Nome*</label>
+                    <label for="inputFirstName">First Name*</label>
                     <input type="text" pInputText class="form-control" placeholder="Nome*" [(ngModel)]="signUpForm.firstName" required maxlength="50" name="firstName">
                 </div>
                 <div class="form-group">
-                    <label for="inputMiddleName">Secondo Nome</label>
+                    <label for="inputMiddleName">Middle Name</label>
                     <input type="text" pInputText class="form-control" placeholder="Secondo Nome" [(ngModel)]="signUpForm.middleName" maxlength="50" name="middleName">
                 </div>
                 <div class="form-group">
-                    <label for="inputLastName">Cognome*</label>
+                    <label for="inputLastName">Last Name*</label>
                     <input type="text" pInputText class="form-control" placeholder="Cognome*" [(ngModel)]="signUpForm.lastName" required maxlength="50" name="lastName">
                 </div>
                 <div class="form-group">
-                    <label for="inputPhone">Telefono</label>
+                    <label for="inputPhone">Phone Number</label>
                     <input type="tel" class="form-control" placeholder="Telefono" [(ngModel)]="signUpForm.phone" maxlength="50" name="phone">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="inputSuffix">Suffisso</label>
+                    <label for="inputSuffix">Suffix</label>
                     <input type="text" pInputText class="form-control" placeholder="Suffisso" [(ngModel)]="signUpForm.suffix" maxlength="10" name="suffix">
                 </div>
                 <div class="form-group">
-                    <label for="inputCompany">Nome Azienda</label>
+                    <label for="inputCompany">Company Name</label>
                     <input type="text" pInputText class="form-control" placeholder="Nome Azienda" [(ngModel)]="signUpForm.companyName" maxlength="128" name="companyName">
                 </div>
                 <div class="form-group">
-                    <label for="inputSalesPerson">Responsabile vendite</label>
+                    <label for="inputSalesPerson">Sales Person</label>
                     <input type="text" pInputText class="form-control" placeholder="Responsabile vendite" [(ngModel)]="signUpForm.salesPerson" maxlength="256" name="salesPerson">
                 </div>
                 <div class="form-group">
@@ -50,7 +50,7 @@
         <div class="form-group">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" [(ngModel)]="stayLoggedIn" binary="true" [ngModelOptions]="{standalone: true}">
-                <label class="form-check-label">Rimani collegato</label>
+                <label class="form-check-label">Keep signed in</label>
             </div>
         </div>
         <button class="btn btn-primary mt-3" type="submit">Sign Up</button>

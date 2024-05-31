@@ -31,7 +31,6 @@ export class SignUpComponent implements OnInit {
   SignUp(formUntyped: NgForm) {
     var form = formUntyped.value as SignUpForm;
     form.isMigrated = false;
-    console.log(form);
     this.customerService.httpPostNewCustomer(form)
       .subscribe({
       next: (response: any) => {

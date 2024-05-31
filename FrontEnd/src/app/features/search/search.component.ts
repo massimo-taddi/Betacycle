@@ -73,7 +73,6 @@ export class SearchComponent implements OnInit {
   private fillProducts() {
     this.productService.setSearchParams(this.searchParams);
     this.products = null;
-    console.log(this.searchParams);
     if (this.searchParams.search == 'all') {
       this.searchParams.search = '';
       this.productService.getProducts(this.searchParams).subscribe({

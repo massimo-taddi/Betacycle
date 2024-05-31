@@ -31,24 +31,15 @@ export class PrivateAreaComponent {
         document.getElementById('info')?.setAttribute('class', 'nav-link text-white active');
         document.getElementById('orders')?.setAttribute('class', 'nav-link text-white');
         document.getElementById('addresses')?.setAttribute('class', 'nav-link text-white');
-        document.getElementById('payments')?.setAttribute('class', 'nav-link text-white');
         break;
       case 'orders':
         document.getElementById('orders')?.setAttribute('class', 'nav-link text-white active');
         document.getElementById('info')?.setAttribute('class', 'nav-link text-white');
         document.getElementById('addresses')?.setAttribute('class', 'nav-link text-white');
-        document.getElementById('payments')?.setAttribute('class', 'nav-link text-white');
         break;
       case 'addresses':
         document.getElementById('addresses')?.setAttribute('class', 'nav-link text-white active');
         document.getElementById('orders')?.setAttribute('class', 'nav-link text-white');
-        document.getElementById('info')?.setAttribute('class', 'nav-link text-white');
-        document.getElementById('payments')?.setAttribute('class', 'nav-link text-white');
-        break;
-      case 'payments':
-        document.getElementById('payments')?.setAttribute('class', 'nav-link text-white active');
-        document.getElementById('orders')?.setAttribute('class', 'nav-link text-white');
-        document.getElementById('addresses')?.setAttribute('class', 'nav-link text-white');
         document.getElementById('info')?.setAttribute('class', 'nav-link text-white');
         break;
     }

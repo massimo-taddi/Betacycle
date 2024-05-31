@@ -86,7 +86,6 @@ export class PersonalAddressesComponent implements OnInit {
   }
 
   PutModifyAddress(rowIndex: number){
-    //DA COMPLETARE
     this.newAddress = new AddressFormData(this.modifyAddress.addressLine1, this.modifyAddress.addressLine2,
                      this.modifyAddress.city, this.modifyAddress.stateProvince, this.modifyAddress.countryRegion,
                     this.modifyAddress.postalCode, this.typeAddress, false);

@@ -76,14 +76,12 @@ export class HomeComponent implements OnInit{
 
     private async getRandomReviews(){
       this.reviews = await lastValueFrom(this.reviewSvc.httpGetReviews());
-      console.log(this.reviews)
     }
 
     FillRecommendProducts(){
       this.http.getRecommendedProducts().subscribe({
         next: (data: any) =>{
           this.products = data;
-          console.log(data)
         },
         error: (err: Error) =>{
           console.log(err);        }
@@ -97,7 +95,6 @@ export class HomeComponent implements OnInit{
       this.http.getRandomProducts().subscribe({
         next: (data: any) =>{
           this.products = data;
-          console.log(data)
         },
         error: (err: Error) =>{
           console.log(err);        }

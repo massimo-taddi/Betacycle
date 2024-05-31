@@ -67,7 +67,7 @@ export class PersonalOrdersComponent implements OnInit {
     })
   }
 
-  private async getPersonalItems() { //ottengo salesorderheaders con soli id senza oggetti annessi
+  private async getPersonalItems() {
     this.orders = await lastValueFrom(this.httpOrders.httpGetUserOrders())
     this.fillAddresses();   
   }
@@ -75,14 +75,12 @@ export class PersonalOrdersComponent implements OnInit {
   private async fillAddresses(){
     this.orders.forEach(async ord => {
       ord.shipToAddress = await lastValueFrom(this.httpOrders.httpGetSingleAddress(ord.shipToAddressId))
-      console.log(ord.shipToAddress)
     });
   }
 
   public async getDetails(headerId: number){
     var myOrder: SalesOrderHeader| undefined = this.orders.find(ord=> ord.salesOrderId == headerId)
     myOrder!.salesOrderDetails = (await lastValueFrom(this.httpOrders.httpGetDetailsFromHeader(headerId))) as SalesOrderDetail[];
-    console.log(this.orders)
   }
 
 }

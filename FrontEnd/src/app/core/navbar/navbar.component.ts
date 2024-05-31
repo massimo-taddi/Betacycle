@@ -55,7 +55,6 @@ export class NavbarComponent implements OnInit {
   Logout() {
     this.logout.httpLogoutTrace().subscribe({
       next: (res: any) => {
-        console.log(res);
       },
       error: (err: Error) => {
         console.log(err);

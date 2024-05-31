@@ -31,7 +31,6 @@ export class SiteReviewComponent implements OnInit{
   }
 
   postReview(data: HTMLTextAreaElement){
-    console.log(data.value)
     var review = {
       reviewId: 0,
       bodyDescription: data.value,

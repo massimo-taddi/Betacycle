@@ -98,7 +98,6 @@ export class CheckoutComponent implements OnInit{
     this.fillDetails();
     this.checkoutService.getOrderFreightCost(this.salesOrderHeader, this.salesOrderHeader.shipMethod).then(
       (data: any) => {
-        console.log(data);
         this.salesOrderHeader.freight = data;
         this.GetTotalDue();
       }
@@ -116,7 +115,6 @@ export class CheckoutComponent implements OnInit{
   private GetTaxPercent(){ //ok
     var taxPercent = 0;
     var billingAddress = this.GetAddressById();
-    console.log(billingAddress?.countryRegion.toLowerCase())
     switch(billingAddress?.countryRegion.toLowerCase()){
       case 'italia':
       case 'italy':
@@ -168,7 +166,6 @@ export class CheckoutComponent implements OnInit{
       } as SalesOrderDetail;
       this.salesOrderHeader.salesOrderDetails.push(detail)
     });
-    console.log(this.salesOrderHeader);
   }
 
   async sendOrder() {

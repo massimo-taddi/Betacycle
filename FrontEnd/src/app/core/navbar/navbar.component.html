@@ -96,12 +96,12 @@
         class="nav-link"
         routerLink="/personal/myinfo"
         (click)="sidebarVisible = false"
-        >Area personale</a
+        >Personal area</a
       >
     </li>
     <li *ngIf="isUserAdmin" class="nav-item bc-nav-item">
       <a class="nav-link" routerLink="/admin" (click)="sidebarVisible = false"
-        >Zona Amministratori</a
+        >Admin zone</a
       >
     </li>
     <li *ngIf="isUserLoggedIn" class="nav-item bc-nav-item">
@@ -112,16 +112,6 @@
         >Logout</a
       >
     </li>
-    <li class="nav-item bc-nav-item">
-      <a class="nav-link" routerLink="/search" (click)="sidebarVisible = false"
-        >RicercaApprofondita</a
-      >
-    </li>
   </ul>
 </p-sidebar>
 <router-outlet></router-outlet>
-
-<!-- 
-    <a *ngIf="isUserLoggedIn">area personale</a><br>
-<input *ngIf="isUserLoggedIn" type="button" value="logout" (click)="Logout()">
-  -->

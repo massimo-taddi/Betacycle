@@ -63,32 +63,10 @@
       <div class="card-wrapper bc-card-wrapper card-space col-md-4" *ngFor="let review of reviews">
         <div class="card-body bc-review-card">
           <h3 class="card-title h5 ">{{review.customerName}}, says...</h3>
-          <p-rating stars="5" readonly="true" [cancel]="false"  [(ngModel)]="review.rating"></p-rating>
+          <p-rating stars="5" readonly="true" [cancel]="false"  [(ngModel)]="review.rating" style="pointer-events: none;"></p-rating>
           <p class="card-text font-serif">{{review.bodyDescription}}</p>
         </div>
       </div>
-
-      <!--<div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div> -->
     </div>
 
     <!-- START THE FEATURETTES -->
@@ -175,108 +153,4 @@
 
     <!-- /END THE FEATURETTES -->
   </div>
-  <!-- /.container -->
-
-  <!-- FOOTER -->
-  <!-- <p-scrollTop class="bc-scolltopbtn"/> -->
 </main>
-
-<!-- <router-outlet></router-outlet> -->
-
-
-
-<!-- <div class="bc-review-row">
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</h3>
-          <p class="card-text font-serif">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <a class="read-more" href="#">
-            <span class="text">Leggi di più</span>
-            <span class="visually-hidden">su Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…</span>
-          </a>
-        </div>
-      </div>
-    </div> -->
-    <!-- Three columns of text below the carousel -->
-    <!-- <div class="row">
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-          alt="Generic placeholder image"
-          width="140"
-          height="140" />
-        <h2>Heading</h2>
-        <p>
-          Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
-          Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
-          risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-          cursus magna.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button">View details »</a>
-        </p>
-      </div> -->
-      <!-- /.col-lg-4 -->
-      <!-- <div class="col-lg-4">
-        <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-          alt="Generic placeholder image"
-          width="140"
-          height="140" />
-        <h2>Heading</h2>
-        <p>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
-          lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
-          fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-          condimentum nibh.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button">View details »</a>
-        </p>
-      </div> -->
-      <!-- /.col-lg-4 -->
-      <!-- <div class="col-lg-4">
-        <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-          alt="Generic placeholder image"
-          width="140"
-          height="140" />
-        <h2>Heading</h2>
-        <p>
-          Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas
-          eget quam. Vestibulum id ligula porta felis euismod semper. Fusce
-          dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
-          fermentum massa justo sit amet risus.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button">View details »</a>
-        </p>
-      </div> -->
-      <!-- /.col-lg-4 -->
-    <!-- </div> -->
-    <!-- /.row -->

@@ -4,7 +4,7 @@
   <div class="container px-4 px-lg-5 my-5">
       <div class="text-center text-white">
           <h1 class="display-4 fw-bolder">"{{searchParams.search}}"</h1>
-          <p class="lead fw-normal text-white-50 mb-0">Risultati della ricerca</p>
+          <p class="lead fw-normal text-white-50 mb-0">Search results</p>
       </div>
   </div>
 </header>
@@ -28,7 +28,7 @@
                   <!-- Product actions-->
                   <div class="card-footer bc-productcard-footer p-4 pt-0 border-top-0 bg-transparent">
                         <button class="btn btn-outline-dark mt-auto pi pi-cart-arrow-down bc-btn-product" style="font-size: 1.5rem;" (click)="addProductToCart(product)"></button>
-                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(product.productId)">Dettagli</button>
+                        <button class="btn btn-outline-dark mt-auto bc-btn-product" (click)="productDetails(product.productId)">Details</button>
                       <!-- add to cart action: takes product as parameter and adds 1 of that item to the shopping cart -->
                   </div>
               </div>

@@ -76,7 +76,6 @@ export class ProductPageComponent {
     this.productsTemp.forEach(prod => {
       if(this.i < 4){
         this.products.push(prod);
-        console.log(this.products);
         this.i++;
       }
     });
