@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using BetaCycleAPI.BLogic.ObjectValidator;
 using BetaCycleAPI.BLogic;
 using Microsoft.ML;
+using System.Runtime.CompilerServices;
 
 namespace BetaCycleAPI.Controllers
 {
@@ -81,6 +82,8 @@ namespace BetaCycleAPI.Controllers
 
             return customerReview;
         }
+
+
 
         // PUT: api/CustomerReviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -164,6 +167,29 @@ namespace BetaCycleAPI.Controllers
                 return CreatedAtAction("GetCustomerReview", new { id = customerReview.ReviewId }, customerReview);
         }
 
+
+        //
+
+
+        [HttpPost]
+        [Route("GetReviewScore")]
+        public async Task<ActionResult<decimal>> GetReviewScore([FromBody] string text)
+        {
+            float result = 0.0f;
+
+            WebsiteReviewRating.ModelOutput predictions = WebsiteReviewRating.Predict(new WebsiteReviewRating.ModelInput { ReviewText = text });
+    
+
+            for (int i = 1; i < 6; i++)
+            {
+                var prediction = WebsiteReviewRating.Predict(new WebsiteReviewRating.ModelInput { ReviewText = text});
+                //result += prediction.Score[(uint)prediction.PredictedLabel];
+                Console.WriteLine(prediction.PredictedLabel + " - " + string.Join(",",prediction.Score));
+            }
+
+
+            return BadRequest();
+        }
         // DELETE: api/CustomerReviews/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomerReview(int id)
@@ -184,5 +210,6 @@ namespace BetaCycleAPI.Controllers
         {
             return _awContext.CustomerReviews.Any(e => e.ReviewId == id);
         }
+
     }
 }
