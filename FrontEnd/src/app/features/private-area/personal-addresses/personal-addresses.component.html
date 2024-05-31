@@ -73,23 +73,12 @@
       </div>
       <div class="col-md-4">
         <label for="inputState" class="form-label">Country</label>
-        <select #addrCountry="ngModel" required
+        <input #addrCountry="ngModel" required
           id="inputState"
-          class="form-select"
+          class="form-control"
           name="countryRegion"
           [(ngModel)]="address.countryRegion"
-        >
-          <option selected>Select</option>
-          <option>Italy</option>
-          <option>Switzerland</option>
-          <option>France</option>
-          <option>Germany</option>
-          <option>USA</option>
-          <option>United Kingdom</option>
-          <option>Malta</option>
-          <option>San Marino</option>
-          <option>Città del Vaticano</option>
-        </select>
+        />
       </div>
       <div class="col-md-3">
         <label for="inputZip" class="form-label">Postal Code</label>

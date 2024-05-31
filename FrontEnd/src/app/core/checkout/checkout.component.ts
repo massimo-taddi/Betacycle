@@ -27,13 +27,17 @@ export class CheckoutComponent implements OnInit{
   taxAmount: number = 0;
   dateArrival: Date = new Date(Date.now()) //getDay = mese, getDate = giorno, getFullYear = anno
   expectedTime: string = '';
+  isCheckoutDisabled: boolean = false;
 
   constructor(private http: HttpUserAdminService, private shoppingCartService: BasketService, private productService: ProductService,
               private checkoutService: CheckoutService, private router: Router){}
 
   ngOnInit(): void {
     this.http.httpGetCustomerAddresses().subscribe({
-      next: (data: Address[]) =>{this.addresses = data},
+      next: (data: Address[]) =>{this.addresses = data;
+        if(!(data.length!=0))
+          this.isCheckoutDisabled = true;
+      },
       error: (err: Error) => {console.log(err)}
     })
     this.fillBasket();
@@ -168,13 +172,15 @@ export class CheckoutComponent implements OnInit{
   }
 
   async sendOrder() {
-    this.salesOrderHeader.orderDate = new Date(Date.now());
-    var postResponse = await this.checkoutService.postSalesOrder(this.salesOrderHeader);
-    try {
-      await this.shoppingCartService.clearBasket();
-    } catch (error) {
-      console.log(error);
+    if(!this.isCheckoutDisabled){
+      this.salesOrderHeader.orderDate = new Date(Date.now());
+      var postResponse = await this.checkoutService.postSalesOrder(this.salesOrderHeader);
+      try {
+        await this.shoppingCartService.clearBasket();
+      } catch (error) {
+        console.log(error);
+      }
+      this.router.navigate(['/order-summary']);
     }
-    this.router.navigate(['/order-summary']);
   }
 }

@@ -58,6 +58,7 @@
                       <button class="btn bsb-btn-xl btn-primary" [disabled]="Password.invalid || Username.invalid" (click)="Login()">Log in now</button>
                     </div>
                   </div>
+                  <p *ngIf="failedLogin" style="color: red;">Login failed - please check the email and password inserted</p>
                 </div>
               </form>
               <div class="row">

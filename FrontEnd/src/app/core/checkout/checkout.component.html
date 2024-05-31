@@ -1,6 +1,6 @@
 <div class="container">
     <div class="col-md-8 col-xs-12">
-        <h1 style="margin-bottom: 30px;">Checkout</h1>
+        <h1 style="margin-bottom: 30px;">Checkout Form</h1>
         <div class="sales-info-card">
             <a class="checkout-info" type="button"
                 data-bs-toggle="collapse"
@@ -9,7 +9,7 @@
                         class="pi pi-angle-down"></i></h4>
             </a>
             <div class="collapse" id="addressShipChoiceCollapse">
-                <div class=" radio-group">
+                <div class=" radio-group" *ngIf="!isCheckoutDisabled; else noAddressFound">
                     <label class="radio-container"
                         *ngFor="let add of addresses; index as i">
                         <input type="radio" (click)="setShipAddress('ship-add')"
@@ -19,6 +19,11 @@
                         {{add.city}}<br>{{add.customerAddresses[0].addressType}}
                     </label>
                 </div>
+                <ng-template #noAddressFound>
+                    <label>
+                        <span style="color: red">You have to add an address before checkout</span>
+                    </label>
+                </ng-template>
             </div>
         </div>
         <hr color="rgb(194, 190, 190);">
@@ -30,7 +35,7 @@
                         class="pi pi-angle-down"></i></h4>
             </a>
             <div class="collapse" id="addressBillChoiceCollapse">
-                <div class=" radio-group">
+                <div class=" radio-group" *ngIf="!isCheckoutDisabled; else noAddressFound">
                     <label class="radio-container"
                         *ngFor="let add of addresses; index as i">
                         <input type="radio" (click)="setBillAddress('bill-add')"
@@ -41,6 +46,11 @@
                         {{add.city}}<br>{{add.customerAddresses[0].addressType}}
                     </label>
                 </div>
+                <ng-template #noAddressFound>
+                    <label>
+                        <span style="color: red">You have to add an address before checkout</span>
+                    </label>
+                </ng-template>
             </div>
         </div>
         <hr color="rgb(194, 190, 190);">
@@ -98,7 +108,10 @@
             <span><strong>Shipping Costs: $</strong></span>{{salesOrderHeader.freight | number: '1.0-2' }}<br>
             <span><strong>Total Due: $</strong></span>{{salesOrderHeader.totalDue | number: '1.0-2' }}</p>
         </div>
-        <button class="checkout-btn" (click)="sendOrder()">Confirm Order</button>
+        <button [disabled]="isCheckoutDisabled" class="checkout-btn" (click)="sendOrder()">Confirm Order</button>
+        <div *ngIf="isCheckoutDisabled">
+            <span style="color: red">You have to correctly fill the form</span>
+        </div>
     </div>
 </div>
 

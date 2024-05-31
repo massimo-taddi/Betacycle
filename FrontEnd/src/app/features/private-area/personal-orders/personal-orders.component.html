@@ -18,8 +18,8 @@
       <ng-template pTemplate="body" let-order let-index="rowIndex" let-columns="columns">
           <tr style="border-bottom: 1px solid grey;">
               <td>{{order.salesOrderNumber}}</td>
-              <td>{{order.orderDate}}</td>
-              <td>{{order.shipDate}}</td>
+              <td>{{order.orderDate | date}}</td>
+              <td>{{order.shipDate | date}}</td>
               <td>{{order.shipToAddress?.addressLine1}}</td>
               <td><span class="status-box">{{orderStatusString(order.status)}}</span></td>
               <td>{{order.shipMethod}}</td>

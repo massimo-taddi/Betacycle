@@ -28,6 +28,7 @@ export class LoginComponent {
   constructor(private http: HttploginService, private router: Router, private authStatus: AuthenticationService, private basketService: BasketService) {}
 
   Login() {
+    this.failedLogin = false;
     if (this.loginCredentials.username != '' && this.loginCredentials.password != '') {
       this.http.httpSendLoginCredentials(this.loginCredentials).subscribe({
         next: (response: any) => {
@@ -47,6 +48,7 @@ export class LoginComponent {
           }
         },
         error: (err: any) => {
+          this.failedLogin = true;
           this.authStatus.setLoginStatus(false, '', false, false);
         },
       });

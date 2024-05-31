@@ -12,6 +12,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import {MessageService} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Route, Router } from '@angular/router';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class PersonalAddressesComponent implements OnInit {
   dialogBoolsDelete: boolean[]=[];
 
 
-  constructor(private httpAddresses: HttpUserAdminService, private messageService: MessageService, private primengConfig: PrimeNGConfig) {}
+  constructor(private route: Router ,private httpAddresses: HttpUserAdminService, private messageService: MessageService, private primengConfig: PrimeNGConfig) {}
 
   ngOnInit(): void {
     this.getUserAddresses();
@@ -58,6 +59,9 @@ export class PersonalAddressesComponent implements OnInit {
 
   showSuccess(content: string) {
     this.messageService.add({severity:'success', summary: 'Success', detail: content});
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000); 
   }
 
   showError(content: string) {
@@ -70,12 +74,12 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpPostCustomerAddress(this.newAddress).subscribe({
       next: (response: any) => {
         if(HttpStatusCode.Ok){
-          this.showSuccess('Indirizzo aggiunto con successo')
+          this.showSuccess('Address successfully added')
           this.dialogBoolAdd = false;
         }
       },
       error: (err: Error) => {
-        this.showError("Errore nell'aggiunta")
+        this.showError("Error - Address not added")
         console.log(err)
       },
     });
@@ -89,12 +93,12 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpPutCustomerAddress(this.newAddress, this.modifyAddress.addressId).subscribe({
       next: (response: any) => {
         if(HttpStatusCode.Ok){
-          this.showSuccess('Modifica avvenuta con successo')
+          this.showSuccess('Address successfully added')
           this.dialogBoolsEdit[rowIndex] = false;
         }
       },
       error: (err: Error) => {
-        this.showError('Errore nella modifica')
+        this.showError('Error - Address not modified')
         console.log(err)
       },
     });
@@ -104,10 +108,10 @@ export class PersonalAddressesComponent implements OnInit {
     this.httpAddresses.httpDeleteCustomerAddress(id).subscribe({
       next: (response: any) => {
         if(HttpStatusCode.Ok)
-          this.showSuccess('Eliminazione avvenuta con successo')
+          this.showSuccess('Address successfully removed')
       },
       error: (err: Error) => {
-        this.showError('Errore nella cancellazione')
+        this.showError('Error - Address not removed')
         console.log(err)
       },
     });
