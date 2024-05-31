@@ -173,23 +173,45 @@ namespace BetaCycleAPI.Controllers
 
         [HttpPost]
         [Route("GetReviewScore")]
-        public async Task<ActionResult<decimal>> GetReviewScore([FromBody] string text)
+        public async Task<ActionResult<float>> GetReviewScore([FromBody] string text)
         {
             float result = 0.0f;
 
             WebsiteReviewRating.ModelOutput predictions = WebsiteReviewRating.Predict(new WebsiteReviewRating.ModelInput { ReviewText = text });
-    
 
             for (int i = 1; i < 6; i++)
             {
-                var prediction = WebsiteReviewRating.Predict(new WebsiteReviewRating.ModelInput { ReviewText = text});
-                //result += prediction.Score[(uint)prediction.PredictedLabel];
-                Console.WriteLine(prediction.PredictedLabel + " - " + string.Join(",",prediction.Score));
+                result += predictions.Score[this.scoreIndex(i)] * i;
             }
 
-
-            return BadRequest();
+            return result;
         }
+
+        // 1 stella - pos 4
+        // 2 stelle - pos 1
+        // 3 stelle - pos 3
+        // 4 stelle - pos 2
+        // 5 stelle - pos 0
+        // 2, 4, 3, 1, 0
+        private int scoreIndex(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    return 4;
+                case 2:
+                    return 1;
+                case 3:
+                    return 3;
+                case 4:
+                    return 2;
+                case 5:
+                    return 0;
+                default:
+                    return 0;
+            }
+        }
+
         // DELETE: api/CustomerReviews/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomerReview(int id)
