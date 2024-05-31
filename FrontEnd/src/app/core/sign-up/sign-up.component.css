@@ -1,0 +1,12 @@
+#signupbg{
+    background-image: url('/assets/images/Banner_BG_Home_1.svg');
+    height: 100%; background-repeat: no-repeat; background-size: cover;
+    top: -50%;
+    background-position-y: center;
+}
+.signupform{
+    background-color: white;
+    padding-bottom: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

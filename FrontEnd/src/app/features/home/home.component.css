@@ -184,6 +184,9 @@
     margin: auto;
     display: block;
 }
+main{
+    margin-bottom: 100px;
+}
 
 @media only screen and (max-width: 1350px) {
     .featurette{display: flex; flex-direction: column; align-items: center; justify-content: center;}

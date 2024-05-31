@@ -13,7 +13,8 @@ div.icontainer{border-bottom: solid 2.5px var(--Secondary-color);}
     background-image: url('/assets/images/Banner_BG_Home_1.svg');
      display: flex;
       justify-content: flex-end; width: 100%;
-       height: 100vh; background-repeat: no-repeat; background-size: cover;
+       height: 100%; background-repeat: no-repeat; background-size: cover;
+       background-position-y: center;
 }
 
 .form-container{
@@ -22,3 +23,16 @@ div.icontainer{border-bottom: solid 2.5px var(--Secondary-color);}
     margin-top: 10%;
     margin-right: 3%;
 }
+
+.left-col{
+    text-align: center;
+    background-color: #687995;
+    border-radius: 10px;
+    color: white;
+    max-height: 400px;
+    min-height: 200px;
+}
+.box-write{
+
+}
+
