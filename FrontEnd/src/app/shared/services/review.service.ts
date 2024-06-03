@@ -19,8 +19,11 @@ export class ReviewService {
     });
   }
 
-
   httpGetReviews(): Observable<any>{
     return this.http.get('https://localhost:7287/api/CustomerReviews');
+  }
+
+  httpGetReviewScore(reviewText: string): Observable<any>{
+    return this.http.post('https://localhost:7287/api/CustomerReviews/GetReviewScore', `"${reviewText}"`, {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },});
   }
 }
