@@ -1,44 +1,59 @@
-<p-button routerLink="../add-category"> Add category </p-button>
-<input type="text" [(ngModel)]="searchCategory" placeholder="search" />
-<button (click)="ShowCategories()">Search</button>
+<div
+  style="
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
+    justify-content: center;
+  "
+>
+  <p-button routerLink="../add-category"> Add category </p-button>
+  <input
+    type="text"
+    [(ngModel)]="searchCategory"
+    placeholder="search"
+    style="border-radius: 10px"
+  />
+  <p-button (click)="ShowCategories()">Search</p-button>
 
-<div class="categoryContainer">
-  <div
-    class="card flex justify-content-center"
-    *ngFor="let category of categories"
-  >
-    <p-card
-      header="{{ category.name }}"
-      subheader="{{ category.modifiedDate }}"
-      [style]="{ width: '360px' }"
+  <div class="categoryContainer">
+    <div
+      class="card flex justify-content-center"
+      *ngFor="let category of categories"
     >
-      <p>
-        <!-- DESCRIPTION PRODUCT -->
-      </p>
+      <p-card
+        header="{{ category.name }}"
+        subheader="{{ category.modifiedDate }}"
+        [style]="{ width: '360px' }"
+      >
+        <p>
+          <!-- DESCRIPTION PRODUCT -->
+        </p>
 
-      <ng-template pTemplate="footer">
-        <div
-          class="flex gap-3 mt-1"
-          style="display: flex; justify-content: space-between; width: 100%"
-        >
-          <p-button
-            label="Modify"
-            class="w-full"
-            styleClass="w-full"
-            (onClick)="NavigateModify(category.productCategoryId)"
-            routerLink="../modify-category"
-          />
-        </div>
-      </ng-template>
-    </p-card>
+        <ng-template pTemplate="footer">
+          <div
+            class="flex gap-3 mt-1"
+            style="display: flex; justify-content: space-between; width: 100%"
+          >
+            <p-button
+              label="Modify"
+              class="w-full"
+              styleClass="w-full"
+              (onClick)="NavigateModify(category.productCategoryId)"
+              routerLink="../modify-category"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
   </div>
-</div>
 
-<p-paginator
-  (onPageChange)="changeOutput($event)"
-  [first]="0"
-  [rows]="searchParams.pageSize"
-  [totalRecords]="categoriesCount"
-  [rowsPerPageOptions]="[10, 20, 30]"
-  [showFirstLastIcon]="false"
-></p-paginator>
+  <p-paginator
+    (onPageChange)="changeOutput($event)"
+    [first]="0"
+    [rows]="searchParams.pageSize"
+    [totalRecords]="categoriesCount"
+    [rowsPerPageOptions]="[10, 20, 30]"
+    [showFirstLastIcon]="false"
+  ></p-paginator>
+</div>

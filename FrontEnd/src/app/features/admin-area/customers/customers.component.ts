@@ -6,11 +6,17 @@ import { Customer } from '../../../shared/models/Customer';
 import { PaginatorModule } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { TableModule } from 'primeng/table';
-import { FilterService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [FormsModule, CommonModule, PaginatorModule, TableModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    PaginatorModule,
+    TableModule,
+    ButtonModule,
+  ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
 })

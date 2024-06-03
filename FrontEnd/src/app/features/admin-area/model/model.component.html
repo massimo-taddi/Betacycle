@@ -1,40 +1,55 @@
-<p-button routerLink="../add-model"> Add model </p-button>
-<input type="text" [(ngModel)]="searchModel" placeholder="search" />
-<button (click)="funzioneModels()">Search</button>
-<div class="modelContainer">
-  <div class="card flex justify-content-center" *ngFor="let model of models">
-    <p-card
-      header="{{ model.name }}"
-      subheader="{{ model.modifiedDate }}"
-      [style]="{ width: '360px' }"
-    >
-      <p>
-        <!-- DESCRIPTION PRODUCT -->
-      </p>
+<div
+  style="
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
+    justify-content: center;
+  "
+>
+  <p-button routerLink="../add-model"> Add model </p-button>
+  <input
+    type="text"
+    [(ngModel)]="searchModel"
+    placeholder="search"
+    style="border-radius: 10px"
+  />
+  <p-button (click)="funzioneModels()">Search</p-button>
+  <div class="modelContainer">
+    <div class="card flex justify-content-center" *ngFor="let model of models">
+      <p-card
+        header="{{ model.name }}"
+        subheader="{{ model.modifiedDate }}"
+        [style]="{ width: '360px' }"
+      >
+        <p>
+          <!-- DESCRIPTION PRODUCT -->
+        </p>
 
-      <ng-template pTemplate="footer">
-        <div
-          class="flex gap-3 mt-1"
-          style="display: flex; justify-content: space-between; width: 100%"
-        >
-          <p-button
-            label="Modify"
-            class="w-full"
-            styleClass="w-full"
-            (onClick)="SetLocalStorage(model.productModelId)"
-            routerLink="../modify-model"
-          />
-        </div>
-      </ng-template>
-    </p-card>
+        <ng-template pTemplate="footer">
+          <div
+            class="flex gap-3 mt-1"
+            style="display: flex; justify-content: space-between; width: 100%"
+          >
+            <p-button
+              label="Modify"
+              class="w-full"
+              styleClass="w-full"
+              (onClick)="SetLocalStorage(model.productModelId)"
+              routerLink="../modify-model"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
   </div>
-</div>
 
-<p-paginator
-  (onPageChange)="changeOutput($event)"
-  [first]="0"
-  [rows]="searchParams.pageSize"
-  [totalRecords]="modelCount"
-  [rowsPerPageOptions]="[10, 20, 30]"
-  [showFirstLastIcon]="false"
-></p-paginator>
+  <p-paginator
+    (onPageChange)="changeOutput($event)"
+    [first]="0"
+    [rows]="searchParams.pageSize"
+    [totalRecords]="modelCount"
+    [rowsPerPageOptions]="[10, 20, 30]"
+    [showFirstLastIcon]="false"
+  ></p-paginator>
+</div>

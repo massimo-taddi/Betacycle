@@ -1,29 +1,45 @@
-<input type="text" [(ngModel)]="searchName" placeholder="search" />
-<button (click)="funzioneCustomer()">Search</button>
-
-<p-table [value]="customers" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>CompanyName</th>
-      <th>FirstName</th>
-      <th>LastName</th>
-      <th>EmailAddress</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-customer>
-    <tr>
-      <td>{{ customer.companyName }}</td>
-      <td>{{ customer.firstName }}</td>
-      <td>{{ customer.lastName }}</td>
-      <td>{{ customer.emailAddress }}</td>
-    </tr>
-  </ng-template>
-</p-table>
-<p-paginator
-  (onPageChange)="changeOutput($event)"
-  [first]="0"
-  [rows]="searchParams.pageSize"
-  [totalRecords]="customersCount"
-  [rowsPerPageOptions]="[10, 20, 30]"
-  [showFirstLastIcon]="false"
-></p-paginator>
+<div
+  style="
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
+    justify-content: center;
+  "
+>
+  <input
+    type="text"
+    [(ngModel)]="searchName"
+    placeholder="search"
+    style="border-radius: 10px"
+  />
+  <p-button (click)="funzioneCustomer()">Search</p-button>
+  <div class="customerContainer">
+    <p-table [value]="customers" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>CompanyName</th>
+          <th>FirstName</th>
+          <th>LastName</th>
+          <th>EmailAddress</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>{{ customer.companyName }}</td>
+          <td>{{ customer.firstName }}</td>
+          <td>{{ customer.lastName }}</td>
+          <td>{{ customer.emailAddress }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-paginator
+      (onPageChange)="changeOutput($event)"
+      [first]="0"
+      [rows]="searchParams.pageSize"
+      [totalRecords]="customersCount"
+      [rowsPerPageOptions]="[10, 20, 30]"
+      [showFirstLastIcon]="false"
+    ></p-paginator>
+  </div>
+</div>

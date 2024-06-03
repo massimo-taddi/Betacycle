@@ -1,11 +1,14 @@
-<nav style="background-color: #687995; position: fixed; width: 100vw; z-index: 2;">
+<nav
+  style="background-color: #687995; position: fixed; width: 100vw; z-index: 2"
+>
   <!-- SUB NAV CONTAINER -->
   <div class="snav-container">
-    
     <!-- LOGO IMAGE -->
-    <a class="navbar-brand" routerLink="/home"><img src="/assets/images/Betacycle_logo_linear.svg"/></a>
+    <a class="navbar-brand" routerLink="/home"
+      ><img src="/assets/images/Betacycle_logo_linear.svg"
+    /></a>
 
-    <!-- SEARCBAR -->
+    <!-- SEARCHBAR -->
     <form
       class="d-flex navbar-form"
       onsubmit="return false;"
@@ -45,9 +48,7 @@
         <span></span>
       </div>
     </div>
-
   </div>
-
 </nav>
 
 <p-sidebar
@@ -56,7 +57,7 @@
   styleClass="bg-light p-sidebar-mask"
   [modal]="true"
 >
-  <h3 style="text-align: center; margin-bottom: 50px;">Menu</h3>
+  <h3 style="text-align: center; margin-bottom: 50px">Menu</h3>
   <form
     class="d-flex ms-auto me-auto"
     onsubmit="return false;"
