@@ -9,11 +9,12 @@ import { SignUpForm } from '../../shared/models/SignUpForm';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [FormsModule, PasswordModule, InputTextModule],
+  imports: [FormsModule, PasswordModule, InputTextModule, CommonModule],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css'
 })

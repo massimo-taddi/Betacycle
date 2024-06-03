@@ -28,7 +28,7 @@ export class SiteReviewComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.getSetTokenFromUrl();
     this.reviewText$
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(300))
       .subscribe({
       next: (nextRev: string) => {
         this.getReviewScore(nextRev);
