@@ -136,12 +136,20 @@ namespace BetaCycleAPI.Controllers
 
             if (customerCheck.CustomerReviewId != null)
             {
-                var id = customerCheck!.CustomerReviewId;
-                var oldReview = await _awContext.CustomerReviews.FindAsync((int)id);
-
-                customerReview.ReviewDate = oldReview.ReviewDate;
-                customerReview.ReviewId = (int)id;
-                await PutCustomerReview((int)id, customerReview);
+                try
+                {
+                    customerReview.Rating = (byte)Convert.ToInt32(this.GetReviewScore(customerReview.BodyDescription));
+                    var id = customerCheck!.CustomerReviewId;
+                    var oldReview = await _awContext.CustomerReviews.FindAsync((int)id);
+                    _awContext.Entry(oldReview).State = EntityState.Detached;
+                    customerReview.ReviewDate = oldReview.ReviewDate;
+                    customerReview.ReviewId = (int)id;
+                    await PutCustomerReview((int)id, customerReview);
+                }catch(Exception ex)
+                {
+                    await DBErrorLogger.WriteExceptionLog(_awContext, ex);
+                    return BadRequest();
+                }
             }
             else
             {
@@ -150,6 +158,7 @@ namespace BetaCycleAPI.Controllers
                     //Creo la recensione
                     if (!ModelValidator.ValidateCustomerReview(customerReview))
                         return BadRequest("Campi non corretti");
+                    customerReview.Rating = (byte)Convert.ToInt32(this.GetReviewScore(customerReview.BodyDescription));
                     _awContext.CustomerReviews.Add(customerReview);
                     await _awContext.SaveChangesAsync();
                     //Aggiungo al customer l'id della review
@@ -173,7 +182,7 @@ namespace BetaCycleAPI.Controllers
 
         [HttpPost]
         [Route("GetReviewScore")]
-        public async Task<ActionResult<float>> GetReviewScore([FromBody] string text)
+        public float GetReviewScore([FromBody] string text)
         {
             float result = 0.0f;
 
