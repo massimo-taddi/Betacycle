@@ -23,14 +23,11 @@ export class ProductService {
   getProducts(params: SearchParams): Observable<any> {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
-    if (params.search != '') {
-      return this.http.get(
-        `https://localhost:7287/api/Products?Search=${params.search}&PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
-        { headers: header }
-      );
-    } else {
-      return this.getAllProducts(params);
-    }
+
+    return this.http.get(
+      `https://localhost:7287/api/Products?Search=${params.search}&PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
+      { headers: header }
+    );
   }
   getAllProducts(params: PaginatorParams): Observable<any> {
     return this.http.get(

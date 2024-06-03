@@ -54,8 +54,7 @@ export class NavbarComponent implements OnInit {
 
   Logout() {
     this.logout.httpLogoutTrace().subscribe({
-      next: (res: any) => {
-      },
+      next: (res: any) => {},
       error: (err: Error) => {
         console.log(err);
       },
@@ -74,8 +73,9 @@ export class NavbarComponent implements OnInit {
     params.search = searchString.value;
     this.productService.setSearchParams(params);
     if (searchString.value == '') {
-      searchString.value = 'all';
+      window.location.reload();
+    } else {
+      this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
     }
-    this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
   }
 }
