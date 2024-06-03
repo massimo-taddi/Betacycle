@@ -37,18 +37,14 @@ export class CategoryComponent {
   dialogBoolEdit: boolean = false;
   dialogBoolDelete: boolean = false;
   category: ProductCategoryForm = new ProductCategoryForm();
-
-  constructor(
-    private service: CategoryService,
-    primengCongig: PrimeNGConfig,
-    private router: Router
-  ) {}
+  searchCategory: string = '';
+  constructor(private service: CategoryService) {}
   ngOnInit() {
     this.ShowCategories();
   }
   ShowCategories() {
     //modificare la chiamata a controller
-    this.searchParams.search = '';
+    this.searchParams.search = this.searchCategory;
     this.searchParams.sort = 'Desc';
     this.service.getNProductCategories(this.searchParams).subscribe({
       next: (category: any) => {

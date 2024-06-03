@@ -1,5 +1,6 @@
 <p-button routerLink="../add-model"> Add model </p-button>
-
+<input type="text" [(ngModel)]="searchModel" placeholder="search" />
+<button (click)="funzioneModels()">Search</button>
 <div class="modelContainer">
   <div class="card flex justify-content-center" *ngFor="let model of models">
     <p-card

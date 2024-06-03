@@ -37,7 +37,7 @@ export class ProductsListComponent {
   funzioneProdotti() {
     this.searchParams.search = this.searchProduct;
     this.searchParams.sort = 'Desc';
-    console.log(this.searchParams);
+
     this.productService.getProductsAdmin(this.searchParams).subscribe({
       next: (prod: any) => {
         this.products = prod.item2;

@@ -1,4 +1,6 @@
 <p-button routerLink="../add-category"> Add category </p-button>
+<input type="text" [(ngModel)]="searchCategory" placeholder="search" />
+<button (click)="ShowCategories()">Search</button>
 
 <div class="categoryContainer">
   <div

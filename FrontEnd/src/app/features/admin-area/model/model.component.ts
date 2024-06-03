@@ -30,17 +30,18 @@ export class ModelComponent {
   first: number = 0;
   rows: number = 10;
   modelCount: number = 0;
-
+  searchModel: string = '';
   constructor(private service: ModelService) {}
 
   ngOnInit() {
     this.funzioneModels();
   }
   funzioneModels() {
-    this.searchParams.search = '';
+    this.searchParams.search = this.searchModel;
     this.searchParams.sort = 'Desc';
     this.service.getNProductModels(this.searchParams).subscribe({
       next: (model: any) => {
+        console.log(model);
         this.modelCount = model.item1;
         this.models = model.item2;
       },

@@ -24,9 +24,15 @@ export class ModelService {
   }
 
   getNProductModels(params: SearchParams): Observable<any> {
-    return this.http.get(
-      `https://localhost:7287/api/Model/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
-    );
+    if (params.search == '') {
+      return this.http.get(
+        `https://localhost:7287/api/Model/Nmodels?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
+      );
+    } else {
+      return this.http.get(
+        `https://localhost:7287/api/Model/Nmodels?Search=${params.search}&PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`
+      );
+    }
   }
   getSingleModel(id: number) {
     return this.http.get(`https://localhost:7287/api/Model/${id}`);

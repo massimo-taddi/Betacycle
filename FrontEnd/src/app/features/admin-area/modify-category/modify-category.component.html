@@ -2,11 +2,15 @@
   <div class="card flex justify-content-center">
     <p-card [style]="{ width: '360px' }">
       <p>
-        Parent Product Category<p-inputNumber
-          type="text"
+        Parent Product Category
+        <p-dropdown
+          [options]="categories"
+          optionLabel="name"
+          optionValue="productCategoryId"
+          placeholder="Seleziona una categoria"
           [(ngModel)]="category.parentProductCategoryId"
-          placeholder="its a macro Category"
-        />
+        >
+        </p-dropdown>
       </p>
       <p>
         CategoryName<input type="text" pInputText [(ngModel)]="category.name" />

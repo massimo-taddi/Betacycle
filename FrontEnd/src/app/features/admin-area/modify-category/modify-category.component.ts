@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CategoryService } from '../../../shared/services/category.service';
 import { Router } from '@angular/router';
+import { ProductCategory } from '../../../shared/models/ProductCategory';
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-modify-category',
   standalone: true,
@@ -20,13 +22,14 @@ import { Router } from '@angular/router';
     InputNumberModule,
     InputTextModule,
     InputSwitchModule,
+    DropdownModule,
   ],
   templateUrl: './modify-category.component.html',
   styleUrl: './modify-category.component.css',
 })
 export class ModifyCategoryComponent {
   category: ProductCategoryForm = new ProductCategoryForm();
-
+  categories: ProductCategory[] = [];
   constructor(private service: CategoryService, private router: Router) {}
   ngOnInit() {
     let idDaCercareStringa = sessionStorage.getItem('ModifyIdCategory');
@@ -42,6 +45,10 @@ export class ModifyCategoryComponent {
         },
       });
     }
+    this.service.getParentProductCategories().subscribe({
+      next: (categories: ProductCategory[]) => (this.categories = categories),
+      error: (err: Error) => console.log(err.message),
+    });
   }
   Update() {
     this.service
