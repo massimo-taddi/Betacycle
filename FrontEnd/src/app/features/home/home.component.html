@@ -57,17 +57,41 @@
   
 
   <div class="container marketing">
-    <h1 style="margin-top: 100px;">Discover what they think about us...</h1>
-    
-    <div class="bc-review-row">
-      <div class="card-wrapper bc-card-wrapper card-space col-md-4" *ngFor="let review of reviews">
-        <div class="card-body bc-review-card">
-          <h3 class="card-title h5 ">{{review.customerName}}, says...</h3>
-          <p-rating stars="5" readonly="true" [cancel]="false"  [(ngModel)]="review.rating" style="pointer-events: none;"></p-rating>
-          <p class="card-text font-serif">{{review.bodyDescription}}</p>
+    <h1 style="margin-top: 100px;">Discover what they think about us...</h1><br>
+    <!-- <p-carousel [value]="reviews" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions" [circular]="true" [autoplayInterval]="4000" [showIndicators]="false" [showNavigators]="false">
+      <ng-template let-review pTemplate="item">
+        <div class="card-wrapper bc-card-wrapper card-space col-md-4">
+          <div class="card-body bc-review-card">
+            <h3 class="card-title h5">{{review.customerName}}, says...</h3>
+            <p-rating stars="5" readonly="true" [cancel]="false" [(ngModel)]="review.rating" style="pointer-events: none;"></p-rating>
+            <p class="card-text font-serif">{{review.bodyDescription}}</p>
+          </div>
         </div>
-      </div>
-    </div>
+      </ng-template>
+    </p-carousel> -->
+    <p-carousel 
+        [value]="reviews" 
+        [numVisible]="3" 
+        [numScroll]="1" 
+        [responsiveOptions]="responsiveOptions"
+        [circular]="true"
+        [showIndicators]="false"
+        [showNavigators]="false"
+        [autoplayInterval]="3000">
+        <ng-template let-review pTemplate="item">
+                <div class="border rounded m-2 p-3" style="height: 250px; align-items: center; justify-content: left; display: flex;">
+                  <div style="text-align: left;">
+                      <div class="mb-3 font-medium">
+                          <b>{{ review.customerName }} says...</b>
+                      </div>
+                      <div>
+                          <p-rating stars="5" readonly="true" [cancel]="false" [(ngModel)]="review.rating" style="pointer-events: none;"></p-rating>
+                          <p class="card-text font-serif">{{review.bodyDescription}}</p>
+                      </div>
+                  </div>
+                </div>
+        </ng-template>
+    </p-carousel>
 
     <!-- START THE FEATURETTES -->
 
