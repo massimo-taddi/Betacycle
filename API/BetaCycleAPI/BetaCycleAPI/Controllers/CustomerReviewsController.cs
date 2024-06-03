@@ -39,13 +39,21 @@ namespace BetaCycleAPI.Controllers
             try
             {
                 var myReviews = await _awContext.CustomerReviews.ToListAsync();
-                Random num = new Random();
-                for (int i = 0; i < 5; i++) //sarebbe 5 ma 3 per comodita di testing
+                Random numGen = new Random();
+                int[] generatedNums = [];
+                int generated;
+                for (int i = 0; i < 5; i++)
                 {
-                    var rev = myReviews[(int)num.Next(myReviews.Count)];
-                    if (rev.Rating >= 0) //da impostare il rating a 3
+                    do
                     {
-                        var cust = await _awContext.Customers.Where(c => c.CustomerReviewId == rev.ReviewId).FirstAsync();
+                        generated = (int)numGen.Next(myReviews.Count);
+                    } while (generatedNums.Contains(generated));
+                    generatedNums = generatedNums.Append(generated).ToArray();
+                    var rev = myReviews[generated];
+                    if (rev.Rating >= 3)
+                    {
+                        var cust = await _awContext.Customers.Where(c => c.CustomerReviewId == rev.ReviewId).FirstOrDefaultAsync();
+
                         res.Add(new ReviewDataForm()
                         {
                             ReviewId = rev.ReviewId,
@@ -53,8 +61,8 @@ namespace BetaCycleAPI.Controllers
                             Rating = rev.Rating,
                             ReviewDate = rev.ReviewDate,
                             ModifiedDate = rev.ModifiedDate,
-                            CustomerName = cust.FirstName
-                        }) ;
+                            CustomerName = cust == null ? "Anonymous" : cust.FirstName
+                        });
                     }
                     else i--;
                 }
@@ -64,7 +72,7 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_awContext, e);
                 return BadRequest();
             }
-            return res;
+            return res.OrderByDescending(rev => rev.Rating).ToList();
         }
 
         // GET: api/CustomerReviews/5
