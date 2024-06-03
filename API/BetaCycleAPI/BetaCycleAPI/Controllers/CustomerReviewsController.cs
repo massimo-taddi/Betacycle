@@ -172,7 +172,7 @@ namespace BetaCycleAPI.Controllers
                     //Aggiungo al customer l'id della review
                     var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
                     customer.CustomerReviewId = customerReview.ReviewId;
-                    _awContext.Entry(customer).State = EntityState.Modified;
+                    //_awContext.Entry(customer).State = EntityState.Modified;
                     await _awContext.SaveChangesAsync();
                 }
                 catch (Exception e)
