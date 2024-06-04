@@ -8,6 +8,7 @@ import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
 import { SearchParams } from '../../shared/models/SearchParams';
 import { AdminFunctionalitiesComponent } from './admin-functionalities/admin-functionalities.component';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 @Component({
   selector: 'app-admin-area',
   standalone: true,
@@ -25,5 +26,20 @@ import { AdminFunctionalitiesComponent } from './admin-functionalities/admin-fun
 export class AdminAreaComponent {
   products!: Product[];
   searchParams: SearchParams = new SearchParams();
-  constructor(private productService: ProductService) {}
+  isUserAdmin: boolean = false;
+  isUserLoggedIn: boolean = false;
+  constructor(
+    private productService: ProductService,
+    private authenticationService: AuthenticationService
+  ) {}
+  ngOnInit(): void {
+    this.authenticationService.isLoggedIn$.subscribe(
+      (res) => (this.isUserLoggedIn = res)
+    );
+    if (localStorage.getItem('jwtToken') != null)
+      sessionStorage.setItem('jwtToken', localStorage.getItem('jwtToken')!);
+    this.authenticationService.isAdmin$.subscribe(
+      (res) => (this.isUserAdmin = res)
+    );
+  }
 }

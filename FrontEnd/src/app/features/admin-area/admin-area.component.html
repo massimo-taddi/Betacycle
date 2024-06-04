@@ -1,10 +1,22 @@
-<article style="padding: 150px 10vw 20px 10vw; display: flex; flex-wrap: wrap; column-gap: 20px; row-gap: 20px; justify-content: center;">
-  <app-admin-functionalities></app-admin-functionalities>
-  <router-outlet></router-outlet>
-</article>
+<div *ngIf="isUserAdmin; else notLogged">
+  <article
+    style="
+      padding: 150px 10vw 20px 10vw;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 20px;
+      row-gap: 20px;
+      justify-content: center;
+    "
+  >
+    <app-admin-functionalities></app-admin-functionalities>
+    <router-outlet></router-outlet>
+  </article>
+</div>
 
-
-
+<ng-template #notLogged>
+  <span>You dont have the authorization</span>
+</ng-template>
 
 <!--
 <article
