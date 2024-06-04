@@ -15,6 +15,7 @@ import { BasketService } from '../../shared/services/basket.service';
 import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 
 @Component({
   selector: 'app-search',
@@ -40,16 +41,26 @@ export class SearchComponent implements OnInit {
   searchParams: SearchParams = new SearchParams();
   productCount: number = 0;
   justAddedProduct: Product | null = null;
-
+  isUserAdmin: boolean = false;
+  isUserLoggedIn: boolean = false;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private basketService: BasketService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
+    this.authenticationService.isLoggedIn$.subscribe(
+      (res) => (this.isUserLoggedIn = res)
+    );
+    if (localStorage.getItem('jwtToken') != null)
+      sessionStorage.setItem('jwtToken', localStorage.getItem('jwtToken')!);
+    this.authenticationService.isAdmin$.subscribe(
+      (res) => (this.isUserAdmin = res)
+    );
     this.getParamsFromUrl();
   }
 

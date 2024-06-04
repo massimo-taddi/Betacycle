@@ -37,7 +37,7 @@
     <!-- RIGHT BUTTONS CONTAINeR -->
     <div class="n-buttons">
       <!-- BOTTONE CARELLO -->
-      <div class="ms-auto">
+      <div class="ms-auto" *ngIf="!isUserAdmin">
         <a routerLink="/basket" class="cart-btn pi pi-shopping-cart"></a>
       </div>
 

@@ -70,10 +70,12 @@ export class NavbarComponent implements OnInit {
 
   Search(searchString: HTMLInputElement) {
     var params = new SearchParams();
+    let searchString1 = '';
     params.search = searchString.value;
     this.productService.setSearchParams(params);
     if (searchString.value == '') {
-      window.location.reload();
+      searchString1 = 'all';
+      this.router.navigate(['/search', searchString1, '1', '20', 'Desc']);
     } else {
       this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
     }
