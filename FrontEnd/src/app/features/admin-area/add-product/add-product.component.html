@@ -181,40 +181,14 @@
       />
     </div>
     <div class="col-12">
-      <button type="submit" class="btn btn-primary mt-3">Add product</button>
+      <button
+        type="submit"
+        class="btn btn-primary mt-3"
+        routerLink="../products-list"
+      >
+        Add product
+      </button>
     </div>
   </form>
 </div>
 <br />
-{{ this.product.productModelId }}
-<span *ngIf="submittedProduct != null">
-  <p-card
-    header="{{ submittedProduct.name }}"
-    subheader="{{ submittedProduct.listPrice }}"
-    [style]="{ width: '360px' }"
-  >
-    <ng-template pTemplate="header">
-      <img
-        alt="Card"
-        src="data:image/gif;base64, {{ submittedProduct.thumbNailPhoto }}"
-      />
-    </ng-template>
-
-    <ng-template pTemplate="footer">
-      <div class="flex gap-3 mt-1">
-        <p-button
-          label="Cancel"
-          severity="secondary"
-          class="w-full"
-          styleClass="w-full"
-        />
-        <p-button
-          label="Save"
-          class="w-full"
-          styleClass="w-full"
-          routerLink="../products-list"
-        />
-      </div>
-    </ng-template>
-  </p-card>
-</span>

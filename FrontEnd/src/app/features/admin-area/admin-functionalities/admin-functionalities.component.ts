@@ -8,6 +8,4 @@ import { RouterModule } from '@angular/router';
   templateUrl: './admin-functionalities.component.html',
   styleUrl: './admin-functionalities.component.css',
 })
-export class AdminFunctionalitiesComponent {
-  //questo ts servirà per funzionalità come modifica elimina etc
-}
+export class AdminFunctionalitiesComponent {}

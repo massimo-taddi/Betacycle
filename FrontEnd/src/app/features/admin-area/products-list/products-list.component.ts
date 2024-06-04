@@ -32,9 +32,9 @@ export class ProductsListComponent {
   searchProduct: string = '';
   constructor(private productService: ProductService) {}
   ngOnInit() {
-    this.funzioneProdotti();
+    this.productFunction();
   }
-  funzioneProdotti() {
+  productFunction() {
     this.searchParams.search = this.searchProduct;
     this.searchParams.sort = 'Desc';
 
