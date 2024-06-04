@@ -4,7 +4,8 @@
     <h3>What do you think about out services? Tell us!</h3>
     <textarea #data class="form-control" id="review" rows="3" [(ngModel)]="reviewText" (ngModelChange)="onTextAreaChanges(data)"></textarea>
     <div *ngIf="data.value != ''">
-        <b>Your review score: {{reviewScore | number: '1.0-2'}}</b>
+        <p-rating [(ngModel)]="reviewScore" [cancel]="false" [disabled]="true" /><br>
+        <b>Your review score: {{reviewScore | number: '1.0-2'}} &rarr; {{ roundedReviewScore }} <i class="pi pi-star-fill"></i></b>
     </div>
     <button type="submit" (click)="postReview(data)" class="btn btn-primary">Submit</button>
     <div style="color: green" *ngIf="showThanks">

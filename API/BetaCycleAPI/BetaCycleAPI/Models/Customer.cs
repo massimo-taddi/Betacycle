@@ -28,7 +28,7 @@ public partial class Customer
     /// First name of the person.
     /// </summary>
     [Required]
-    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(1, ErrorMessage = "Minimo 1 carattere")]
     public string FirstName { get; set; } = null!;
 
     /// <summary>
@@ -43,7 +43,7 @@ public partial class Customer
     /// Last name of the person.
     /// </summary>
     [Required]
-    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 1 carattere")]
     public string LastName { get; set; } = null!;
 
     /// <summary>
@@ -67,7 +67,7 @@ public partial class Customer
     [Required]
     [DataType(DataType.EmailAddress)]
     [EmailAddress]
-    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
+    [MaxLength(128, ErrorMessage = "Massimo 128 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string? EmailAddress { get; set; }
 
     /// <summary>

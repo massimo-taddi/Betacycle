@@ -9,11 +9,12 @@ import { HttpStatusCode } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounce, debounceTime, interval, scan } from 'rxjs';
+import { RatingModule } from 'primeng/rating';
 
 @Component({
   selector: 'app-site-review',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, RatingModule],
   templateUrl: './site-review.component.html',
   styleUrl: './site-review.component.css'
 })
@@ -23,6 +24,7 @@ export class SiteReviewComponent implements OnInit, OnDestroy{
   reviewText: string = '';
   reviewText$: Subject<string> = new Subject<string>();
   reviewScore: number = 1;
+  roundedReviewScore: number = 1;
   constructor(private route: ActivatedRoute, private authStatus: AuthenticationService, private reviewService: ReviewService){}
 
   ngOnInit(): void {
@@ -71,6 +73,7 @@ export class SiteReviewComponent implements OnInit, OnDestroy{
     this.reviewService.httpGetReviewScore(reviewText).subscribe({
       next: (resp: number) => {
         this.reviewScore = resp;
+        this.roundedReviewScore = Math.round(this.reviewScore);
       },
       error: (err: Error) => {
         console.log(err);
