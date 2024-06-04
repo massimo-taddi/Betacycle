@@ -32,9 +32,9 @@ export class ModifyCategoryComponent {
   categories: ProductCategory[] = [];
   constructor(private service: CategoryService, private router: Router) {}
   ngOnInit() {
-    let idDaCercareStringa = sessionStorage.getItem('ModifyIdCategory');
-    if (idDaCercareStringa != null) {
-      let idDaCercare = parseInt(idDaCercareStringa, 10);
+    let idToSearch = sessionStorage.getItem('ModifyIdCategory');
+    if (idToSearch != null) {
+      let idDaCercare = parseInt(idToSearch, 10);
       this.service.getSingleCategory(idDaCercare).subscribe({
         next: (category: any) => {
           this.category = category;

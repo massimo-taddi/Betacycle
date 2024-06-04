@@ -52,7 +52,7 @@ export class ModifyModelComponent {
       )
       .subscribe({
         next: (el: any) => {
-          return console.log('successo');
+          return console.log('success');
         },
         error: (err: Error) => {
           console.log(err);

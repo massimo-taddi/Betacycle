@@ -21,7 +21,6 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './customers.component.css',
 })
 export class CustomersComponent {
-  //ArrayCheSiMostra
   customers!: Customer[];
 
   searchParams: SearchParams = new SearchParams();
