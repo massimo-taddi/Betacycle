@@ -227,26 +227,60 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
+        // DELETE: api/Customers/1
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        [Authorize]
+        public async Task<IActionResult> DeleteCustomer(int id=0)
         {
-            var customer = await _awContext.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+            var tokenEmail = token.Claims.First(claim => claim.Type == "unique_name").Value;
+            var tokenCustomerId = _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).IsNullOrEmpty() ?
+                                   _awContext.Customers.Where(customer => customer.EmailAddress == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId :
+                                   _credentialsContext.Credentials.Where(customer => customer.Email == tokenEmail).OrderBy(c => c.CustomerId).Last().CustomerId;
+            if (token.Claims.First(claim => claim.Type == "role").Value == "admin")
+            { //Admin case
+                try
+                {
+                    var customer = await _awContext.Customers.FindAsync((int)id);
+                    _awContext.Entry(customer).State = EntityState.Detached;
+                    var credentials = await _credentialsContext.Credentials.FindAsync((long)id);
+                    _credentialsContext.Entry(credentials).State = EntityState.Detached;
+                    if (customer != null)
+                    {
+                        _awContext.Customers.Remove(customer);
+                        await _awContext.SaveChangesAsync();
+                        _credentialsContext.Credentials.Remove(credentials);
+                        await _credentialsContext.SaveChangesAsync();
+                    }
+                    else return BadRequest();
+                }catch(Exception ex)
+                {
+                    await DBErrorLogger.WriteExceptionLog(_awContext, ex);
+                    return BadRequest();
+                }
             }
-
-            try
-            {
-                _awContext.Customers.Remove(customer);
-                await _awContext.SaveChangesAsync();
+            else
+            { // Customer case
+                try
+                {
+                    var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
+                    _awContext.Entry(customer).State = EntityState.Detached;
+                    var credentials = await _credentialsContext.Credentials.FindAsync((int)id);
+                    _credentialsContext.Entry(credentials).State = EntityState.Detached;
+                    if (customer != null)
+                    {
+                        _awContext.Customers.Remove(customer);
+                        await _awContext.SaveChangesAsync();
+                        _credentialsContext.Credentials.Remove(credentials);
+                        await _credentialsContext.SaveChangesAsync();
+                    }
+                }catch(Exception ex)
+                {
+                    await DBErrorLogger.WriteExceptionLog(_awContext, ex);
+                    return BadRequest();
+                }
             }
-            catch (Exception e)
-            {
-                await DBErrorLogger.WriteExceptionLog(_awContext, e);
-                return BadRequest();
-            }
-
             return NoContent();
         }
 

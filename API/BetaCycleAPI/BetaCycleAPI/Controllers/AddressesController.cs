@@ -256,8 +256,7 @@ namespace BetaCycleAPI.Controllers
                     {
                         _awContext.CustomerAddresses.Remove(custAdd);
                         await _awContext.SaveChangesAsync();
-                        _awContext.Addresses.Remove(addrDelete);
-                        await _awContext.SaveChangesAsync();
+
                     }
                 }
                 catch (Exception e)
