@@ -206,6 +206,7 @@ namespace BetaCycleAPI.Controllers
             };
             try
             {
+                if (IsMailTaken(customer.EmailAddress)) return BadRequest("Mail is already taken");
                 // customer.PasswordHash is NOT supposed to be hashed at this point
                 KeyValuePair<string, string> pwData = EncryptData.CypherData.SaltEncryp(toInsert.Password);
                 // this is where it gets hashed ^
@@ -226,6 +227,17 @@ namespace BetaCycleAPI.Controllers
             }
 
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+        }
+
+        [HttpGet]
+        [Route("isMailTaken/{mail}")]
+         // GET: api/Customers/isMailTaken
+        public bool IsMailTaken(string mail)
+        {
+            if (_credentialsContext.Credentials.Any(c => c.Email.ToLower() == mail.ToLower()))
+                return true;
+            else
+                return false;
         }
 
         private void writeToAiFile(int customerID)

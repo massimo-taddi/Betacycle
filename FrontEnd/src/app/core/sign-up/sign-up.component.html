@@ -42,8 +42,9 @@
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">Email*</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Email*" [(ngModel)]="signUpForm.emailAddress" required maxlength="" name="emailAddress">
+                        <input type="email" pInputText class="form-control rounded" placeholder="Email*" [(ngModel)]="signUpForm.emailAddress" required maxlength="128" name="emailAddress" (blur)="onBlurEmail()">
                         <small class="text-danger" *ngIf="signUp.controls['emailAddress']?.invalid && signUp.controls['emailAddress']?.touched">Please enter a valid email address.</small>
+                        <small class="text-danger" *ngIf="isEmailTaken">This email address already exists</small>
                     </div>
                     <div class="form-group">
                         <label for="inputPassword">Password*</label>

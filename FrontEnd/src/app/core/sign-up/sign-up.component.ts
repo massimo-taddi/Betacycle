@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { EmailValidator, FormsModule, NgForm } from '@angular/forms';
 import { CustomerAddress } from '../../shared/models/CustomerAddress';
 import { HttploginService } from '../../shared/services/httplogin.service';
 import { Customer } from '../../shared/models/Customer';
@@ -22,6 +22,7 @@ export class SignUpComponent implements OnInit {
   signUpSuccess: boolean = false;
   stayLoggedIn: boolean = false;
   signUpForm: SignUpForm = new SignUpForm();
+  isEmailTaken: boolean = false;
 
   constructor(private customerService: CustomerService, private router: Router, private basketService: BasketService) { }
 
@@ -44,5 +45,19 @@ export class SignUpComponent implements OnInit {
       });
       this.basketService.pushLocalCart();
       this.router.navigate(["/home"]);
+  }
+
+  onBlurEmail() {
+    if(this.signUpForm.emailAddress == null || this.signUpForm.emailAddress == '') return;
+    this.customerService.httpIsMailTaken(this.signUpForm.emailAddress)
+      .subscribe({
+      next: (response: any) => {
+        this.isEmailTaken = response;
+      },
+      error: (error: Error) => {
+        // errore di rete
+        console.log(error.message);
+      }
+      });
   }
 }

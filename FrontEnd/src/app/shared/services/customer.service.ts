@@ -17,4 +17,10 @@ export class CustomerService {
       headers: header,
     });
   }
+
+  httpIsMailTaken(email: string): Observable<any> {
+    return this.http.get(
+      'https://localhost:7287/api/customers/IsMailTaken/' + email
+    );
+  }
 }
