@@ -268,6 +268,14 @@ namespace BetaCycleAPI.Controllers
                     _awContext.Entry(customer).State = EntityState.Detached;
                     var credentials = await _credentialsContext.Credentials.FindAsync((long)id);
                     _credentialsContext.Entry(credentials).State = EntityState.Detached;
+
+                    //Get customer's related ids
+                    var addressIds = await (from custom in _awContext.Customers
+                                     join custAddr in _awContext.CustomerAddresses on custom.CustomerId equals custAddr.CustomerId
+                                     join address in _awContext.Addresses on custAddr.AddressId equals address.AddressId
+                                     where custom.CustomerId == (int)id
+                                     select address.AddressId).ToListAsync();
+
                     if (customer != null)
                     {
                         _awContext.Customers.Remove(customer);
