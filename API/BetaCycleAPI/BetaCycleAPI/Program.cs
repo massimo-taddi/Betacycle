@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using BetaCycleAPI.Contexts;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using BetaCycleAPI.BLogic;
 
 namespace BetaCycleAPI
 {
@@ -15,8 +16,9 @@ namespace BetaCycleAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddHostedService<RetrainingService>();
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 

@@ -6,7 +6,7 @@ namespace BetaCycleAPI
 {
     public partial class RecommendProduct
     {
-        public const string RetrainRelativeFilePath = @"..\..\..\Data\aiTrainingData.csv";
+        public const string RetrainRelativeFilePath = @"Data\aiTrainingData.csv";
         public const char RetrainSeparatorChar = ';';
         public const bool RetrainHasHeader = true;
 
@@ -23,7 +23,7 @@ namespace BetaCycleAPI
 
             var completePath = Path.Combine(Environment.CurrentDirectory, inputDataRelativeFilePath);
 
-            var data = LoadIDataViewFromFile(mlContext, inputDataRelativeFilePath, separatorChar, hasHeader);
+            var data = LoadIDataViewFromFile(mlContext, completePath, separatorChar, hasHeader);
             var model = RetrainModel(mlContext, data);
             SaveModel(mlContext, model, data, outputModelPath);
         }

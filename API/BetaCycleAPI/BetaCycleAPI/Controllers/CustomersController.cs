@@ -217,6 +217,7 @@ namespace BetaCycleAPI.Controllers
                 // the changes are only written on _awContext since the data is automatically migrated to the Credentials DB
                 _awContext.Customers.Add(customer);
                 await _awContext.SaveChangesAsync();
+                writeToAiFile(customer.CustomerId);
             }
             catch (Exception e)
             {
@@ -225,6 +226,16 @@ namespace BetaCycleAPI.Controllers
             }
 
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+        }
+
+        private void writeToAiFile(int customerID)
+        {
+            string toAppend = string.Empty;
+            foreach(var prod in _awContext.Products)
+            {
+                toAppend += $"{customerID};{prod.ProductId};0\n";
+            }
+            System.IO.File.AppendAllText("Data/aiTrainingData.csv", toAppend);
         }
 
         [HttpDelete("{id}")]
