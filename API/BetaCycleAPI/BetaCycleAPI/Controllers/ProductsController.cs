@@ -14,6 +14,7 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        // Contexts
         private readonly AdventureWorksLt2019Context _context;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
         public ProductsController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext)
@@ -21,6 +22,19 @@ namespace BetaCycleAPI.Controllers
             _context = context;
             _credentialsContext = credentialsContext;
         }
+        #region Private Methods
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.ProductId == id);
+        }
+
+        private class FloatMaxCompare : IComparer<float>
+        {
+            public int Compare(float x, float y) => y.CompareTo(x);
+        }
+        #endregion
+
+        #region Public Methods
 
         // GET: api/Products
         [HttpGet]
@@ -119,10 +133,6 @@ namespace BetaCycleAPI.Controllers
         }
 
 
-        
-
-
-
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
@@ -210,10 +220,6 @@ namespace BetaCycleAPI.Controllers
                 return BadRequest();
             }
             return res;
-        }
-        private class FloatMaxCompare : IComparer<float>
-        {
-            public int Compare(float x, float y) => y.CompareTo(x);
         }
         [HttpGet]
         [Route("RandomProducts")]
@@ -393,10 +399,7 @@ namespace BetaCycleAPI.Controllers
             }
             return NoContent();
         }
+        #endregion
 
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.ProductId == id);
-        }
     }
 }

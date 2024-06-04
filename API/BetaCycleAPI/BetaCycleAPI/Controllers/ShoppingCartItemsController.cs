@@ -16,6 +16,7 @@ namespace BetaCycleAPI.Controllers
     [Authorize]
     public class ShoppingCartItemsController : ControllerBase
     {
+        // Contexts
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
 
@@ -25,6 +26,19 @@ namespace BetaCycleAPI.Controllers
             _credentialsContext = credentialsContext;
         }
 
+        #region Private Methods
+        private bool ShoppingCartItemExists(int id)
+        {
+            return _awContext.ShoppingCartItems.Any(e => e.ShoppingCartItemId == id);
+        }
+
+        private async Task<bool> isCartEmpty(int shoppingCartId)
+        {
+            return !(await _awContext.ShoppingCarts.FindAsync(shoppingCartId)).ShoppingCartItems.Any();
+        }
+        #endregion
+
+        #region Public Methods
         // GET: api/ShoppingCart
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShoppingCartItem>>> GetShoppingCartItems()
@@ -235,10 +249,6 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("PostShoppingCartItemAsync", new { id = shoppingCartItem.ShoppingCartItemId }, shoppingCartItem);
         }
 
-        private async Task<bool> isCartEmpty(int shoppingCartId)
-        {
-            return !(await _awContext.ShoppingCarts.FindAsync(shoppingCartId)).ShoppingCartItems.Any();
-        }
 
         // DELETE: api/ShoppingCart/5
         [HttpDelete("{productId}")]
@@ -313,10 +323,7 @@ namespace BetaCycleAPI.Controllers
 
             return NoContent();
         }
+        #endregion
 
-        private bool ShoppingCartItemExists(int id)
-        {
-            return _awContext.ShoppingCartItems.Any(e => e.ShoppingCartItemId == id);
-        }
     }
 }

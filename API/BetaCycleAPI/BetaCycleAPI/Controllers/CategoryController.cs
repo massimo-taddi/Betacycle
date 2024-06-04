@@ -13,18 +13,17 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class CategoryController : Controller
     {
-
+        // Contexts
         private readonly AdventureWorksLt2019Context _context;
 
         public CategoryController(AdventureWorksLt2019Context context)
         {
             _context = context;
         }
+        #region Public Methods
         // GET: api/Category/categories
         //Get all categories
-
         [HttpGet]
-
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
         {
             try
@@ -186,6 +185,7 @@ namespace BetaCycleAPI.Controllers
 
 
         //DELETE 
+        // Delete of a specific category by id
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -210,5 +210,6 @@ namespace BetaCycleAPI.Controllers
             }
             return NoContent();
         }
+#endregion
     }
 }

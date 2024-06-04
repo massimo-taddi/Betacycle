@@ -15,6 +15,7 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+        // Contexts
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
 
@@ -23,7 +24,14 @@ namespace BetaCycleAPI.Controllers
             _awContext = context;
             _credentialsContext = credentialsContext;
         }
+        #region Private Methods
+        private bool CustomerExists(int id)
+        {
+            return _awContext.Customers.Any(e => e.CustomerId == id);
+        }
+        #endregion
 
+        #region Public Methods
         // GET: api/Customers
         /// <summary>
         /// Administrators get a list of all customer information, while customers get a list with a single item containing their information
@@ -48,7 +56,7 @@ namespace BetaCycleAPI.Controllers
                             {
                                 @params.Search = "";
                             }
-                            //ritornare n customer 
+                            // Returns n customers 
                             res = await (from customer in _awContext.Customers
                                          where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
 
@@ -59,7 +67,7 @@ namespace BetaCycleAPI.Controllers
 
                             break;
                         case "Asc":
-                            //ritornare n customer 
+                            // Returns n customers 
                             res = await (from customer in _awContext.Customers
                                          where customer.FirstName.Contains(@params.Search) || customer.CompanyName.Contains(@params.Search)
 
@@ -219,21 +227,6 @@ namespace BetaCycleAPI.Controllers
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Boolean>> PostLogin(string email, string password)
-        //{
-        //    bool isValid = false;
-        //    var myCredentials = await _credentials.Credentials.FindAsync(email); //da verificare
-
-        //    return CreatedAtAction("Login", isValid);
-        //}
-
-        // DELETE: api/Customers/5
-        /// <summary>
-        /// Deletes a customer record from the DB
-        /// </summary>
-        /// <param name="id">The id of the customer to delete</param>
-        /// <returns>A response indicating whether the record was deleted or not</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
@@ -257,9 +250,6 @@ namespace BetaCycleAPI.Controllers
             return NoContent();
         }
 
-        private bool CustomerExists(int id)
-        {
-            return _awContext.Customers.Any(e => e.CustomerId == id);
-        }
+        #endregion
     }
 }

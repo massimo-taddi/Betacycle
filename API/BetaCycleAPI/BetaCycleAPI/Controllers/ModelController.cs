@@ -13,6 +13,7 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class ModelController : Controller
     {
+        // Contexts
         private readonly AdventureWorksLt2019Context _context;
 
         public ModelController(AdventureWorksLt2019Context context)
@@ -21,6 +22,7 @@ namespace BetaCycleAPI.Controllers
         }
         // GET: api/Model/models
 
+        #region Public Methods
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModels()
@@ -202,5 +204,6 @@ namespace BetaCycleAPI.Controllers
             }
             return NoContent();
         }
+        #endregion
     }
 }

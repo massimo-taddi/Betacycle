@@ -19,6 +19,7 @@ namespace BetaCycleAPI.Controllers
     [Authorize]
     public class AddressesController : ControllerBase
     {
+        //Contexts
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
 
@@ -27,7 +28,14 @@ namespace BetaCycleAPI.Controllers
             _awContext = context;
             _credentialsContext = credentialsContext;
         }
+        #region Private Methods
+        private bool AddressExists(int id)
+        {
+            return _awContext.Addresses.Any(e => e.AddressId == id);
+        }
+        #endregion
 
+        #region Public Methods
         // GET: api/Addresses
         // for a customer, gets all of their addresses. for an admin, gets all the addresses on the db
         [HttpGet]
@@ -81,7 +89,7 @@ namespace BetaCycleAPI.Controllers
         }
 
         // PUT: api/Addresses/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Modifiy the chosen address for customers, bad request if admin
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAddress(int id, AddressFormData formData)
         {
@@ -144,7 +152,7 @@ namespace BetaCycleAPI.Controllers
         }
 
         // POST: api/Addresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Post a new address for customers, bad request if admin
         [HttpPost]
         public async Task<ActionResult<Address>> PostAddress([FromBody] AddressFormData formData)
         {
@@ -200,6 +208,7 @@ namespace BetaCycleAPI.Controllers
         }
 
         // DELETE: api/Addresses/5
+        // Delete address for customers when it has no orders, delete it in the other case, bad request if admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAddress(int id)
         {
@@ -259,10 +268,7 @@ namespace BetaCycleAPI.Controllers
             }
             return NoContent();
         }
+        #endregion
 
-        private bool AddressExists(int id)
-        {
-            return _awContext.Addresses.Any(e => e.AddressId == id);
-        }
     }
 }

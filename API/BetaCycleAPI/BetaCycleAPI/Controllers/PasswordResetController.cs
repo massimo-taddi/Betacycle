@@ -20,7 +20,7 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class PasswordResetController : ControllerBase
     {
-
+        // Contexts
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
         private readonly string _siteUrl;
@@ -34,7 +34,7 @@ namespace BetaCycleAPI.Controllers
             _jwtSettings = jwtSettings;
         }
 
-
+        #region Public Methods
         // PUT api/<PasswordResetController>
         [HttpPut]
         [Authorize]
@@ -111,14 +111,16 @@ namespace BetaCycleAPI.Controllers
         }
 
         // POST api/<PasswordResetController>/forgot
-        // pagina pwdforgot: ti chiede di inserire la mail e la manda qua
+        // pwdforgot page: asks you to insert the mail and it sends
         [Route("forgot")]
         [HttpPost]
         public async Task<ActionResult<bool>> SendEmail(string email)
         {
-            // invia la mail, che deve contenere un link a pwforgot con un token valido 10 minuti con unique_name=mail
-            // in pwforgot ho quindi il token, e avro' un singolo form che chiede la nuova pwd. a questo punto facciamo una nuova PUT 
-            // in cui aggiorniamo il record dell'utente verificando il token
+            //Send the email, which must contain a link to pwforgot with a token valid for 10 minutes
+            //with unique_name=mail. In pwforgot, I then have the token, and I will have a single form
+            //that asks for the new password. At this point, we make a new PUT request where we update
+            //the user's record by verifying the token.
+
             MailMessage mail = new MailMessage();
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
 
@@ -126,7 +128,7 @@ namespace BetaCycleAPI.Controllers
             mail.To.Add(email);
             mail.Subject = "Password Reset For Your Betacycle Account";
 
-            // genera il token
+            // Generate the token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -148,9 +150,6 @@ namespace BetaCycleAPI.Controllers
             mail.IsBodyHtml = true;
             mail.Body = $"<a href=\"http://{_siteUrl}:4200/resetforgot?token={tokenString}\">Password reset</a>";
 
-            //password originale betaprova123
-
-
             smtpClient.Port = 587;
             smtpClient.Credentials = new NetworkCredential("beta89256464@gmail.com", "ooriltjjyrjekmvi");
             smtpClient.EnableSsl = true;
@@ -165,6 +164,7 @@ namespace BetaCycleAPI.Controllers
             }
             return true;
         }
+        #endregion
 
     }
 }

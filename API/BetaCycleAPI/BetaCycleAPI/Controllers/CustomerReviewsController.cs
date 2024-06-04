@@ -22,6 +22,7 @@ namespace BetaCycleAPI.Controllers
     [ApiController]
     public class CustomerReviewsController : ControllerBase
     {
+        // Contexts
         private readonly AdventureWorksLt2019Context _awContext;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
 
@@ -31,6 +32,39 @@ namespace BetaCycleAPI.Controllers
             _credentialsContext = credentials;
         }
 
+        #region Private Methods
+        // 1 star - pos 4
+        // 2 stars - pos 1
+        // 3 stars - pos 3
+        // 4 stars - pos 2
+        // 5 stars - pos 0
+        // 2, 4, 3, 1, 0
+        private int scoreIndex(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    return 4;
+                case 2:
+                    return 1;
+                case 3:
+                    return 3;
+                case 4:
+                    return 2;
+                case 5:
+                    return 0;
+                default:
+                    return 0;
+            }
+        }
+        private bool CustomerReviewExists(int id)
+        {
+            return _awContext.CustomerReviews.Any(e => e.ReviewId == id);
+        }
+        #endregion
+
+
+        #region Public Methods
         // GET: api/CustomerReviews
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReviewDataForm>>> GetCustomerReviews()
@@ -163,16 +197,15 @@ namespace BetaCycleAPI.Controllers
             {
                 try
                 {
-                    //Creo la recensione
+                    //Create the review
                     if (!ModelValidator.ValidateCustomerReview(customerReview))
                         return BadRequest("Campi non corretti");
                     customerReview.Rating = (byte)Convert.ToInt32(this.GetReviewScore(customerReview.BodyDescription));
                     _awContext.CustomerReviews.Add(customerReview);
                     await _awContext.SaveChangesAsync();
-                    //Aggiungo al customer l'id della review
+                    //Add to customer the review id
                     var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
                     customer.CustomerReviewId = customerReview.ReviewId;
-                    //_awContext.Entry(customer).State = EntityState.Modified;
                     await _awContext.SaveChangesAsync();
                 }
                 catch (Exception e)
@@ -190,6 +223,7 @@ namespace BetaCycleAPI.Controllers
 
         [HttpPost]
         [Route("GetReviewScore")]
+        // Predicts with AI the score of a body description
         public float GetReviewScore([FromBody] string text)
         {
             float result = 0.0f;
@@ -204,30 +238,6 @@ namespace BetaCycleAPI.Controllers
             return result;
         }
 
-        // 1 stella - pos 4
-        // 2 stelle - pos 1
-        // 3 stelle - pos 3
-        // 4 stelle - pos 2
-        // 5 stelle - pos 0
-        // 2, 4, 3, 1, 0
-        private int scoreIndex(int i)
-        {
-            switch (i)
-            {
-                case 1:
-                    return 4;
-                case 2:
-                    return 1;
-                case 3:
-                    return 3;
-                case 4:
-                    return 2;
-                case 5:
-                    return 0;
-                default:
-                    return 0;
-            }
-        }
 
         // DELETE: api/CustomerReviews/5
         [HttpDelete("{id}")]
@@ -244,11 +254,8 @@ namespace BetaCycleAPI.Controllers
 
             return NoContent();
         }
+        #endregion
 
-        private bool CustomerReviewExists(int id)
-        {
-            return _awContext.CustomerReviews.Any(e => e.ReviewId == id);
-        }
 
     }
 }
