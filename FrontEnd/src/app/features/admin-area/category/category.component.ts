@@ -43,7 +43,6 @@ export class CategoryComponent {
     this.ShowCategories();
   }
   ShowCategories() {
-    //modificare la chiamata a controller
     this.searchParams.search = this.searchCategory;
     this.searchParams.sort = 'Desc';
     this.service.getNProductCategories(this.searchParams).subscribe({

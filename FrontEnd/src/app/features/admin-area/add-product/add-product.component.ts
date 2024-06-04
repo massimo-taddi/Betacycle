@@ -93,5 +93,6 @@ export class AddProductComponent implements OnInit {
       ),
       error: (err: Error) => console.log(err.message),
     });
+    this.router.navigate(['/admin/products-list']);
   }
 }

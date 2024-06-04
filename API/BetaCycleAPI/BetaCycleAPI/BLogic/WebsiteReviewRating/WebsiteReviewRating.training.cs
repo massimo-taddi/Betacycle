@@ -14,7 +14,7 @@ namespace BetaCycleAPI
 {
     public partial class WebsiteReviewRating
     {
-        public const string RetrainFilePath =  @"C:\Users\Drako\Documents\GitHub\Betacycle\API\BetaCycleAPI\BetaCycleAPI\Data\reviews_Sports_and_Outdoors_sample_100k.csv";
+        public const string RetrainFilePath =  @"Data\reviews_Sports_and_Outdoors_sample_100k.csv";
         public const char RetrainSeparatorChar = ',';
         public const bool RetrainHasHeader =  true;
         public const bool RetrainAllowQuoting =  true;
@@ -26,11 +26,13 @@ namespace BetaCycleAPI
         /// <param name="inputDataFilePath">Path to the data file for training.</param>
         /// <param name="separatorChar">Separator character for delimited training file.</param>
         /// <param name="hasHeader">Boolean if training file has a header.</param>
-        public static void Train(string outputModelPath, string inputDataFilePath = RetrainFilePath, char separatorChar = RetrainSeparatorChar, bool hasHeader = RetrainHasHeader, bool allowQuoting = RetrainAllowQuoting)
+        public static void Train(string outputModelPath, string inputDataRelativeFilePath = RetrainFilePath, char separatorChar = RetrainSeparatorChar, bool hasHeader = RetrainHasHeader, bool allowQuoting = RetrainAllowQuoting)
         {
             var mlContext = new MLContext();
 
-            var data = LoadIDataViewFromFile(mlContext, inputDataFilePath, separatorChar, hasHeader, allowQuoting);
+            var completePath = Path.Combine(Environment.CurrentDirectory, inputDataRelativeFilePath);
+
+            var data = LoadIDataViewFromFile(mlContext, completePath, separatorChar, hasHeader, allowQuoting);
             var model = RetrainModel(mlContext, data);
             SaveModel(mlContext, model, data, outputModelPath);
         }
