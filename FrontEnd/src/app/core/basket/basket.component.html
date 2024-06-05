@@ -4,30 +4,32 @@
         <div class="col-md-8">
             <h2>Shopping Basket</h2>
             <p>Your items:</p>
+            <div class="table-responsive">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of basketItemsProductsMap | keyvalue">
-                        <td><img style="width: 100px;" src="data:image/gif;base64, {{item.value.largePhoto}}" alt="..."></td>
-                        <td>{{ item.value.name }}</td>
-                        <td>
-                            <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
-                        </td>
-                        <td>${{ (item.key.quantity * item.value.listPrice) | number: '1.0-2' }}</td>
-                        <td>
-                            <button pButton type="button" class="btn btn-danger pi pi-trash" (click)="deleteItem(item.key)"></button>
-                        </td>
-                    </tr>
+                <tr *ngFor="let item of basketItemsProductsMap | keyvalue">
+                    <td><img style="width: 100px;" src="data:image/gif;base64, {{item.value.largePhoto}}" alt="..."></td>
+                    <td>{{ item.value.name }}</td>
+                    <td>
+                    <p-dropdown [(ngModel)]="item.key.quantity" [options]="rangeArray" (onChange)="updateQuantity(item.key)"></p-dropdown>
+                    </td>
+                    <td>${{ (item.key.quantity * item.value.listPrice) | number: '1.0-2' }}</td>
+                    <td>
+                    <button pButton type="button" class="btn btn-danger pi pi-trash" (click)="deleteItem(item.key)"></button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
+        </div>
         </div>
         <div class="col-md-4" style="padding-left: 50px;">
             <h2>Order Summary</h2>

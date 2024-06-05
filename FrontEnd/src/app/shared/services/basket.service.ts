@@ -85,9 +85,26 @@ export class BasketService {
    }
 
    putBasketItem(item: ShoppingCartItem): Observable<any> {
+    if(!this.isLoggedIn) {
+      return this.putBasketItemLocal(item);
+    }
     var header = new HttpHeaders();
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.put(`https://localhost:7287/api/shoppingcart/${item.shoppingCartItemId}`, item, {headers: header});
+   }
+
+   putBasketItemLocal(item: ShoppingCartItem): Observable<any> {
+    var localBasket = localStorage.getItem('basket');
+    if(localBasket != undefined) {
+      var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
+      localBasketFound.map((p: ShoppingCartItem) => {
+        if(p.shoppingCartItemId == item.shoppingCartItemId) {
+          p.quantity = item.quantity;
+        }
+      });
+      localStorage.setItem('basket', JSON.stringify(localBasketFound));
+    }
+    return of(item);
    }
 
    isItemInBasket(productId: number): Observable<any> {
@@ -103,10 +120,25 @@ export class BasketService {
    }
 
    deleteBasketItem(itemId: number): Observable<any> {
+    if(!this.isLoggedIn) {
+      return this.deleteBasketItemLocal(itemId);
+    }
     var header = new HttpHeaders();
     this.authService.authJwtHeader$.subscribe((h) => (header = h));
     return this.http.delete(`https://localhost:7287/api/shoppingcart/${itemId}`, {headers: header});
    }
+
+  deleteBasketItemLocal(itemId: number): Observable<boolean> {
+    var localBasket = localStorage.getItem('basket');
+    if (localBasket != undefined) {
+      var localBasketFound = JSON.parse(localBasket) as ShoppingCartItem[];
+      var updatedBasket = localBasketFound.filter(item => item.shoppingCartItemId == itemId);
+      console.log(updatedBasket);
+      localStorage.setItem('basket', JSON.stringify(updatedBasket));
+      return of(true);
+    }
+    return of(false);
+  }
 
    pushLocalCart() {
     var localBasket = localStorage.getItem('basket');

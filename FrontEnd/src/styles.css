@@ -47,3 +47,7 @@ nav {
   font-weight: 400;
   font-style: normal;
 }
+
+.p-toast {
+  max-width: calc(100vw - 40px);
+}

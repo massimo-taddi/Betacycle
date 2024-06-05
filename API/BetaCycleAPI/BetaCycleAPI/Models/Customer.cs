@@ -43,7 +43,7 @@ public partial class Customer
     /// Last name of the person.
     /// </summary>
     [Required]
-    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 1 carattere")]
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(1, ErrorMessage = "Minimo 1 carattere")]
     public string LastName { get; set; } = null!;
 
     /// <summary>
