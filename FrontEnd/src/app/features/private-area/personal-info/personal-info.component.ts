@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../../shared/services/authentication.s
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-personal-info',
@@ -52,19 +53,14 @@ export class PersonalInfoComponent implements OnInit {
     return decodedToken.unique_name;
   }
 
-  DeleteAccount(){
-    this.httpInfo.httpDeleteCustomer().subscribe({
-      next: (data: any) =>{
-        this.authService.setLoginStatus(false,'', false, false);
+  async DeleteAccount(){
+    var deleteCust = await lastValueFrom(this.httpInfo.httpDeleteCustomer()).then( (resp: any) =>{
+      this.authService.setLoginStatus(false,'', false, false);
         this.showSuccess('Account deleted successfully');
         setTimeout(() => {
           this.router.navigate(["/home"]);
-        }, 5000); 
-      },
-      error: (err: Error) =>{
-        console.log(err);
-      }
-    })
+        }, 3000); 
+    }).catch( (err: Error) =>{console.log(err)});
   }
 
   showSuccess(content: string) {

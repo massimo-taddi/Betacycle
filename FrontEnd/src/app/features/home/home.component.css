@@ -26,7 +26,7 @@
     object-fit: cover;
     top: 0;
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 #bcimg-third{
@@ -56,10 +56,7 @@
     color: white;
     background-color: lightblue;
 }
-.phrase{
-    position: relative;
-    bottom: 100%;
-}
+
 .carousel-caption span{
     color: #687995;
 }
@@ -151,6 +148,8 @@
     color: #1e1e1e;
 }
 
+
+
 .bc-pbutton{
     margin-right: 20px;
 }
@@ -175,6 +174,9 @@
     justify-content: center;
     column-gap: 10px;
 }
+.car-phrase{
+    color: #687995;
+}
 .bc-img-container{
     text-align: center;
 }
@@ -198,5 +200,27 @@ main{
 
 @media only screen and (max-width: 927px) {
     #bc-videobg{height: 100%;}
+    .phrase{
+        position: absolute;
+        top: 150px;
+    }
+}
+@media only screen and (min-width: 927px){
+    .phrase{
+        position: absolute;
+        top: 170px;
+    }
+}
+
+@media only screen and (min-height: 680px){
+    .bc-info-carousel{
+        height: 410px;
+    }
+}
+
+@media only screen and (max-height: 680px){
+    .bc-info-carousel{
+        height: 370px;
+    }
 }
 
