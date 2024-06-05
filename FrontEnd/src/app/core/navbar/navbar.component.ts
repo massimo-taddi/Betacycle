@@ -61,6 +61,7 @@ export class NavbarComponent implements OnInit {
     });
     this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
+    this.router.navigate(["/home"]).then(() => {window.location.reload();});
   }
 
   @HostListener('window:resize', ['$event'])
@@ -74,8 +75,7 @@ export class NavbarComponent implements OnInit {
     params.search = searchString.value;
     this.productService.setSearchParams(params);
     if (searchString.value == '') {
-      searchString1 = 'all';
-      this.router.navigate(['/search', searchString1, '1', '20', 'Desc']);
+      window.location.reload();
     } else {
       this.router.navigate(['/search', searchString.value, '1', '20', 'Desc']);
     }

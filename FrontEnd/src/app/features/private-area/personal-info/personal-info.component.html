@@ -32,9 +32,12 @@
             <input type="email" class="form-control" value="{{getJwtUsername()}}" #email [disabled]="changesNotAllowed">
         </div>
         <div class="col-12">
-            <button type="button" (click)="resetPwd ? resetPwd = false : resetPwd = true;"
-                class="btn btn-primary">Change Password</button>
-            <span *ngIf="resetPwd"><app-password-reset [formsDisabled]="changesNotAllowed"></app-password-reset></span>
+            <p-button label="Change Password" type="button" (click)="resetPwd = true"
+                styleClass="p-button-info"></p-button>
+            <p-dialog header="Change Password" [modal]="true" blockScroll="true" draggable="false"
+            [(visible)]="resetPwd" [style]="{ width: '40rem' }"
+            [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"><app-password-reset></app-password-reset>
+            </p-dialog>
         </div>
     </div>
     <div class="row g-3 p-3">
