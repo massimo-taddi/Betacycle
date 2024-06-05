@@ -127,10 +127,6 @@
     border: 1px solid #e5e7eb;
     border-radius: 10px;
 }
-#frame-maps{
-    width: 500px;
-    height: 500px;
-}
 
 .bc-imgfr{
     border-radius: 10px;
@@ -191,7 +187,33 @@ main{
 @media only screen and (max-width: 1350px) {
     .featurette{display: flex; flex-direction: column; align-items: center; justify-content: center;}
     .col-text{width: 100%; text-align: center;}
+    .bc-imgfr{
+        width: 500px;
+        height: 500px;
+    }
 }
+@media only screen and (min-width: 1401px){
+    .bc-imgfr{
+        width: 500px;
+        height: 500px;
+    }
+    #frame-maps{
+        width: 500px;
+        height: 500px;
+    }
+}
+
+@media only screen and (min-width: 1351px) and (max-width: 1400px) {
+    .bc-imgfr{
+        width: 450px;
+        height: 450px;
+    }
+
+    #frame-maps{
+        width: 450px;
+        height: 450px;
+    }
+  }
 
 @media only screen and (max-width: 530px) {
     .bc-imgfr{width: 100%;}
