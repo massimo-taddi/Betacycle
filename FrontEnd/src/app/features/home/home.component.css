@@ -135,8 +135,8 @@
 .bc-imgfr{
     border-radius: 10px;
     overflow: hidden;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .featurette-divider{

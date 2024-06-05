@@ -1,4 +1,36 @@
-#big-container{align-items: flex-end;}
+.bc-login-art{padding: 100px 5vw 100px 5vw; justify-content: center; align-items: center; display: flex;}
+.bc-login-container{display: flex; flex-direction: row; flex-wrap: nowrap;  -webkit-box-shadow: 0px 0px 20px 3px rgba(30,30,30,0.55); -moz-box-shadow: 0px 0px 20px 3px rgba(30,30,30,0.55); box-shadow: 0px 0px 20px 3px rgba(30,30,30,0.55); max-width: 800px; min-width: 250px; min-height: 400px; border-radius: 10px; overflow: hidden; background-color: rgba(59, 130, 246, .7);}
+.bc-login-container:hover > .bc-login-righ{ transition: .35s ease-in-out; background-size: cover; }
+.bc-login-righ{transition: .35s ease-in-out; min-width: 250px; max-width: 500px; background: url("../../../assets/images/Banner_BG_Home_1.svg"); background-position: left; background-size: cover;}
+.bc-login-left{z-index: 2; -webkit-box-shadow: 10px 0px 30px 0px rgba(255,255,255,0.3); -moz-box-shadow: 10px 0px 30px 0px rgba(255,255,255,0.3); box-shadow: 10px 0px 30px 0px rgba(255,255,255,0.3); padding: 35px; display: flex; flex-direction: column; row-gap: 25px; max-width: 300px;}
+.bcLR-text-container{display: flex; align-items: center; justify-content: center; flex-direction: column; width: 100%; height: 100%; background-color: rgba(30,30,30,.3); padding: 15px;}
+.bc-login-Atext{color: white;}
+.bcL-input-container{row-gap: 15px; display: flex; flex-direction: column;}
+.bcL-input{appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;}
+
+.bcL-inner-form{row-gap: 25px; display: flex; flex-direction: column;}
+
+
+
+@media only screen and (max-width: 600px) {
+    .bc-login-container{flex-direction: column-reverse;}
+    .bc-login-left{box-shadow: none;}
+    .bc-login-container{align-items: center;}
+}
+
+
+
+
+
+
+/* #big-container{align-items: flex-end;}
 #form-big-container{max-width: 550px; width: 500px; min-width: 230px;}
 
 #form-container{row-gap: 35px; padding: var(--Padding-form); border: solid 3px var(--Secondary-color); border-radius: calc(25px - 0.235vw);}
@@ -35,4 +67,4 @@ div.icontainer{border-bottom: solid 2.5px var(--Secondary-color);}
 .box-write{
 
 }
-
+ */

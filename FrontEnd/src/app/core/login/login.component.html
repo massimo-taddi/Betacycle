@@ -1,64 +1,38 @@
-<section class="p-3 p-md-4 p-xl-5" id="logArt">
-    <div class="container" style="margin-top: 168px; margin-bottom: 107px;">
-      <div class="card border-light-subtle shadow-sm">
-        <div class="row g-0">
-          <div class="col-12 col-md-6">
-            <div class="card-body left p-3 p-md-4 p-xl-5">
-              <div class="left-col">
-                <div class="box-write">
-                  <h3>Welcome back!</h3>
-                  <span>Please login, or if you don't have an account, create it now: it's easy!!</span>
-                </div>
-              </div>
-            </div>
+
+
+<article class="bc-login-art">
+  <div class="bc-login-container">
+    <div class="bc-login-left">
+      <h1 class="bc-login-Atext">LOG IN</h1>
+      <form style="display: flex; row-gap: 35px; flex-direction: column;">
+        
+        <div class="bcL-inner-form">
+          <div class="bcL-input-container">
+            <input type="email" #Username="ngModel" [(ngModel)]="loginCredentials.username" [ngModelOptions]="{standalone:true}" class="bcL-input" name="email" id="email" placeholder="name@example.com" required>
+            <input type="password" #Password="ngModel" [(ngModel)]="loginCredentials.password" [ngModelOptions]="{standalone:true}" class="bcL-input"  name="password" id="password" value="" placeholder="Password" required>
           </div>
-          <div class="col-12 col-md-6">
-            <div class="card-body p-3 p-md-4 p-xl-5">
-              <div class="row">
-                <div class="col-12">
-                  <div class="mb-5">
-                    <h3>Log in</h3>
-                  </div>
-                </div>
-              </div>
-              <form action="#!">
-                <div class="row gy-3 gy-md-4 overflow-hidden">
-                  <div class="col-12">
-                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                    <input type="email" #Username="ngModel" [(ngModel)]="loginCredentials.username" [ngModelOptions]="{standalone:true}" class="form-control" name="email" id="email" placeholder="name@example.com" required>
-                  </div>
-                  <div class="col-12">
-                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                    <input type="password" #Password="ngModel" [(ngModel)]="loginCredentials.password" [ngModelOptions]="{standalone:true}" class="form-control" name="password" id="password" value="" required>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" name="remember_me" id="remember_me" value="remember-me" [(ngModel)]="stayLoggedIn" [ngModelOptions]="{standalone:true}">
-                      <label class="form-check-label text-secondary" for="remember_me">
-                        Keep me logged in
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="d-grid">
-                      <button class="btn bsb-btn-xl btn-primary" [disabled]="Password.invalid || Username.invalid" (click)="Login()">Log in now</button>
-                    </div>
-                  </div>
-                  <p *ngIf="failedLogin" style="color: red;">Login failed - please check the email and password inserted</p>
-                </div>
-              </form>
-              <div class="row">
-                <div class="col-12">
-                  <hr class="mt-5 mb-4 border-secondary-subtle">
-                  <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end">
-                    <a role="button" (click)="navToSignup()" class="link-secondary text-decoration-none">Create new account</a>
-                    <a role="button" (click)="navToForgot()" class="link-secondary text-decoration-none">Forgot password</a>
-                  </div>
-                </div>
-              </div>
+          <div style="display: flex; flex-direction: column-reverse; row-gap: 15px;">
+            <button class="btn bsb-btn-xl btn-primary" [disabled]="Password.invalid || Username.invalid" (click)="Login()">Log in now</button>
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+              <p style="margin: 0;">Keep me Log</p>
+              <input class="form-check-input" type="checkbox" value="" name="remember_me" id="remember_me" value="remember-me" [(ngModel)]="stayLoggedIn" [ngModelOptions]="{standalone:true}">
             </div>
           </div>
         </div>
+        
+        <div style="display: flex; flex-direction: column;">
+          <a role="button" (click)="navToSignup()" class="link-secondary text-decoration-none">Create new account</a>
+          <a role="button" (click)="navToForgot()" class="link-secondary text-decoration-none">Forgot password</a>
+        </div>
+
+      </form>
+    </div>
+    <div class="bc-login-righ">
+      <div class="bcLR-text-container">
+        <h1 class="bc-login-Atext" style="text-align: center; font-weight: 900;">BETACYCLE</h1>
+        <h2 class="bc-login-Atext" style="text-align: center;">"Ride the Difference with our Exceptional Bicycles!"</h2>
       </div>
     </div>
-  </section>
+  </div>
+</article>
+
