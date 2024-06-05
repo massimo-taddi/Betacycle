@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
 import { CommonModule } from '@angular/common';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { LoginCredentials } from '../../shared/models/LoginCredentials';
 
 @Component({
   selector: 'app-sign-up',
@@ -24,7 +26,7 @@ export class SignUpComponent implements OnInit {
   signUpForm: SignUpForm = new SignUpForm();
   isEmailTaken: boolean = false;
 
-  constructor(private customerService: CustomerService, private router: Router, private basketService: BasketService) { }
+  constructor(private customerService: CustomerService, private router: Router, private basketService: BasketService, private authService: AuthenticationService, private loginService: HttploginService) { }
 
   ngOnInit(): void {
     
@@ -33,10 +35,18 @@ export class SignUpComponent implements OnInit {
   SignUp(formUntyped: NgForm) {
     var form = formUntyped.value as SignUpForm;
     form.isMigrated = false;
-    this.customerService.httpPostNewCustomer(form)
-      .subscribe({
+    this.customerService.httpPostNewCustomer(form).subscribe({
       next: (response: any) => {
         this.signUpSuccess = true;
+        this.loginService.httpSendLoginCredentials(new LoginCredentials(form.emailAddress, form.password)).subscribe({
+          next: (response: any) => {
+            this.authService.setLoginStatus(true, JSON.parse(response.body).token, this.stayLoggedIn, false);
+          },
+          error: (error: Error) => {
+            // errore di rete
+            console.log(error.message);
+          }
+        });
       },
       error: (error: Error) => {
         // il validate da backend non e' andato bene (o c'e' stato un errore su backend)
