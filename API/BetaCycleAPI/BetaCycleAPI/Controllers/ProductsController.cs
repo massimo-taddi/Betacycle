@@ -41,7 +41,7 @@ namespace BetaCycleAPI.Controllers
         public async Task<ActionResult<(int, IEnumerable<Product>)>> GetProducts([FromQuery] ProductSpecParams @params)
         {
             List<Product> res = [];
-            int productCount = 0;
+            int prodCount = 0;
             List<ProductDescription> test = [];
             try
             {
@@ -49,19 +49,24 @@ namespace BetaCycleAPI.Controllers
                 {
                     @params.Search = "";
                 }
-                res = await (from product in _context.Products
-                             from pmpd in product.ProductModel.ProductModelProductDescriptions
-                             where ((EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || (product.Name.Contains(@params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search))) && product.OnSale)
-                             select product).Distinct().ToListAsync();
-
-                productCount = res.Count();
+                var allProds = _context.Products
+                    .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
+                prodCount = await allProds.CountAsync();
                 switch (@params.Sort)
                 {
                     case "Desc":
-                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = await allProds
+                                        .OrderByDescending(p => p.ListPrice)
+                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                        .Take(@params.PageSize)
+                                        .ToListAsync();
                         break;
                     case "Asc":
-                        res = res.OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = await allProds
+                                        .OrderBy(p => p.ListPrice)
+                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                        .Take(@params.PageSize)
+                                        .ToListAsync();
                         break;
                     default:
                         return BadRequest();
@@ -72,7 +77,7 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
             }
-            return (productCount, res);
+            return (prodCount, res);
         }
 
 
@@ -100,26 +105,27 @@ namespace BetaCycleAPI.Controllers
             {
                 if (@params.Search == null)
                 {
-                    res=await _context.Products.ToListAsync();
-                }else
-                {
-
-                
-                res = await (from product in _context.Products
-                             from pmpd in product.ProductModel.ProductModelProductDescriptions
-                             where (EF.Functions.FreeText(product.Name, @params.Search) || EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || (product.Name.Contains(@params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))
-                             select product).Distinct().ToListAsync();
+                    @params.Search = "";
                 }
-                productCount = res.Count();
+                var allProds = _context.Products
+                                        .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
+                productCount = await allProds.CountAsync();
                 switch (@params.Sort)
                 {
                     case "Desc":
-                        res = res.OrderByDescending(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = await allProds
+                                        .OrderByDescending(p => p.ListPrice)
+                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                        .Take(@params.PageSize)
+                                        .ToListAsync();
                         break;
                     case "Asc":
-                        res = res.OrderBy(p => p.ListPrice).Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize).ToList();
+                        res = await allProds
+                                        .OrderBy(p => p.ListPrice)
+                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                        .Take(@params.PageSize)
+                                        .ToListAsync();
                         break;
-
                     default:
                         return BadRequest();
                 }
