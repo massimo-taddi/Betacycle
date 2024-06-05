@@ -108,6 +108,8 @@ export class ModifyProductComponent {
     modifiedProduct.thumbNailPhoto = this.product.thumbNailPhoto;
     modifiedProduct.thumbnailPhotoFileName =
       this.product.thumbnailPhotoFileName;
+    modifiedProduct.largePhoto = this.product.largePhoto;
+    modifiedProduct.largePhotoFileName = this.product.largePhotoFileName;
     this.product.modifiedDate = new Date(Date.now());
 
     //inviamo modifiedProduct con l'id associato

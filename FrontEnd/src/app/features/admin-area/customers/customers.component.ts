@@ -70,4 +70,15 @@ export class CustomersComponent {
       },
     });
   }
+  DeleteCustomer(id: number) {
+    this.AdminService.httpDeleteCustomerAdmin(id).subscribe({
+      next: (el: any) => {
+        console.log(el);
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+    window.location.reload();
+  }
 }

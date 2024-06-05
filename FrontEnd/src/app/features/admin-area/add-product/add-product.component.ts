@@ -85,7 +85,10 @@ export class AddProductComponent implements OnInit {
   SubmitProduct(newForm: NgForm) {
     var newProductForm = newForm.value as ProductForm;
     newProductForm.thumbNailPhoto = this.product.thumbNailPhoto;
+    console.log(this.product.thumbnailPhotoFileName);
     newProductForm.thumbnailPhotoFileName = this.product.thumbnailPhotoFileName;
+    newProductForm.largePhoto = this.product.largePhoto;
+    newProductForm.largePhotoFileName = this.product.largePhotoFileName;
     this.product.modifiedDate = new Date(Date.now());
     this.prodService.postProduct(newProductForm).subscribe({
       next: (prod: Product) => (

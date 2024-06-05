@@ -19,9 +19,10 @@
       <ng-template pTemplate="header">
         <tr>
           <th>CompanyName</th>
-          <th>FirstName</th>
-          <th>LastName</th>
-          <th>EmailAddress</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Email address</th>
+          <th>Ban customer</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-customer>
@@ -30,6 +31,11 @@
           <td>{{ customer.firstName }}</td>
           <td>{{ customer.lastName }}</td>
           <td>{{ customer.emailAddress }}</td>
+          <td>
+            <p-button (onClick)="DeleteCustomer(customer.customerId)"
+              >DELETE</p-button
+            >
+          </td>
         </tr>
       </ng-template>
     </p-table>

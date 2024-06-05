@@ -303,6 +303,12 @@ namespace BetaCycleAPI.Controllers
                 ModifiedDate = DateTime.Now,
                 Rowguid = getRowGuidProduct.Rowguid,
                 OnSale= productForm.OnSale,
+                LargePhoto=productForm.LargePhoto,
+                LargePhotoFileName=productForm.LargePhotoFileName
+
+
+                
+
             };
             _context.Entry(product).State = EntityState.Modified;
 
@@ -354,7 +360,10 @@ namespace BetaCycleAPI.Controllers
                 ThumbNailPhoto = productForm.ThumbNailPhoto,
                 ThumbnailPhotoFileName = productForm.ThumbnailPhotoFileName,
                 ModifiedDate = DateTime.Now,
-                OnSale = productForm.OnSale
+                OnSale = productForm.OnSale,
+
+                LargePhoto = productForm.LargePhoto,
+                LargePhotoFileName = productForm.LargePhotoFileName
             };
 
 
