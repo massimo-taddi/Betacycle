@@ -110,6 +110,27 @@ export class HttpUserAdminService {
     );
   }
 
+  httpDeleteCustomerAdmin(id: number): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.delete(
+      `https://localhost:7287/api/customers/${id}`,
+      {
+        headers: header,
+      }
+    );
+  }
+  httpDeleteCustomer(): Observable<any> {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
+    return this.http.delete(
+      `https://localhost:7287/api/customers/0`,
+      {
+        headers: header,
+      }
+    );
+  }
+
   httpSendResetEmail(email: string): Observable<any> {
     return this.http.post(
       'https://localhost:7287/api/passwordreset/forgot?email=' + email,
