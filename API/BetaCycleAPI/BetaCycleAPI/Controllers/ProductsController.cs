@@ -49,24 +49,27 @@ namespace BetaCycleAPI.Controllers
                 {
                     @params.Search = "";
                 }
-                var allProds = _context.Products
-                    .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
-                prodCount = await allProds.CountAsync();
+                //var allProds = await _context.Products
+                //    .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale)).ToListAsync();
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
+                var allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '{@params.Search.Replace("'", "''")}') UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '{@params.Search.Replace("'", "''")}')").ToListAsync();
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
+                prodCount = allProds.Count();
                 switch (@params.Sort)
                 {
                     case "Desc":
-                        res = await allProds
-                                        .OrderByDescending(p => p.ListPrice)
-                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
-                                        .Take(@params.PageSize)
-                                        .ToListAsync();
+                        res = allProds
+                                .OrderByDescending(p => p.ListPrice)
+                                .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                .Take(@params.PageSize)
+                                .ToList();
                         break;
                     case "Asc":
-                        res = await allProds
-                                        .OrderBy(p => p.ListPrice)
-                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
-                                        .Take(@params.PageSize)
-                                        .ToListAsync();
+                        res = allProds
+                                .OrderBy(p => p.ListPrice)
+                                .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                .Take(@params.PageSize)
+                                .ToList();
                         break;
                     default:
                         return BadRequest();
@@ -107,24 +110,27 @@ namespace BetaCycleAPI.Controllers
                 {
                     @params.Search = "";
                 }
-                var allProds = _context.Products
-                                        .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
-                productCount = await allProds.CountAsync();
+                //var allProds = _context.Products
+                //                        .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
+                var allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '{@params.Search.Replace("'", "''")}') UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '{@params.Search.Replace("'", "''")}')").ToListAsync();
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
+                productCount = allProds.Count();
                 switch (@params.Sort)
                 {
                     case "Desc":
-                        res = await allProds
-                                        .OrderByDescending(p => p.ListPrice)
-                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
-                                        .Take(@params.PageSize)
-                                        .ToListAsync();
+                        res = allProds
+                                .OrderByDescending(p => p.ListPrice)
+                                .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                .Take(@params.PageSize)
+                                .ToList();
                         break;
                     case "Asc":
-                        res = await allProds
-                                        .OrderBy(p => p.ListPrice)
-                                        .Skip((@params.PageIndex - 1) * @params.PageSize)
-                                        .Take(@params.PageSize)
-                                        .ToListAsync();
+                        res = allProds
+                                .OrderBy(p => p.ListPrice)
+                                .Skip((@params.PageIndex - 1) * @params.PageSize)
+                                .Take(@params.PageSize)
+                                .ToList();
                         break;
                     default:
                         return BadRequest();
