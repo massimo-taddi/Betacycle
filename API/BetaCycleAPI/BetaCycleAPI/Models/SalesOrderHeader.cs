@@ -58,7 +58,7 @@ public partial class SalesOrderHeader
     /// <summary>
     /// Customer identification number. Foreign key to Customer.CustomerID.
     /// </summary>
-    public int CustomerId { get; set; }
+    public int? CustomerId { get; set; }
 
     /// <summary>
     /// The ID of the location to send goods.  Foreign key to the Address table.

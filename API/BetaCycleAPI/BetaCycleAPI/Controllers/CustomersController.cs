@@ -29,6 +29,91 @@ namespace BetaCycleAPI.Controllers
         {
             return _awContext.Customers.Any(e => e.CustomerId == id);
         }
+        private void writeToAiFile(int customerID)
+        {
+            string toAppend = string.Empty;
+            foreach (var prod in _awContext.Products)
+            {
+                toAppend += $"{customerID};{prod.ProductId};0\n";
+            }
+            System.IO.File.AppendAllText("Data/aiTrainingData.csv", toAppend);
+        }
+
+
+        private async Task<IActionResult> deleteCustomerLogic(int id) //it could be tokenCustomerID or id given by an admin
+        {
+            try
+            {
+                bool found = false;
+                var customer = await _awContext.Customers.FindAsync((int)id);
+                _awContext.Entry(customer).State = EntityState.Detached;
+                var credentials = await _credentialsContext.Credentials.FindAsync((long)id);
+                if (credentials != null) //check if the user is migrated
+                {
+                    _credentialsContext.Entry(credentials).State = EntityState.Detached;
+                    found = true;
+                }
+                //Get customer's related ids
+                var addressIds = await(from custom in _awContext.Customers
+                                       join custAddr in _awContext.CustomerAddresses on custom.CustomerId equals custAddr.CustomerId
+                                       join address in _awContext.Addresses on custAddr.AddressId equals address.AddressId
+                                       where custom.CustomerId == (int)id
+                                       select address.AddressId).ToListAsync();
+                if (addressIds.Any()) //it has addresses
+                {
+                    var headers = await(from custom in _awContext.Customers
+                                        join head in _awContext.SalesOrderHeaders on custom.CustomerId equals head.CustomerId
+                                        where custom.CustomerId == (int)id
+                                        select head).ToListAsync();
+                    if (headers.Any()) //It has past orders, so need to set null the following fields to keep RI
+                    {
+                        headers.ForEach(head =>
+                        {
+                            head.ShipToAddressId = null;
+                            head.BillToAddressId = null;
+                            head.CustomerId = null;
+                            _awContext.Entry(head).State = EntityState.Modified;
+                        });
+                        await _awContext.SaveChangesAsync();
+                    }
+                    //Delete customer Addresses records
+                    IQueryable<CustomerAddress> custAddresses = from custom in _awContext.Customers
+                                                                join custAdd in _awContext.CustomerAddresses
+                                                                on custom.CustomerId equals custAdd.CustomerId
+                                                                where custom.CustomerId == (int)id
+                                                                select custAdd;
+                    _awContext.RemoveRange(custAddresses);
+                    await _awContext.SaveChangesAsync();
+
+                    //Delete addresses records 
+                    addressIds.ForEach(add =>
+                    {
+                        _awContext.Addresses.Remove(new Address() { AddressId = (int)add });
+                    });
+                    await _awContext.SaveChangesAsync();
+                }
+                //it has no address registered so no past orders
+                if (customer != null)
+                {
+                    _awContext.Customers.Remove(customer!);
+                    if (found)
+                    {
+                        _credentialsContext.Credentials.Remove(credentials!);
+                        await _credentialsContext.SaveChangesAsync();
+                    }
+                    await _awContext.SaveChangesAsync();
+                }
+                else return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await DBErrorLogger.WriteExceptionLog(_awContext, ex);
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+
         #endregion
 
         #region Public Methods
@@ -240,15 +325,6 @@ namespace BetaCycleAPI.Controllers
                 return false;
         }
 
-        private void writeToAiFile(int customerID)
-        {
-            string toAppend = string.Empty;
-            foreach(var prod in _awContext.Products)
-            {
-                toAppend += $"{customerID};{prod.ProductId};0\n";
-            }
-            System.IO.File.AppendAllText("Data/aiTrainingData.csv", toAppend);
-        }
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -264,26 +340,7 @@ namespace BetaCycleAPI.Controllers
             { //Admin case
                 try
                 {
-                    var customer = await _awContext.Customers.FindAsync((int)id);
-                    _awContext.Entry(customer).State = EntityState.Detached;
-                    var credentials = await _credentialsContext.Credentials.FindAsync((long)id);
-                    _credentialsContext.Entry(credentials).State = EntityState.Detached;
-
-                    //Get customer's related ids
-                    var addressIds = await (from custom in _awContext.Customers
-                                     join custAddr in _awContext.CustomerAddresses on custom.CustomerId equals custAddr.CustomerId
-                                     join address in _awContext.Addresses on custAddr.AddressId equals address.AddressId
-                                     where custom.CustomerId == (int)id
-                                     select address.AddressId).ToListAsync();
-
-                    if (customer != null)
-                    {
-                        _awContext.Customers.Remove(customer);
-                        await _awContext.SaveChangesAsync();
-                        _credentialsContext.Credentials.Remove(credentials);
-                        await _credentialsContext.SaveChangesAsync();
-                    }
-                    else return BadRequest();
+                    await deleteCustomerLogic(id);
                 }catch(Exception ex)
                 {
                     await DBErrorLogger.WriteExceptionLog(_awContext, ex);
@@ -294,18 +351,9 @@ namespace BetaCycleAPI.Controllers
             { // Customer case
                 try
                 {
-                    var customer = await _awContext.Customers.FindAsync((int)tokenCustomerId);
-                    _awContext.Entry(customer).State = EntityState.Detached;
-                    var credentials = await _credentialsContext.Credentials.FindAsync((int)id);
-                    _credentialsContext.Entry(credentials).State = EntityState.Detached;
-                    if (customer != null)
-                    {
-                        _awContext.Customers.Remove(customer);
-                        await _awContext.SaveChangesAsync();
-                        _credentialsContext.Credentials.Remove(credentials);
-                        await _credentialsContext.SaveChangesAsync();
-                    }
-                }catch(Exception ex)
+                    await deleteCustomerLogic((int)tokenCustomerId);
+                }
+                catch (Exception ex)
                 {
                     await DBErrorLogger.WriteExceptionLog(_awContext, ex);
                     return BadRequest();
