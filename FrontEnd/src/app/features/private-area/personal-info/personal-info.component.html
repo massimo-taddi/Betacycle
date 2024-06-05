@@ -1,15 +1,17 @@
-
+<!-- <p-toast></p-toast> -->
 <form style="overflow: hidden;">
     <div class="row g-3 p-3">
         <h1>Personal Informations</h1>
         <h3>Anagraphic data</h3>
         <div class="col-md-4">
             <label for="inputEmail4" class="form-label">Name</label>
-            <input #firstname type="text" class="form-control" value="{{info?.firstName}}" [disabled]="changesNotAllowed">
+            <input #firstname type="text" class="form-control" value="{{info?.firstName}}"
+                [disabled]="changesNotAllowed">
         </div>
         <div class="col-sm-4">
             <label for="inputPassword4" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" value="{{info?.middleName}}" #middlename [disabled]="changesNotAllowed">
+            <input type="text" class="form-control" value="{{info?.middleName}}" #middlename
+                [disabled]="changesNotAllowed">
         </div>
         <hr style="color: white; margin: 0;">
         <div class="col-md-4">
@@ -30,8 +32,23 @@
             <input type="email" class="form-control" value="{{getJwtUsername()}}" #email [disabled]="changesNotAllowed">
         </div>
         <div class="col-12">
-            <button type="button" (click)="resetPwd ? resetPwd = false : resetPwd = true;" class="btn btn-primary">Change Password</button>
+            <button type="button" (click)="resetPwd ? resetPwd = false : resetPwd = true;"
+                class="btn btn-primary">Change Password</button>
             <span *ngIf="resetPwd"><app-password-reset [formsDisabled]="changesNotAllowed"></app-password-reset></span>
         </div>
+    </div>
+    <div class="row g-3 p-3">
+        <p-button label="Delete account" (click)="dialogBoolDelete = true;" styleClass="p-button-danger"></p-button>
+        <p-dialog header="Delete account" [modal]="true" blockScroll="true" draggable="false"
+            [(visible)]="dialogBoolDelete" [style]="{ width: '40rem' }"
+            [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+            <h6>Are you sure?</h6>
+            <div class="d-flex justify-content-evenly">
+                <button type="button" (click)="dialogBoolDelete = false;" style="padding: 10px;"
+                    class="btn btn-outline-secondary">Cancel</button>
+                <button type="button" (click)="DeleteAccount(); dialogBoolDelete = false;"
+                    style="padding: 10px;" class="btn btn-danger">Delete</button>
+            </div>
+        </p-dialog>
     </div>
 </form>
