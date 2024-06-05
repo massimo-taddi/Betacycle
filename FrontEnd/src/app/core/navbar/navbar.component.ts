@@ -61,6 +61,7 @@ export class NavbarComponent implements OnInit {
     });
     this.authenticationService.setLoginStatus(false, '', false, false);
     this.isUserLoggedIn = false;
+    this.router.navigate(["/home"]).then(() => {window.location.reload();});
   }
 
   @HostListener('window:resize', ['$event'])
