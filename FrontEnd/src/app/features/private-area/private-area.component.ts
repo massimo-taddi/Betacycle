@@ -16,7 +16,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class PrivateAreaComponent {
   windowWidth: number = window.innerWidth;
-  navbarBreakpoint = +(getComputedStyle(document.body).getPropertyValue('--bs-breakpoint-lg')).slice(0, -2)
+  navbarBreakpoint =+(getComputedStyle(document.body).getPropertyValue('--bs-breakpoint-xl')).slice(0, -2);
   mySidebar: boolean = false;
 
   @HostListener('window:resize', ['$event'])

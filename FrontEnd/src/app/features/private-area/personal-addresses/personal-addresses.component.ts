@@ -60,7 +60,7 @@ export class PersonalAddressesComponent implements OnInit {
   showSuccess(content: string) {
     this.messageService.add({severity:'success', summary: 'Success', detail: content});
     setTimeout(() => {
-      window.location.reload();
+      this.ngOnInit();
     }, 1000); 
   }
 
