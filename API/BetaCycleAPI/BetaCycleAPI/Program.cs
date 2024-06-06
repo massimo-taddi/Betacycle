@@ -33,7 +33,7 @@ namespace BetaCycleAPI
             builder.Services.AddSingleton(url);
 
             // Cache
-            InMemoryCache<string, (int, IEnumerable<Product>)> cache = new(100);
+            InMemoryCache<string, IEnumerable<Product>> cache = new(100);
             builder.Services.AddSingleton(cache);
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

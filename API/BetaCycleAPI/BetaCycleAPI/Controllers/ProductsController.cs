@@ -19,8 +19,8 @@ namespace BetaCycleAPI.Controllers
         private readonly AdventureWorksLt2019Context _context;
         private readonly AdventureWorks2019CredentialsContext _credentialsContext;
         // Cache
-        private readonly InMemoryCache<string, (int, IEnumerable<Product>)> _cache;
-        public ProductsController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext, InMemoryCache<string, (int, IEnumerable<Product>)> cache)
+        private readonly InMemoryCache<string, IEnumerable<Product>> _cache;
+        public ProductsController(AdventureWorksLt2019Context context, AdventureWorks2019CredentialsContext credentialsContext, InMemoryCache<string, IEnumerable<Product>> cache)
         {
             _context = context;
             _credentialsContext = credentialsContext;
@@ -59,17 +59,20 @@ namespace BetaCycleAPI.Controllers
                     return BadRequest("Empty search is not allowed.");
                 }
 
-                // if item is cached, return it from cache
-                if(_cache.HasItem(@params.Search))
-                {
-                    return _cache.Get(@params.Search);
-                }
-
                 //var allProds = await _context.Products
                 //    .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale)).ToListAsync();
-#pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
-                var allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE (CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '\"{@params.Search.Replace("'", "''")}\"')) AND p.[OnSale] = 1 UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE (CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '\"{@params.Search.Replace("'", "''")}\"')) AND p.[OnSale] = 1").ToListAsync();
-#pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
+                IEnumerable<Product> allProds = [];
+                // If item is in cache, fetch it
+                if (_cache.HasItem(@params.Search))
+                {
+                    allProds = _cache.Get(@params.Search)!;
+                } else
+                {
+                    #pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
+                    allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE (CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '\"{@params.Search.Replace("'", "''")}\"')) AND p.[OnSale] = 1 UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE (CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '\"{@params.Search.Replace("'", "''")}\"')) AND p.[OnSale] = 1").ToListAsync();
+                    #pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
+                    _cache.Add(@params.Search, allProds);
+                }
                 prodCount = allProds.Count();
                 switch (@params.Sort)
                 {
@@ -96,7 +99,6 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
             }
-            _cache.Add(@params.Search, (prodCount, res));
             return (prodCount, res);
         }
 
@@ -122,22 +124,26 @@ namespace BetaCycleAPI.Controllers
 
             try
             {
+                IEnumerable<Product> allProds = [];
                 if (@params.Search == null)
                 {
                     @params.Search = "";
                 }
 
-                // if item is cached, return it from cache
+                // if item is cached, fetch it from cache
                 if (_cache.HasItem(@params.Search))
                 {
-                    return _cache.Get(@params.Search);
+                    allProds = _cache.Get(@params.Search)!;
+                }else
+                {
+                    #pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
+                    allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '\"{@params.Search.Replace("'", "''")}\"') UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '\"{@params.Search.Replace("'", "''")}\"')").ToListAsync();
+                    #pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
+                    _cache.Add(@params.Search, allProds);
                 }
 
                 //var allProds = _context.Products
                 //                        .Where(prod => ((EF.Functions.FreeText(prod.Name, @params.Search) || prod.ProductModel.ProductModelProductDescriptions.Any(pmpd => (EF.Functions.FreeText(pmpd.ProductDescription.Description, @params.Search) || pmpd.ProductDescription.Description.Contains(@params.Search)))) || (prod.Name.Contains(@params.Search)) && prod.OnSale));
-#pragma warning disable EF1002 // Risk of vulnerability to SQL injection. (solved through input sanitation)
-                var allProds = await _context.Products.FromSqlRaw($"SELECT p.* FROM [SalesLT].[Product] AS p WHERE CONTAINS([Name], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT([Name], '\"{@params.Search.Replace("'", "''")}\"') UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID WHERE CONTAINS(pd.[Description], '\"*{@params.Search.Replace("'", "''").Replace(' ', '*')}*\"') OR FREETEXT(pd.[Description], '\"{@params.Search.Replace("'", "''")}\"')").ToListAsync();
-#pragma warning restore EF1002 // Risk of vulnerability to SQL injection. (previously solved through input sanitation)
                 productCount = allProds.Count();
                 switch (@params.Sort)
                 {
@@ -164,7 +170,6 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
             }
-            _cache.Add(@params.Search, (productCount, res));
             return (productCount, res);
         }
 
@@ -192,13 +197,17 @@ namespace BetaCycleAPI.Controllers
                     @params.Search = "";
                 }
 
+                IEnumerable<Product> allProds = [];
                 // if item is cached, return it from cache
                 if (_cache.HasItem(@params.Search))
                 {
-                    return _cache.Get(@params.Search);
+                    allProds = _cache.Get(@params.Search)!;
+                } else
+                {
+                    allProds = await _context.Products.FromSql($"SELECT p.* FROM [SalesLT].[Product] AS p UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID").ToListAsync();
+                    _cache.Add(@params.Search, allProds);
                 }
 
-                var allProds = await _context.Products.FromSql($"SELECT p.* FROM [SalesLT].[Product] AS p UNION SELECT p.* FROM [SalesLT].[Product] AS p INNER JOIN [SalesLT].[ProductModel] AS pm ON p.ProductModelID = pm.ProductModelID INNER JOIN [SalesLT].[ProductModelProductDescription] AS pmpd ON pm.ProductModelID = pmpd.ProductModelID INNER JOIN [SalesLT].[ProductDescription] AS pd ON pmpd.ProductDescriptionID = pd.ProductDescriptionID").ToListAsync();
                 productCount = allProds.Count();
                 switch (@params.Sort)
                 {
@@ -225,7 +234,6 @@ namespace BetaCycleAPI.Controllers
                 await DBErrorLogger.WriteExceptionLog(_context, e);
                 return BadRequest();
             }
-            _cache.Add(@params.Search, (productCount, res));
             return (productCount, res);
         }
 
