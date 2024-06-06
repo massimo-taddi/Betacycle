@@ -5,13 +5,17 @@ import { Product } from '../../shared/models/Product';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-product-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ToastModule],
   templateUrl: './product-page.component.html',
   styleUrl: './product-page.component.css',
+  providers: [MessageService]
 })
 export class ProductPageComponent {
   product: Product = new Product();
@@ -28,7 +32,8 @@ export class ProductPageComponent {
     private route: ActivatedRoute,
     private basketService: BasketService,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -67,15 +72,14 @@ export class ProductPageComponent {
     return 'ERROR - CANNOT GET PRODUCT DESCRIPTION';
   }
 
-  addProductToCart() {
-    this.basketService.postBasketItem(this.product).subscribe({
-      next: (prod: Product) => {
-        this.justAddedProduct = prod;
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      },
-    });
+  private showSuccess(content: string) {
+    this.messageService.add({severity:'success', summary: 'Success', detail: content});
+  }
+
+  async addProductToCart() {
+    var addBasket = await lastValueFrom(this.basketService.postBasketItem(this.product)).then((prod: Product) =>{
+      this.showSuccess('Added product to cart');})
+      .catch((err: Error) =>{console.log(err.message);});
   }
 
   FillRandProducts() {
