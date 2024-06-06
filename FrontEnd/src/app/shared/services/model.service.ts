@@ -46,13 +46,25 @@ export class ModelService {
       { headers: header }
     );
   }
-  postModel(name: string, discontinued: boolean) {
+  postModel(name: string, discontinued: boolean, description: string) {
     var header = new HttpHeaders();
     this.auth.authJwtHeader$.subscribe((h) => (header = h));
+
+    if (description != '') {
+      return this.http.post(
+        `https://localhost:7287/api/Model/Test?name=${name}&discontinued=${discontinued}&description=${description}`,
+        {},
+        { headers: header }
+      );
+    }
     return this.http.post(
       `https://localhost:7287/api/Model?name=${name}&discontinued=${discontinued}`,
       {},
       { headers: header }
     );
+  }
+  postModelDescription() {
+    var header = new HttpHeaders();
+    this.auth.authJwtHeader$.subscribe((h) => (header = h));
   }
 }

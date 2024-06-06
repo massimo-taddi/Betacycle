@@ -129,6 +129,7 @@ namespace BetaCycleAPI.Controllers
                 _context.Entry(res).State = EntityState.Modified;
 
 
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -139,13 +140,43 @@ namespace BetaCycleAPI.Controllers
 
             return NoContent();
         }
+        [Authorize]
+        private async Task<IActionResult> ModifyModelDescription (int id,string description)
+        {
+            try
+            {
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+            {
+                return BadRequest();
+            }
+                ProductDescription res = new ProductDescription
+                {
+                    Description = description,
+                    ModifiedDate = DateTime.Now
+                };
+
+                _context.Entry(res).State = EntityState.Modified;
+
+            }
+            catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
+            return NoContent();
+        }
 
 
         //POST:
         //it insert a record in the productModel Table
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostAModel(string name, bool discontinued)
+        [Route("Test")]
+        public async Task<IActionResult> PostAModel(string name, bool discontinued,string description="")
         {
             try
             {
@@ -162,13 +193,23 @@ namespace BetaCycleAPI.Controllers
                 Name = name,
                 ModifiedDate = DateTime.Now,
                 Discontinued = discontinued,
+                
 
             };
+                
             _context.ProductModels.Add(res);
 
  
                 await _context.SaveChangesAsync();
+                if (description != "")
+                {
+                //it creates before a record in the productDescription 
+                int descriptionId= await PostADescription(description);
+                //after the product description it connects a product model to his description in product description  
+                await PostProductModelProductDescription(res.ProductModelId, descriptionId);
+                }
 
+               
             }
             catch (Exception e)
             {
@@ -177,6 +218,71 @@ namespace BetaCycleAPI.Controllers
             }
             return NoContent();
         }
+
+        //create a record that joins the product model to his product description
+        private async Task<IActionResult>PostProductModelProductDescription(int id,int idProductDescription)
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+                {
+                    return BadRequest();
+                }
+                ProductModelProductDescription res = new ProductModelProductDescription
+                {
+                    ProductModelId = id,
+                    ProductDescriptionId = idProductDescription,
+                    ModifiedDate = DateTime.Now,
+                    Culture = "en"
+                    
+                };
+                _context.ProductModelProductDescriptions.Add(res);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
+                return NoContent();
+        }
+
+
+        //Post a description for a product
+
+        private async Task<int> PostADescription(string description)
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+                {
+                    return -1; 
+                }
+
+                ProductDescription res = new ProductDescription
+                {
+                    Description = description,
+                    ModifiedDate = DateTime.Now
+                };
+                _context.ProductDescriptions.Add(res);
+                await _context.SaveChangesAsync();
+                return res.ProductDescriptionId;
+            }
+            catch (Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return -1; // Indica un errore dovuto ad eccezione
+            }
+        }
+
+
+
         //DELETE
         //Delete a single record from the ProductModel Table
         [HttpDelete("{id}")]

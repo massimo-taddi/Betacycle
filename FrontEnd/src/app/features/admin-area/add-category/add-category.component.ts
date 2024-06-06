@@ -47,7 +47,7 @@ export class AddCategoryComponent {
       )
       .subscribe({
         next: (el: any) => {
-          console.log('Post avvenuta con successo');
+          console.log('Success!');
         },
         error: (err: Error) => {
           console.log(err);

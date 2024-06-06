@@ -4,7 +4,15 @@
       <p>ModelName<input type="text" pInputText [(ngModel)]="model.name" /></p>
 
       Discontinued<p-inputSwitch [(ngModel)]="model.discontinued" />
-
+      <br />
+      Add a description
+      <br />
+      <textarea
+        rows="5"
+        cols="30"
+        pInputTextarea
+        [(ngModel)]="description"
+      ></textarea>
       <ng-template pTemplate="footer">
         <div
           class="flex gap-3 mt-1"
