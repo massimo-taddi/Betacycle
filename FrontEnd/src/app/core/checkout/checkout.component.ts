@@ -152,6 +152,7 @@ export class CheckoutComponent implements OnInit{
   }
 
   fillDetails(){
+    this.salesOrderHeader.salesOrderDetails = [];
     this.basketItemsProductsMap.forEach((prod, item) =>{
       var detail = {
         salesOrderid: 0,
