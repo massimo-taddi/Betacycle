@@ -1,4 +1,6 @@
-﻿namespace BetaCycleAPI.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BetaCycleAPI.Models;
 
 /// <summary>
 /// High-level product categorization.
@@ -8,6 +10,8 @@ public partial class ProductCategory
     /// <summary>
     /// Primary key for ProductCategory records.
     /// </summary>
+
+    [Key]
     public int ProductCategoryId { get; set; }
 
     /// <summary>
@@ -18,6 +22,8 @@ public partial class ProductCategory
     /// <summary>
     /// Category description.
     /// </summary>
+   
+    [MaxLength(50, ErrorMessage = "Massimo 50 caratteri"), MinLength(4, ErrorMessage = "Minimo 4 caratteri")]
     public string Name { get; set; } = null!;
 
     /// <summary>
