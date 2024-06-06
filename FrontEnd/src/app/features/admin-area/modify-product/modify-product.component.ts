@@ -114,8 +114,10 @@ export class ModifyProductComponent {
 
     //inviamo modifiedProduct con l'id associato
 
-    if (modifiedProduct.OnSale == undefined) {
-      modifiedProduct.OnSale = false;
+    if (modifiedProduct.onSale) {
+      modifiedProduct.onSale = true;
+    } else {
+      modifiedProduct.onSale = false;
     }
     console.log(modifiedProduct);
     this.prodService.putProduct(modifiedProduct, this.modifyId).subscribe({
