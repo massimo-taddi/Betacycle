@@ -78,7 +78,7 @@ export class ProductService {
 
     if (params.search == '') {
       return this.http.get(
-        `https://localhost:7287/api/Products/GetProductsAdmin?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
+        `https://localhost:7287/api/Products/GetAllProductsAdmin?Search=any&PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Sort=${params.sort}`,
         { headers: header }
       );
     }
