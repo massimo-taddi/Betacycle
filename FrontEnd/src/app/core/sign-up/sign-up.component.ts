@@ -4,7 +4,7 @@ import { CustomerAddress } from '../../shared/models/CustomerAddress';
 import { HttploginService } from '../../shared/services/httplogin.service';
 import { Customer } from '../../shared/models/Customer';
 import { CustomerService } from '../../shared/services/customer.service';
-import { PasswordModule } from 'primeng/password'; 
+import { Password, PasswordModule } from 'primeng/password'; 
 import { SignUpForm } from '../../shared/models/SignUpForm';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
@@ -69,5 +69,11 @@ export class SignUpComponent implements OnInit {
         console.log(error.message);
       }
       });
+  }
+
+  validPwd(passwordForm: Password): boolean {
+    if(passwordForm.value == null || passwordForm.value == '') return false;
+    var mediumRegex = new RegExp(passwordForm.mediumRegex);
+    return mediumRegex.test(passwordForm.value!);
   }
 }
