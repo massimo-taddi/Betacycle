@@ -6,6 +6,7 @@ using BetaCycleAPI.Contexts;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using BetaCycleAPI.BLogic;
+using BetaCycleAPI.Models.Cache;
 
 namespace BetaCycleAPI
 {
@@ -27,8 +28,13 @@ namespace BetaCycleAPI
             jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
             builder.Services.AddSingleton(jwtSettings);
 
+            // Base URL
             string url = builder.Configuration.GetSection("BaseSiteUrl").Get<string>();
             builder.Services.AddSingleton(url);
+
+            // Cache
+            InMemoryCache<string, (int, IEnumerable<Product>)> cache = new(100);
+            builder.Services.AddSingleton(cache);
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opts =>
