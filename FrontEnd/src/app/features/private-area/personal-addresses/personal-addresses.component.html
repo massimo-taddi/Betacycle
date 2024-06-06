@@ -1,10 +1,10 @@
 <p-toast></p-toast>
-<div style="border: 1px solid yellow; width: 100%; flex-direction: column; align-items: flex-start; overflow: hidden;">
+<div style="width: 100%; flex-direction: column; align-items: flex-start; overflow: hidden;">
   <div class="row">
     <div class="col">
-      <h1 style="border: 1px solid green">Addresses</h1>
+      <h1>Addresses</h1>
     </div>
-    <div class="col d-flex justify-content-end" style="border: 1px solid red;">
+    <div class="col d-flex justify-content-end">
       <button
         pbutton
         pripple
@@ -118,7 +118,7 @@
       </p-dialog>
     </div>
   </div>
-  <p-table [value]="addresses" [style]="{'overflow-x':'scroll', 'width':'100%', 'border':'1px solid pink'}">
+  <p-table [value]="addresses" [style]="{'width':'100%'}">
       <ng-template pTemplate="header" let-columns>
           <tr>
               <th scope="col">#</th>
