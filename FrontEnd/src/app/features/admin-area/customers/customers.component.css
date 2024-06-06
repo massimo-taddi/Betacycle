@@ -1,9 +1,10 @@
 div.customerContainer {
   width: fit-content;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   column-gap: 25px;
   justify-content: center;
+  align-items: center;
   row-gap: 35px;
 }

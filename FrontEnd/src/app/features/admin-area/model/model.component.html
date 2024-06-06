@@ -5,16 +5,22 @@
     column-gap: 20px;
     row-gap: 20px;
     justify-content: center;
+    flex-direction: column;
+    width: 100%;
   "
 >
-  <p-button routerLink="../add-model"> Add model </p-button>
-  <input
-    type="text"
-    [(ngModel)]="searchModel"
-    placeholder="search"
-    style="border-radius: 10px"
-  />
-  <p-button (click)="ModelsFunction()">Search</p-button>
+  <div class="search-bar-div">
+    <p-button routerLink="../add-model"> Add model </p-button>
+    <div class="search-div" style="display: flex; flex-direction: row;">
+      <input
+        type="text"
+        [(ngModel)]="searchModel"
+        placeholder="search"
+        style="border-radius: 10px; width: 200px; height: 50px;"
+      />
+      <p-button (click)="ModelsFunction()">Search</p-button>
+    </div>
+  </div>
   <div class="modelContainer">
     <div class="card flex justify-content-center" *ngFor="let model of models">
       <p-card

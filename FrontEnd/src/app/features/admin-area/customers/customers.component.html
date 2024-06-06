@@ -5,16 +5,19 @@
     column-gap: 20px;
     row-gap: 20px;
     justify-content: center;
+    flex-direction: column;
   "
 >
-  <input
-    type="text"
-    [(ngModel)]="searchName"
-    placeholder="search"
-    style="border-radius: 10px"
-  />
-  <p-button (click)="funzioneCustomer()">Search</p-button>
-  <div class="customerContainer">
+  <div style="display: flex; flex-direction: row; column-gap: 20px; justify-content: center;">
+    <input
+      type="text"
+      [(ngModel)]="searchName"
+      placeholder="search"
+      style="border-radius: 10px; width: 200px; height: 50px;"
+    />
+    <p-button (click)="funzioneCustomer()">Search</p-button>
+  </div>
+  <div class="customerContainer justify-content-center" style="overflow-x: scroll; width: 100%;">
     <p-table [value]="customers" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
         <tr>
