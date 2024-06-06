@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { FormsModule } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
@@ -8,7 +8,7 @@ import { Product } from '../../shared/models/Product';
 import { ProductService } from '../../shared/services/product.service';
 import { CommonModule } from '@angular/common';
 import { SearchParams } from '../../shared/models/SearchParams';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { Paginator, PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BasketService } from '../../shared/services/basket.service';
@@ -64,22 +64,26 @@ export class SearchComponent implements OnInit {
     this.getParamsFromUrl();
   }
 
-  changeOutput(event: PaginatorState) {
-    this.searchParams.pageIndex = event.page! + 1;
-    this.searchParams.pageSize = event.rows!;
-    this.productService.searchParams$.subscribe(
-      (par) => (this.searchParams = par)
-    );
-    this.products = null;
-    this.productService.getProducts(this.searchParams).subscribe({
-      next: (products: any) => {
-        this.products = products.item2;
-        this.productCount = products.item1;
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      },
-    });
+  async changeOutput(event: PaginatorState) {
+    this.router.navigate(['/search', this.searchParams.search, event.page! + 1, event.rows!, this.searchParams.sort]);
+    await new Promise(resolve => setTimeout(resolve, 20));
+    window.scrollTo(0, 0);
+    
+    // this.searchParams.pageIndex = event.page! + 1;
+    // this.searchParams.pageSize = event.rows!;
+    // this.productService.searchParams$.subscribe(
+    //   (par) => (this.searchParams = par)
+    // );
+    // this.products = null;
+    // this.productService.getProducts(this.searchParams).subscribe({
+    //   next: (products: any) => {
+    //     this.products = products.item2;
+    //     this.productCount = products.item1;
+    //   },
+    //   error: (err: Error) => {
+    //     console.log(err.message);
+    //   },
+    // });
   }
   private fillProducts() {
     this.productService.setSearchParams(this.searchParams);

@@ -36,6 +36,7 @@ export class BasketComponent implements OnInit {
     this.authenticationService.isLoggedIn$.subscribe(
       (res) => (this.isUserLoggedIn = res)
     );
+    window.scrollTo(0, 0);
   }
 
   updateQuantity(item: ShoppingCartItem) {

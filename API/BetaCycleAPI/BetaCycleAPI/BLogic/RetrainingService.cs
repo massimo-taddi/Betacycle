@@ -36,7 +36,7 @@
 
         private void Retrain()
         {
-            RecommendProduct.Train("RecommendProduct.mlnet");
+            RecommendProduct.Train("BLogic/RecommendProduct/RecommendProduct.mlnet");
         }
 
         private void ScheduleRetraining()

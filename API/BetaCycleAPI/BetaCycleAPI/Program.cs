@@ -109,7 +109,7 @@ namespace BetaCycleAPI
             );
 
 
-    var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -118,18 +118,18 @@ namespace BetaCycleAPI
                 app.UseSwaggerUI();
             }
 
-app.UseHttpsRedirection();
-app.UseCors("CorsPolicy");
-app.UseAuthentication();
-app.UseResponseCaching();
+            app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
+            app.UseResponseCaching();
 
 
-app.UseAuthorization();
+            app.UseAuthorization();
 
 
-app.MapControllers();
+            app.MapControllers();
 
-app.Run();
+            app.Run();
         }
     }
 }

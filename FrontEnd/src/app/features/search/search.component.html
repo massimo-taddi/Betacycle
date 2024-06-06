@@ -64,7 +64,7 @@
       <div class="flex-1">
         <p-paginator
           (onPageChange)="changeOutput($event)"
-          [first]="0"
+          [first]="(searchParams.pageIndex - 1) * searchParams.pageSize"
           [rows]="searchParams.pageSize"
           [totalRecords]="productCount"
           [rowsPerPageOptions]="[10, 20, 30]"

@@ -41,6 +41,7 @@ export class SignUpComponent implements OnInit {
         this.loginService.httpSendLoginCredentials(new LoginCredentials(form.emailAddress, form.password)).subscribe({
           next: (response: any) => {
             this.authService.setLoginStatus(true, JSON.parse(response.body).token, this.stayLoggedIn, false);
+            this.basketService.pushLocalCart();
           },
           error: (error: Error) => {
             // errore di rete
@@ -53,7 +54,6 @@ export class SignUpComponent implements OnInit {
         console.log(error.message);
       }
       });
-      this.basketService.pushLocalCart();
       this.router.navigate(["/home"]);
   }
 
