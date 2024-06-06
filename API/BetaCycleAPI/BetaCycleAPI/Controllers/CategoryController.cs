@@ -89,14 +89,23 @@ namespace BetaCycleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductCategory>> GetSingleProductCategory(int id)
         {
-            var category = await _context.ProductCategories.FindAsync(id);
-
-            if (category == null)
+            try
             {
-                return NotFound();
+                var category = await _context.ProductCategories.FindAsync(id);
+
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(category);
+            }
+            catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
             }
 
-            return Ok(category);
         }
 
         //GET
@@ -105,10 +114,19 @@ namespace BetaCycleAPI.Controllers
         [Route("ParentCategories")]
         public async Task<ActionResult<List<ProductCategory>>> GetAllParentProductCategory ()
         {
-            List<ProductCategory> res = [];
+            try
+            {
+                List<ProductCategory> res = [];
 
-            res = await _context.ProductCategories.Where(el => el.ParentProductCategoryId == null).ToListAsync();
-            return res;
+                res = await _context.ProductCategories.Where(el => el.ParentProductCategoryId == null).ToListAsync();
+                return res;
+            }
+            catch(Exception e)
+            {
+                await DBErrorLogger.WriteExceptionLog(_context, e);
+                return BadRequest();
+            }
+
         }
 
         //PUT
@@ -118,26 +136,27 @@ namespace BetaCycleAPI.Controllers
 
         public async Task<IActionResult> ModifyCategory(int id, string name, bool discontinued, int? parentCategory)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
-
-            ProductCategory getRowguidProductModel = await _context.ProductCategories.FindAsync(id);
-            _context.ProductCategories.Entry(getRowguidProductModel).State = EntityState.Detached;
-
-
-            ProductCategory res = new ProductCategory()
-            {
-                ProductCategoryId = id,
-                Name = name,
-                Discontinued = discontinued,
-                ModifiedDate = DateTime.Now,
-                Rowguid = getRowguidProductModel.Rowguid,
-                ParentProductCategoryId = parentCategory,
-            };
-            _context.Entry(res).State = EntityState.Modified;
             try
             {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
+                ProductCategory getRowguidProductModel = await _context.ProductCategories.FindAsync(id);
+                _context.ProductCategories.Entry(getRowguidProductModel).State = EntityState.Detached;
+
+
+                ProductCategory res = new ProductCategory()
+                {
+                    ProductCategoryId = id,
+                    Name = name,
+                    Discontinued = discontinued,
+                    ModifiedDate = DateTime.Now,
+                    Rowguid = getRowguidProductModel.Rowguid,
+                    ParentProductCategoryId = parentCategory,
+                };
+                _context.Entry(res).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -156,22 +175,23 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<IActionResult> PostCategory(int? parentProductCategory, string name)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
-
-            ProductCategory res = new ProductCategory()
-            {
-
-                ParentProductCategoryId = parentProductCategory,
-                Discontinued = false,
-                ModifiedDate = DateTime.Now,
-                Name = name,
-            };
-
-            _context.ProductCategories.Add(res);
             try
             {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin") return BadRequest();
+
+                ProductCategory res = new ProductCategory()
+                {
+
+                    ParentProductCategoryId = parentProductCategory,
+                    Discontinued = false,
+                    ModifiedDate = DateTime.Now,
+                    Name = name,
+                };
+
+                _context.ProductCategories.Add(res);
+
                 await _context.SaveChangesAsync();
 
             }
@@ -192,14 +212,15 @@ namespace BetaCycleAPI.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
-                return BadRequest();
-            var category = await _context.ProductCategories.FindAsync(id);
-            _context.ProductCategories.Remove(category);
             try
             {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+                    return BadRequest();
+                var category = await _context.ProductCategories.FindAsync(id);
+                _context.ProductCategories.Remove(category);
+
                 await _context.SaveChangesAsync();
 
             }

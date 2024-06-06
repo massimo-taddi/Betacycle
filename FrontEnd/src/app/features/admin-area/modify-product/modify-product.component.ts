@@ -114,6 +114,9 @@ export class ModifyProductComponent {
 
     //inviamo modifiedProduct con l'id associato
 
+    if (modifiedProduct.OnSale == undefined) {
+      modifiedProduct.OnSale = false;
+    }
     console.log(modifiedProduct);
     this.prodService.putProduct(modifiedProduct, this.modifyId).subscribe({
       next: (prod: Product) => (this.updateProduct = prod),

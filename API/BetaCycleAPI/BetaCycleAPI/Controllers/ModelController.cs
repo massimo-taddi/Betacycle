@@ -104,30 +104,31 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<IActionResult> ModifyModel(int id, string name, bool discontinued)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
-
-            if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
-            {
-                return BadRequest();
-            }
-
-            ProductModel getRowguidProductModel = await _context.ProductModels.FindAsync(id);
-            _context.ProductModels.Entry(getRowguidProductModel).State = EntityState.Detached;
-
-            ProductModel res = new ProductModel()
-            {
-                ProductModelId = id,
-                Name = name,
-                ModifiedDate = DateTime.Now,
-                Rowguid = getRowguidProductModel.Rowguid,
-                Discontinued = discontinued,
-
-            };
-            _context.Entry(res).State = EntityState.Modified;
-
             try
             {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
+
+                if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
+                {
+                    return BadRequest();
+                }
+
+                ProductModel getRowguidProductModel = await _context.ProductModels.FindAsync(id);
+                _context.ProductModels.Entry(getRowguidProductModel).State = EntityState.Detached;
+
+                ProductModel res = new ProductModel()
+                {
+                    ProductModelId = id,
+                    Name = name,
+                    ModifiedDate = DateTime.Now,
+                    Rowguid = getRowguidProductModel.Rowguid,
+                    Discontinued = discontinued,
+
+                };
+                _context.Entry(res).State = EntityState.Modified;
+
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -146,7 +147,9 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<IActionResult> PostAModel(string name, bool discontinued)
         {
-            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
 
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
@@ -163,8 +166,7 @@ namespace BetaCycleAPI.Controllers
             };
             _context.ProductModels.Add(res);
 
-            try
-            {
+ 
                 await _context.SaveChangesAsync();
 
             }
@@ -181,7 +183,9 @@ namespace BetaCycleAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(await HttpContext.GetTokenAsync("access_token"));
 
             if (token.Claims.First(claim => claim.Type == "role").Value != "admin")
@@ -192,8 +196,7 @@ namespace BetaCycleAPI.Controllers
 
 
             _context.ProductModels.Remove(res);
-            try
-            {
+
                 await _context.SaveChangesAsync();
 
             }
