@@ -1,9 +1,20 @@
-div.productContainer{
-    width: fit-content;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 25px;
+div.productContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 25px;
+  justify-content: center;
+  align-items: center;
+  row-gap: 35px;
+}
+
+@media only screen and (max-width: 576px) {
+  .search-bar-div {
     justify-content: center;
-    row-gap: 35px;
+    column-gap: 20px;
+  }
+  .search-div {
+    margin-top: 10px;
+  }
 }
