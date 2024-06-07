@@ -10,7 +10,7 @@
             <input type="password" #Password="ngModel" [(ngModel)]="loginCredentials.password" [ngModelOptions]="{standalone:true}" class="bcL-input"  name="password" id="password" value="" placeholder="Password" required>
           </div>
           <div style="display: flex; flex-direction: column-reverse; row-gap: 15px;">
-            <div *ngIf="failedLogin" style="color: red;">Login failed - check your credentials</div>
+            <!-- <div *ngIf="failedLogin" style="color: red;">Login failed - check your credentials</div> -->
             <button class="btn bsb-btn-xl btn-primary" [disabled]="Password.invalid || Username.invalid" (click)="Login()">Log in now</button>
             <div style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
               <p style="margin: 0;">Keep me Log</p>

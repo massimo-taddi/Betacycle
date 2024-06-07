@@ -28,6 +28,8 @@ import { AddModelComponent } from './features/admin-area/add-model/add-model.com
 import { CheckoutComponent } from './core/checkout/checkout.component';
 import { OrderSummaryComponent } from './core/checkout/order-summary/order-summary.component';
 import { SiteReviewComponent } from './features/site-review/site-review.component';
+import { NotFoundPageComponent } from './core/error_pages/not-found-page/not-found-page.component';
+import { NotAuthorizedPageComponent } from './core/error_pages/not-authorized-page/not-authorized-page.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +40,14 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'not-found',
+    component: NotFoundPageComponent,
+  },
+  {
+    path: 'not-authorized',
+    component: NotAuthorizedPageComponent,
   },
   {
     path: 'login',
@@ -150,5 +160,9 @@ export const routes: Routes = [
         component: AddModelComponent,
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: '/not-found',
   },
 ];

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +30,8 @@ export class AdminAreaComponent {
   isUserLoggedIn: boolean = false;
   constructor(
     private productService: ProductService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.authenticationService.isLoggedIn$.subscribe(
@@ -41,5 +42,9 @@ export class AdminAreaComponent {
     this.authenticationService.isAdmin$.subscribe(
       (res) => (this.isUserAdmin = res)
     );
+    if(!this.isUserAdmin) {
+      this.router.navigate(['/not-authorized']);
+    }
   }
+  
 }
