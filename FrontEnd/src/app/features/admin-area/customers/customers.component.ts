@@ -7,6 +7,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SearchParams } from '../../../shared/models/SearchParams';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'app-customers',
   standalone: true,
@@ -16,9 +19,11 @@ import { ButtonModule } from 'primeng/button';
     PaginatorModule,
     TableModule,
     ButtonModule,
+    ToastModule
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
+  providers: [MessageService]
 })
 export class CustomersComponent {
   customers!: Customer[];
@@ -29,7 +34,7 @@ export class CustomersComponent {
   customersCount: number = 0;
   searchName: string = '';
 
-  constructor(private AdminService: HttpUserAdminService) {}
+  constructor(private AdminService: HttpUserAdminService, private messageService: MessageService) {}
   ngOnInit() {
     this.funzioneCustomer();
   }
@@ -73,11 +78,21 @@ export class CustomersComponent {
     this.AdminService.httpDeleteCustomerAdmin(id).subscribe({
       next: (el: any) => {
         console.log(el);
+        this.deleteSuccess();
+        this.ngOnInit();
+        // window.location.reload();
       },
       error: (err: any) => {
         console.log(err);
       },
     });
-    window.location.reload();
+  }
+
+  deleteSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Customer deleted',
+    });
   }
 }
