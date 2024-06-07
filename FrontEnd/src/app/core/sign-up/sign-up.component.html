@@ -1,66 +1,59 @@
-<div id="signupbg">
-    <div class="w-50 mx-auto" style="margin-right: 10%; padding-top: 100px; padding-bottom: 100px;">
-        <form class="p-fluid signupform rounded" #signUp="ngForm" (submit)="SignUp(signUp)">
-            <h1 class="p-mb-3">Sign Up</h1>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="inputTitle">Title</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Title" [(ngModel)]="signUpForm.title" maxlength="8" name="title">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputFirstName">First Name*</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="First Name*" [(ngModel)]="signUpForm.firstName" required maxlength="50" name="firstName">
-                        <small class="text-danger" *ngIf="signUp.controls['firstName']?.invalid && signUp.controls['firstName']?.touched">Please enter your first name.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputMiddleName">Middle Name</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Middle Name" [(ngModel)]="signUpForm.middleName" maxlength="50" name="middleName">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputLastName">Last Name*</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Last Name*" [(ngModel)]="signUpForm.lastName" required maxlength="50" name="lastName">
-                        <small class="text-danger" *ngIf="signUp.controls['lastName']?.invalid && signUp.controls['lastName']?.touched">Please enter your last name.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPhone">Phone Number</label>
-                        <input type="tel" class="form-control rounded" placeholder="Phone Number" [(ngModel)]="signUpForm.phone" maxlength="50" name="phone">
-                    </div>
+<article class="bc-login-art">
+    <div class="bc-login-container">
+      <div class="bc-login-left">
+        <h1 class="bc-login-Atext">SIGN UP</h1>
+        <form style="display: flex; row-gap: 35px; flex-direction: column;" #signUp="ngForm" (submit)="SignUp(signUp)">
+          
+          <div class="bcL-inner-form">
+            <div class="bcL-input-container">
+                <input type="text" pInputText class="form-control rounded" placeholder="Title" [(ngModel)]="signUpForm.title" maxlength="8" name="title">
+
+                <div>
+                    <input type="text" pInputText class="form-control rounded" placeholder="First Name*" [(ngModel)]="signUpForm.firstName" required maxlength="50" name="firstName">
+                    <small class="text-danger" *ngIf="signUp.controls['firstName']?.invalid && signUp.controls['firstName']?.touched">Please enter your first name.</small>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="inputSuffix">Suffix</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Suffix" [(ngModel)]="signUpForm.suffix" maxlength="10" name="suffix">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCompany">Company Name</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Company Name" [(ngModel)]="signUpForm.companyName" maxlength="128" name="companyName">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputSalesPerson">Sales Person</label>
-                        <input type="text" pInputText class="form-control rounded" placeholder="Sales Person" [(ngModel)]="signUpForm.salesPerson" maxlength="256" name="salesPerson">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email*</label>
-                        <input type="email" pInputText class="form-control rounded" placeholder="Email*" [(ngModel)]="signUpForm.emailAddress" required maxlength="128" name="emailAddress" (blur)="onBlurEmail()">
-                        <small class="text-danger" *ngIf="signUp.controls['emailAddress']?.invalid && signUp.controls['emailAddress']?.touched">Please enter a valid email address.</small>
-                        <small class="text-danger" *ngIf="isEmailTaken">This email address already exists</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword">Password*</label>
-                        <p-password #pwd [style]="{'height': '38px', 'min-height': '35px'}" required="true" [(ngModel)]="signUpForm.password" placeholder="Password*" [feedback]="true" [toggleMask]="true" name="password"></p-password>
-                        <small class="text-danger" *ngIf="signUp.controls['password']?.invalid && signUp.controls['password']?.touched">Please enter a password.</small>
-                        <small class="text-danger" *ngIf="!validPwd(pwd) && pwd.value != ''">Please enter a stronger password.</small>
-                    </div>
+
+                <input type="text" pInputText class="form-control rounded" placeholder="Middle Name" [(ngModel)]="signUpForm.middleName" maxlength="50" name="middleName">
+
+                <div>
+                    <input type="text" pInputText class="form-control rounded" placeholder="Last Name*" [(ngModel)]="signUpForm.lastName" required maxlength="50" name="lastName">
+                    <small class="text-danger" *ngIf="signUp.controls['lastName']?.invalid && signUp.controls['lastName']?.touched">Please enter your last name.</small>
                 </div>
+
+                <input type="tel" class="form-control rounded" placeholder="Phone Number" [(ngModel)]="signUpForm.phone" maxlength="50" name="phone">
+                <input type="text" pInputText class="form-control rounded" placeholder="Suffix" [(ngModel)]="signUpForm.suffix" maxlength="10" name="suffix">
+                <input type="text" pInputText class="form-control rounded" placeholder="Company Name" [(ngModel)]="signUpForm.companyName" maxlength="128" name="companyName">
+                <input type="text" pInputText class="form-control rounded" placeholder="Sales Person" [(ngModel)]="signUpForm.salesPerson" maxlength="256" name="salesPerson">
+
+                <div>
+                    <input type="email" pInputText class="form-control rounded" placeholder="Email*" [(ngModel)]="signUpForm.emailAddress" required maxlength="128" name="emailAddress" (blur)="onBlurEmail()">
+                    <small class="text-danger" *ngIf="signUp.controls['emailAddress']?.invalid && signUp.controls['emailAddress']?.touched">Please enter a valid email address.</small>
+                    <small class="text-danger" *ngIf="isEmailTaken">This email address already exists</small>
+                </div>
+
+                <div>
+                    <p-password #pwd [style]="{'height': '38px', 'min-height': '35px'}" required="true" [(ngModel)]="signUpForm.password" placeholder="Password*" [feedback]="true" [toggleMask]="true" name="password"></p-password>
+                    <small class="text-danger" *ngIf="signUp.controls['password']?.invalid && signUp.controls['password']?.touched">Please enter a password.</small>
+                    <small class="text-danger" *ngIf="!validPwd(pwd) && pwd.value != ''">Please enter a stronger password.</small>
+                </div>
+
             </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="stayLoggedIn" binary="true" [ngModelOptions]="{standalone: true}">
-                    <label class="form-check-label">Keep signed in</label>
-                </div>
+            <div style="display: flex; flex-direction: column-reverse; row-gap: 15px;">
+                <button [disabled]="!signUp.valid" class="btn btn-primary mt-3" type="submit">Sign Up</button>
+              <div style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+                <p style="margin: 0;">Keep me sign</p>
+                <input class="form-check-input" type="checkbox" [(ngModel)]="stayLoggedIn" binary="true" [ngModelOptions]="{standalone: true}">
             </div>
-            <button [disabled]="!signUp.valid" class="btn btn-primary mt-3" type="submit">Sign Up</button>
+            </div>
+          </div>  
+  
         </form>
+      </div>
+      <div class="bc-login-righ">
+        <div class="bcLR-text-container">
+          <h1 class="bc-login-Atext" style="text-align: center; font-weight: 900;">BETACYCLE</h1>
+          <h2 class="bc-login-Atext" style="text-align: center;">"Ride the Difference with our Exceptional Bicycles!"</h2>
+        </div>
+      </div>
     </div>
-</div>
+  </article>

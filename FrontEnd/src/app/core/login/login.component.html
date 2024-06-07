@@ -1,5 +1,3 @@
-
-
 <article class="bc-login-art">
   <div class="bc-login-container">
     <div class="bc-login-left">
@@ -21,6 +19,9 @@
           </div>
         </div>
         
+        <p *ngIf="failedLogin" style="color: red;">Login failed - please check the email and password inserted</p>
+
+
         <div style="display: flex; flex-direction: column;">
           <a role="button" (click)="navToSignup()" class="link-secondary text-decoration-none">Create new account</a>
           <a role="button" (click)="navToForgot()" class="link-secondary text-decoration-none">Forgot password</a>
@@ -36,4 +37,3 @@
     </div>
   </div>
 </article>
-
